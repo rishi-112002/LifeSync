@@ -74,7 +74,6 @@ function SearchScreen() {
                 data={bookNames}
                 renderItem={({ item }) => filterData(item)}
             />
-
         </View>
     )
 };
