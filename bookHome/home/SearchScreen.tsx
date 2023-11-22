@@ -44,14 +44,15 @@ function SearchScreen() {
             return (
                 <View>
                     <TouchableOpacity>
-                    <Text style={styles.bookList}>
-                        {
-                            item.bookName
-                        }
-                    </Text>
+                        <Text style={styles.bookList}>
+                            {
+                                item.bookName
+                            }
+                        </Text>
                     </TouchableOpacity>
                 </View>)
         }
+
     }
     return (
         <View style={styles.container}>
@@ -59,6 +60,16 @@ function SearchScreen() {
                 Search
             </Text>
             <SearchBar value={searchText} onChangeText={setValue} />
+            {
+                (searchText === "") &&
+                (<View style={{ marginTop: 170, alignItems: 'center' }}>
+                    <Image source={require('../../assets/searchImageDefaultIcon.png')} style={{ width: 180, height: 150, resizeMode: 'contain' }} />
+                    <Text style={{ color: 'gray' }}>
+                        Type to search
+                    </Text>
+                </View>
+                )
+            }
             <FlatList
                 data={bookNames}
                 renderItem={({ item }) => filterData(item)}
