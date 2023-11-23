@@ -6,11 +6,24 @@ import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { store } from "../reduxIntegration/Store";
 import { loginAuth } from "../reduxIntegration/Reducer";
-import ApiCalling from "../apiCalling/ApiRequest";
+import ApiCalling from "../apiCalling/PostRequest";
 
 function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [message, setMessage] = useState(false)
+    let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
+    const handleEmail = () => {
+        if (!emailRegex.test(email)) {
+            console.log("invalid email");
+            setMessage(false)
+            Alert.alert("Warning", "please enter valid email")
+        }
+        else {
+            console.log("valid email");
+            setMessage(true)
+        }
+    }
     const saveLoginInputToAsyncStorage = async () => {
         try {
             await AsyncStorage.setItem('email', email)
@@ -37,9 +50,13 @@ function LoginScreen({ navigation }) {
             userEmail: email,
             userPassword: password,
         }
-        saveLoginInputToAsyncStorage();
-        store.dispatch(loginAuth(object))
-        ApiCalling
+        handleEmail();
+        if (message) {
+            saveLoginInputToAsyncStorage();
+            store.dispatch(loginAuth(object))
+        }
+
+
     }
     return (
         <ScrollView style={style.container}>

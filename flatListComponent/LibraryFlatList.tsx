@@ -1,8 +1,8 @@
 import React = require("react");
 import { View, FlatList, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 
-function LibraryFlatList(props) {
-    const { renderItem } = props
+function LibraryFlatList(props: { searchText: String }) {
+    const { searchText } = props
     const LibraryData = [
         {
             type: "Personality Development",
@@ -12,7 +12,7 @@ function LibraryFlatList(props) {
 
         },
         {
-            type: "growth",
+            type: "Growth",
             imageSrc: require('../assets/growthImage.jpg'),
 
         },
@@ -42,21 +42,36 @@ function LibraryFlatList(props) {
             imageSrc: require('../assets/biography.jpg')
         },
     ];
+    const filterData = (item) => {
+        console.log(item, searchText);
+        if (searchText === "") {
+            return (
+                <View style={styles.view}>
+                    <TouchableOpacity>
+                        <Image source={item.imageSrc} style={styles.image} />
+                    </TouchableOpacity>
+                    <Text style={styles.typeText}>
+                        {item.type}
+                    </Text>
+                </View>
+            )
+        }
+        if (item.type.toLowerCase().includes(searchText.toLowerCase())) {
+            return (
+                <View style={styles.view}>
+                    <TouchableOpacity>
+                        <Image source={item.imageSrc} style={styles.image} />
+                    </TouchableOpacity>
+                    <Text style={styles.typeText}>
+                        {item.type}
+                    </Text>
+                </View>
+            )
+        }
+    }
     return (
         <View style={styles.container}>
-            <FlatList data={LibraryData} renderItem={(item) => {
-                return (
-                    <View style={styles.view}>
-                        <TouchableOpacity>
-                            <Image source={item.item.imageSrc} style={styles.image} />
-                        </TouchableOpacity>
-                        <Text style={styles.typeText}>
-                            {item.item.type}
-                        </Text>
-                    </View>
-                )
-            }
-            }
+            <FlatList data={LibraryData} renderItem={({ item }) => filterData(item)}
                 numColumns={2}
                 columnWrapperStyle={styles.viewContainer} />
         </View>
@@ -91,6 +106,7 @@ const styles = StyleSheet.create({
         color: 'gray',
         marginLeft: 10,
         fontSize: 15,
+        textAlign: 'auto',
         alignSelf: 'center',
         marginTop: 8
     }

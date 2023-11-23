@@ -16,7 +16,7 @@ function LibraryScreen(this: any) {
                 </TouchableOpacity>
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />
-            <LibraryFlatList/>
+            <LibraryFlatList searchText = {searchText}/>
         </View>
     )
 };

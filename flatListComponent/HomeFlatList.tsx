@@ -5,25 +5,60 @@ function HomeFlatList(props) {
     const {onUserIconPress} = props
     const User = [
         {
-            text: "Edit Profile"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         },
         {
-            text: "Change Password"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         },
         {
-            text: "Privacy Policy"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         },
         {
-            text: "Terms Of usage"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         },
         {
-            text: "Ratting app"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         },
         {
-            text: "Share app"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         },
         {
-            text: "Logout"
+            readerName: "",
+            timeStatus:"",
+            BookName :"",
+            authorName:"",
+            bookImage :"",
+            bookLink :""
         }
     ];
     return (
