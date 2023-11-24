@@ -5,6 +5,7 @@ import { RootState, store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import PostRequest from "../apiCalling/PostRequest";
+import GetApiRequest from "../apiCalling/GetRequest";
 
 function UserFlatList() {
 
@@ -12,8 +13,6 @@ function UserFlatList() {
         console.log('state', state);
         return state.loginAuth.email
     })
-    const userPassword = useSelector((state: RootState) => state.loginAuth.password)
-
     const logoutUser = async () => {
         try {
             await AsyncStorage.removeItem('email');
@@ -74,11 +73,10 @@ function UserFlatList() {
 
 
                         case 'Privacy Policy':
-                          PostRequest();
                             break;
 
                         case 'Terms Of usage':
-                            Alert.alert("warning", "click on Terms Of usage")
+                            GetApiRequest();
                             break;
 
                         case 'Ratting app':

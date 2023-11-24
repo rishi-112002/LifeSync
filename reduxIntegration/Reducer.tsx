@@ -8,8 +8,8 @@ export const loginAuthentication = createSlice({
     },
     reducers: {
         loginAuth: (state, action) => {
-            state.email = action.payload.userEmail
-            state.password = action.payload.userPassword
+            state.email = action.payload.email
+            state.password = action.payload.password
         }
     }
 })

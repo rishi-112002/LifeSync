@@ -1,63 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { store } from "../reduxIntegration/Store";
-import { loginAuth } from "../reduxIntegration/Reducer";
-import ApiCalling from "../apiCalling/PostRequest";
+import LoginData from "../apiDataFunctions/LoginData";
 
 function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [message, setMessage] = useState(false)
+    // const [message, setMessage] = useState(false)
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
-    const handleEmail = () => {
-        if (!emailRegex.test(email)) {
-            console.log("invalid email");
-            setMessage(false)
-            Alert.alert("Warning", "please enter valid email")
-        }
-        else {
-            console.log("valid email");
-            setMessage(true)
-        }
-    }
-    const saveLoginInputToAsyncStorage = async () => {
-        try {
-            await AsyncStorage.setItem('email', email)
-            await AsyncStorage.setItem('password', password)
-            console.log('saved successfully in shared Preference ')
-        } catch {
-            console.error('not saved in local storage')
-        }
-    }
     const handleLogin = () => {
         if (!email) {
             Alert.alert("warning", "Please enter E-mail");
             return
         }
-        if (!password) {
-            Alert.alert("warning", "Please enter Password");
-            return
-        }
-        if (password.length < 6) {
-            Alert.alert("warning", "password is invalid")
-            return
-        }
-        const object = {
-            userEmail: email,
-            userPassword: password,
-        }
         handleEmail();
-        if (message) {
-            saveLoginInputToAsyncStorage();
-            store.dispatch(loginAuth(object))
-        }
-
 
     }
+    const handleEmail = () => {
+        if (!emailRegex.test(email)) {
+            Alert.alert("warning", "entered email is invalid")
+            console.log("InValid email")
+            return
+        }
+        handlePassword();
+    }
+    const handlePassword = () => {
+        if (!password) {
+            Alert.alert("Warning", "Please enter password");
+            return;
+        }
+        if (password.length < 6) {
+            Alert.alert("Warning", "Password is invalid (less than 6 characters)");
+            return;
+        }
+        else {
+            LoginData({
+                object: {
+                    email: email,
+                    password: password
+                }
+            });
+        }
+        console.log("Valid email and password");
+    };
     return (
         <ScrollView style={style.container}>
             <View >

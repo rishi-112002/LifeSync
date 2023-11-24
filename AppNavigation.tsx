@@ -24,8 +24,8 @@ function AppNavigation() {
             console.log("user data ", email, password);
             if (email && password) {
                 const object = {
-                    userEmail: email,
-                    userPassword: password,
+                    email,
+                    password,
                 }
                 store.dispatch(loginAuth(object))
                 return
@@ -40,6 +40,7 @@ function AppNavigation() {
         getUserData();
     }, []);
     const userEmail = useSelector((state: RootState) => {
+        console.log("userEmail", userEmail)
         return state.loginAuth.email
     })
     if (loader) {

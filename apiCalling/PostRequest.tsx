@@ -1,27 +1,43 @@
- function PostRequest() {
-    console.log("api call")
-    const apiUrl = "https://pcphqvtxraheujwnqaql.supabase.co/functions/v1/login";
-    const requestData = {
-        email: "te@gmail.com",  
-        password: "123",
-    };
-
-    const bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcGhxdnR4cmFoZXVqd25xYXFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA2NDgyMDMsImV4cCI6MjAxNjIyNDIwM30.tOYdiJgnBZhPyRQBIC2bmZ1ZtAwAklx1wQsiq08Po18";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+    Alert
+} from 'react-native'
+import { store } from '../reduxIntegration/Store';
+import { loginAuth } from '../reduxIntegration/Reducer';
+import { APIBASEURL, BEARERTOKEN, LOGIN } from '../constants/ApiConstants';
+function PostRequest(props: {requestData: { email: String, password: String } }) {
+    
+    const {  requestData } = props
+    const apiURL = APIBASEURL + LOGIN
 
     const headers = {
-        Authorization: `Bearer ${bearerToken}`,
+        Authorization: `Bearer ${BEARERTOKEN}`,
         "Content-Type": "application/json",
     };
-         fetch(apiUrl, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify(requestData)
-        }).then((response) => response.json())
-            .then((data) => {
-                console.log(data.data.email);
-            }).catch((error) => {
-                console.error('Error during get request:', error);
-            })
-    
+    fetch(apiURL, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(requestData)
+    }).then((response) => {
+        if (!response.ok) {
+            return Alert.alert("warning", "api response error")
+        }
+        return response.json()
+    })
+        .then(async (data) => {
+            try {
+                await AsyncStorage.setItem('email', data.data.email)
+                await AsyncStorage.setItem('password', data.data.password)
+                store.dispatch(loginAuth(data.data))
+                console.log('saved successfully in shared Preference ')
+            } catch {
+                console.error('not saved in local storage')
+            }
+        }
+        )
+        .catch((error: any) => {
+            console.error('Error during get request:', error);
+        })
+
 }
 export default PostRequest;

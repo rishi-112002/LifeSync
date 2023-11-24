@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, TextInput } from "react-native"
+import { StyleSheet, Text, TextInput, View } from "react-native"
 
-function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; secureTextEntry: any }) {
-    const { placeholder, value, onChangeText, secureTextEntry } = props;
+function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; secureTextEntry: any  ; errorMessage:String}) {
+    const { placeholder, value, onChangeText, secureTextEntry , errorMessage } = props;
     return (
+        <View>
         <TextInput
             style={style.input}
             placeholder={placeholder}
@@ -12,6 +13,8 @@ function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; 
             onChangeText={(text) => onChangeText(text)}
             secureTextEntry={secureTextEntry}
         />
+        {errorMessage && (<Text style = {{color:'red', fontSize:12,   alignSelf: "flex-start",marginStart:23}}> {errorMessage}</Text>)}
+        </View>
     )
 
 };
