@@ -1,4 +1,15 @@
 {
   "name": "BookStore",
-  "displayName": "BookStore"
+  "displayName": "BookStore" ,
+  "expo": {
+    "android": {
+      "googleServicesFile": "../android/app/google-services.json"
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/perf",
+      "@react-native-firebase/crashlytics"
+    ]
+
+  }
 }

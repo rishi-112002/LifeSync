@@ -3,11 +3,24 @@ import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import TextInputCom from "../reuseableComponent/TextInputComponent";
-
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore'
+import { serverTimestamp } from '@react-native-firebase/firestore';
 function SignupScreen({ navigation }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
+    const userData = {
+        address: "Indore",
+        countryCode: "+91",
+        createdAt: serverTimestamp(),
+        email: email,
+        gender: "m",
+        mobile: "1234567890",
+        name: name,
+        status: "active", 
+        updatedAt:" 25 November 2023 at 00:00:00 UTC + 5: 30 ",
+    }
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
     const handleSignInAuth = () => {
         if (!name) {
@@ -19,11 +32,12 @@ function SignupScreen({ navigation }) {
             return
         }
         handleEmail();
+
     }
     const handleEmail = () => {
         if (!emailRegex.test(email)) {
             Alert.alert("warning", "entered email is invalid")
-            console.log("Valid email")
+            console.log("InValid email")
             return
         }
         handlePassword();
@@ -37,8 +51,37 @@ function SignupScreen({ navigation }) {
             Alert.alert("Warning", "Password is invalid (less than 6 characters)");
             return;
         }
+        else {
+            addNewUser(email, password);
+        }
         console.log("Valid email and password");
     };
+
+    const addNewUser = async (email: any, password: any) => {
+        try {
+            await auth().createUserWithEmailAndPassword(email, password);
+            console.log('User added successfully!');
+            addUserData(email);
+            navigation.navigate("Login")
+            
+        } catch (error) {
+            console.error('Error adding user:', error.message);
+            Alert.alert("warning", "User is already exits Please try to login")
+            return
+        }
+    };
+
+    const addUserData = async (email: any) => {
+        try {
+            await firestore().collection("users").doc(email).set(userData)
+        } catch (error) {
+            console.error('Error adding user:', error.message);
+            Alert.alert("warning", "User is already exits Please try to login")
+            return
+        }
+    }
+
+
     return (
         <ScrollView style={style.container}>
             <View >

@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import PostRequest from "../apiCalling/PostRequest";
 import GetApiRequest from "../apiCalling/GetRequest";
+import EditProfile from "../bookHome/home/EditProfile";
 
 function UserFlatList() {
 
@@ -21,7 +22,7 @@ function UserFlatList() {
         } catch {
             console.error('user data is not Deleted')
         }
-
+        
     };
 
     const handleLogout = () => {
@@ -77,10 +78,10 @@ function UserFlatList() {
 
                         case 'Terms Of usage':
                             GetApiRequest();
-                            break;
+                            break;                                                                                                                                                                                                                                                                                                                                                                       
 
                         case 'Ratting app':
-                            Alert.alert("warning", "click onRatting app")
+                            EditProfile();
                             break;
 
                         case 'Share app':

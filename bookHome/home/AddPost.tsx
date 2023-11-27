@@ -48,10 +48,11 @@ function AddPost() {
             setAnError("author Name can'not be empty ")
             return
         }
+
         if (!link) {
             setLinkError("link can'not be empty")
         }
-        else{
+        else {
             setAnError("")
             setBnError("")
             setLinkError("")

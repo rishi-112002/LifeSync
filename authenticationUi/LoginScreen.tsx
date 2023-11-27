@@ -4,6 +4,7 @@ import TextInputCom from "../reuseableComponent/TextInputComponent";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import LoginData from "../apiDataFunctions/LoginData";
+import auth from '@react-native-firebase/auth';
 
 function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("")
@@ -16,8 +17,20 @@ function LoginScreen({ navigation }) {
             return
         }
         handleEmail();
-
+        
     }
+    const loginUser = async (email: string, password: string) => {
+        try {
+            await auth().signInWithEmailAndPassword(email, password);
+            console.log('User logged in successfully!');
+        } catch (error) {
+            if (error === 'auth/user-not-found') {
+                console.log('User does not exist. You may want to redirect to the registration page.');
+            } else {
+                console.error('Error logging in:', error);
+            }
+        }
+    };
     const handleEmail = () => {
         if (!emailRegex.test(email)) {
             Alert.alert("warning", "entered email is invalid")
@@ -42,9 +55,11 @@ function LoginScreen({ navigation }) {
                     password: password
                 }
             });
+            loginUser(email, password)
         }
         console.log("Valid email and password");
     };
+
     return (
         <ScrollView style={style.container}>
             <View >
