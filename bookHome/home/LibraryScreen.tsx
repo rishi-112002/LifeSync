@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import SearchBar from "../../reuseableComponent/CustomSearchBar";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
+import { useNavigation } from "@react-navigation/native";
+import AddCategory from "./AddCategory";
 
 function LibraryScreen(this: any) {
+    const navigation = useNavigation();
     const [searchText, setValue] = useState("")
     return (
         <View style={styles.container}>
@@ -11,8 +14,8 @@ function LibraryScreen(this: any) {
                 <Text style={styles.tabTextColor}>
                     Library
                 </Text>
-                <TouchableOpacity>
-                <Image source={require('../../assets/threeDots.png')} style={{ marginStart: 210, marginTop: 19, alignSelf: 'flex-end' }} />
+                <TouchableOpacity onPress={() => navigation.navigate(AddCategory)}>
+                <Image source={require('../../assets/threeDots.png')} style={{ marginStart: 210, marginTop: 19, alignSelf: 'flex-end' }}  />
                 </TouchableOpacity>
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />

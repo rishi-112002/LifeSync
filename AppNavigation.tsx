@@ -40,7 +40,7 @@ function AppNavigation() {
         getUserData();
     }, []);
     const userEmail = useSelector((state: RootState) => {
-        console.log("userEmail", userEmail)
+        console.log("userEmail", state)
         return state.loginAuth.email
     })
     if (loader) {

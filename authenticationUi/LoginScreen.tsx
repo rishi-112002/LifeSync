@@ -5,10 +5,18 @@ import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import LoginData from "../apiDataFunctions/LoginData";
 import auth from '@react-native-firebase/auth';
+import { useNavigation } from "@react-navigation/native";
+import firestore from '@react-native-firebase/firestore';
+import { store } from "../reduxIntegration/Store";
+import { loginAuth } from "../reduxIntegration/Reducer";
+import { useDispatch } from "react-redux";
 
-function LoginScreen({ navigation }) {
+function LoginScreen() {
+    const navigation = useNavigation();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const usersCollection = firestore().collection('users');
+    const dispatch = useDispatch()
     // const [message, setMessage] = useState(false)
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
     const handleLogin = () => {
@@ -17,11 +25,18 @@ function LoginScreen({ navigation }) {
             return
         }
         handleEmail();
-        
     }
-    const loginUser = async (email: string, password: string) => {
+    const loginUser = async () => {
         try {
             await auth().signInWithEmailAndPassword(email, password);
+            usersCollection.where("email", "==", email).get().then((querySnapShot) => {
+                querySnapShot.forEach((doc) => {
+                    console.log("id", doc.id)
+                    const userId = doc.id
+                    saveLoginData(email, password, userId)
+
+                });
+            })
             console.log('User logged in successfully!');
         } catch (error) {
             if (error === 'auth/user-not-found') {
@@ -31,6 +46,16 @@ function LoginScreen({ navigation }) {
             }
         }
     };
+    const saveLoginData = async (email: string, password: string, userId: string) => {
+        const object = {
+            email: email,
+            password: password,
+            userId: userId
+        }
+        console.log(object)
+        dispatch(loginAuth(object))
+
+    }
     const handleEmail = () => {
         if (!emailRegex.test(email)) {
             Alert.alert("warning", "entered email is invalid")
@@ -49,13 +74,7 @@ function LoginScreen({ navigation }) {
             return;
         }
         else {
-            LoginData({
-                object: {
-                    email: email,
-                    password: password
-                }
-            });
-            loginUser(email, password)
+            loginUser()
         }
         console.log("Valid email and password");
     };

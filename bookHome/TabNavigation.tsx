@@ -5,6 +5,7 @@ import LibraryScreen from './home/LibraryScreen';
 import UserScreen from './home/UserScreen';
 import { Image, StyleSheet } from "react-native";
 import HomeNavigation from "./home/HomeNav";
+import LibraryNavigation from "./home/LibraryNav";
 
 function TabNavigation() {
     const Tab = createMaterialBottomTabNavigator();
@@ -25,7 +26,7 @@ function TabNavigation() {
                         <Image source={require('../assets/search.png')} />
                     ),
                 }} />
-            <Tab.Screen name="Library" component={LibraryScreen}
+            <Tab.Screen name="Library" component={LibraryNavigation}
                 options={{
                     tabBarLabel: 'Library',
                     tabBarIcon: () => (

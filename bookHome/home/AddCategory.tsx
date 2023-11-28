@@ -1,37 +1,19 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
-import DropDownPicker from "react-native-dropdown-picker";
 import storage from "@react-native-firebase/storage";
-import { serverTimestamp } from '@react-native-firebase/firestore';
-import { useSelector } from "react-redux";
-import firestore from '@react-native-firebase/firestore'
-import { RootState } from "../../reduxIntegration/Store";
-
-function AddPost() {
-    const [bookName, setBookName] = useState("")
-    const [authorName, setAuthorName] = useState("")
-    const [link, setLink] = useState("")
+function AddCategory() {
+    const [categoryName, setCategoryName] = useState("")
+    const [description, setDescription] = useState("")
     const navigation = useNavigation()
     const [imageURI, setImageUri] = useState("")
     const [bnErrorMessage, setBnError] = useState("")
     const [anErrorMessage, setAnError] = useState("")
-    const [linkErrorMessage, setLinkError] = useState("")
-    const [selectedValue, setSelectedValue] = useState(null);
-    const [isOpen, setIsOpen] = useState(false)
-    const userId = useSelector((state: RootState) => {
-        console.log("userEmail", state)
-        return state.loginAuth.userId
-    })
-    const options = [
-        { label: 'Option 1', value: 'option1' },
-        { label: 'Option 2', value: 'option2' },
-        { label: 'Option 3', value: 'option3' },
-    ];
-
+    // const [uploading, setUploading] = useState(false)
+    // const [transferred, setTransferred] = useState(0)
     const openImagePicker = () => {
         const options = {
             mediaType: 'photo',
@@ -55,23 +37,21 @@ function AddPost() {
         setImageUri(imageUri)
     };
     const handleAddPost = () => {
-        if (!bookName) {
-            setBnError("book name can'not be empty")
+        if (!categoryName) {
+            setBnError("categoryName can'not be empty")
             return
         }
-        if (!authorName) {
-            setAnError("author Name can'not be empty ")
+        if (!description) {
+            setAnError("description Name can'not be empty ")
             return
         }
-
-        if (!link) {
-            setLinkError("link can'not be empty")
+        if (!imageURI) {
+            Alert.alert("Warning", "please select a image")
             return
         }
         else {
             setAnError("")
             setBnError("")
-            setLinkError("")
         }
         uploadPhoto();
 
@@ -80,66 +60,34 @@ function AddPost() {
         const uploadUri = imageURI
         // setUploading(true)
         // setTransferred(0);
-
-        let FileName = `PostImage/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`
-
+        let fileName = `CategoryImages/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`;
         try {
-            const reference = storage().ref(FileName)
+            const reference = storage().ref(fileName)
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
                 // setTransferred(Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100)
                 // setUploading(false)
             })
-            navigation.navigate("Homes")
+            navigation.navigate("LibraryS")
         } catch (error) {
             console.log("photo not uploaded", error)
         }
-        addPostToFireStore(FileName);
-    }
-
-    const addPostToFireStore = (FileName:String) => {
-        const postData = {
-            categoryId: "",
-            createdAt: serverTimestamp(),
-            image: FileName,
-            link: link,
-            status: "active",
-            subTitle: authorName,
-            title: bookName,
-            updatedAt: serverTimestamp(),
-            userId: userId,
-        }
-        console.log("Post Data", postData)
-        firestore().collection("posts").doc().set(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
-
     }
     return (
         <View style={{ flexDirection: 'column', alignItems: 'flex-start', backgroundColor: 'white', flex: 1 }}>
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
-                <TouchableOpacity onPress={() => navigation.navigate("Homes")}>
+                <TouchableOpacity onPress={() => navigation.navigate("LibraryS")}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
+
                 <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold' }}>
-                    Add Post
+                    Add Category
                 </Text>
             </View>
-            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} />
-            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={anErrorMessage} />
-            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} />
+            <TextInputCom placeholder="Category name" value={categoryName} onChangeText={setCategoryName} secureTextEntry={false} errorMessage={bnErrorMessage} />
+            <TextInputCom placeholder="Description" value={description} onChangeText={setDescription} secureTextEntry={false} errorMessage={anErrorMessage} />
             <View style={{ padding: 20, marginEnd: 15 }}>
-                <DropDownPicker
-                    items={options}
-                    open={isOpen}
-                    value={selectedValue}
-                    setOpen={() => setIsOpen(!isOpen)}
-                    setValue={(val) => setSelectedValue(val)}
-                    placeholder="Categories"
-                    style={styles.dropDown}
-                    maxHeight={200}
-                    autoScroll
-                    placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 17 }}
-                />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
                 <TouchableOpacity onPress={() => openImagePicker()} >
@@ -147,6 +95,13 @@ function AddPost() {
                         {imageURI ? "change Image" : "add image"}
                     </Text>
                 </TouchableOpacity>
+                {/* {uploading && (
+                    <View style = {{width :70 , height:30}}>
+                        <Text style ={{color:"blue"}}> {transferred} % completed</Text>
+                    <ActivityIndicator />
+                    </View>
+                    )
+                } */}
                 {imageURI && (
                     <Image source={({ uri: imageURI })} style={{ width: 140, height: 100, resizeMode: 'contain', marginStart: 80, borderRadius: 5, alignSelf: 'center', alignItems: 'center' }} />
                 )
@@ -157,14 +112,5 @@ function AddPost() {
     )
 }
 
-const styles = StyleSheet.create({
-
-    dropDown: {
-        alignItems: 'center',
-        backgroundColor: 'white',
-        color: 'black'
-    }
-})
-export default AddPost;
-
+export default AddCategory;
 

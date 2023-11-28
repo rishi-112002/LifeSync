@@ -6,10 +6,13 @@ import TextInputCom from "../reuseableComponent/TextInputComponent";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import { serverTimestamp } from '@react-native-firebase/firestore';
-function SignupScreen({ navigation }) {
+import { useNavigation } from "@react-navigation/native";
+function SignupScreen() {
+    const navigation = useNavigation();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
+    const userId = auth().currentUser?.uid;
     const userData = {
         address: "Indore",
         countryCode: "+91",
@@ -19,7 +22,8 @@ function SignupScreen({ navigation }) {
         mobile: "1234567890",
         name: name,
         status: "active", 
-        updatedAt:" 25 November 2023 at 00:00:00 UTC + 5: 30 ",
+        updatedAt:serverTimestamp(),
+        userId:userId,
     }
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
     const handleSignInAuth = () => {
@@ -61,7 +65,7 @@ function SignupScreen({ navigation }) {
         try {
             await auth().createUserWithEmailAndPassword(email, password);
             console.log('User added successfully!');
-            addUserData(email);
+            addUserData();
             navigation.navigate("Login")
             
         } catch (error) {
@@ -71,9 +75,9 @@ function SignupScreen({ navigation }) {
         }
     };
 
-    const addUserData = async (email: any) => {
+    const addUserData = async () => {
         try {
-            await firestore().collection("users").doc(email).set(userData)
+            await firestore().collection("users").doc(userId).set(userData)
         } catch (error) {
             console.error('Error adding user:', error.message);
             Alert.alert("warning", "User is already exits Please try to login")

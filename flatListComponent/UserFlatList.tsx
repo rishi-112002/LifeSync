@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 import { RootState, store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
-import PostRequest from "../apiCalling/PostRequest";
 import GetApiRequest from "../apiCalling/GetRequest";
 import EditProfile from "../bookHome/home/EditProfile";
-
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore'
 function UserFlatList() {
 
     const userEmail = useSelector((state: RootState) => {
@@ -22,16 +22,25 @@ function UserFlatList() {
         } catch {
             console.error('user data is not Deleted')
         }
-        
+
     };
+    const handleLogoutUser = () => {
+        auth().signOut().then(() => {
+            console.log("LogoutUser Successfully")
+        }).catch((error) => {
+            console.log("error", error)
+        })
+    }
 
     const handleLogout = () => {
+        handleLogoutUser();
         const object = {
             userEmail: '',
             userPassword: '',
         }
         store.dispatch(loginAuth(object))
         logoutUser();
+
     };
 
     const userMethod = [
@@ -78,7 +87,7 @@ function UserFlatList() {
 
                         case 'Terms Of usage':
                             GetApiRequest();
-                            break;                                                                                                                                                                                                                                                                                                                                                                       
+                            break;
 
                         case 'Ratting app':
                             EditProfile();
