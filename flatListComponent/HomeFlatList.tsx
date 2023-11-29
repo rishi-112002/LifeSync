@@ -1,69 +1,48 @@
 import React = require("react");
 import { View, FlatList, TouchableOpacity, StyleSheet, Image, Text } from "react-native";
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore'
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../reduxIntegration/Store";
+function HomeFlatList(props: { onUserIconPress: any }) {
+    const { onUserIconPress } = props
+    const postCollection = firestore().collection('posts');
+    const [postOption, setPostOption] = useState([])
+    const userName = useSelector((state: RootState) => {
+        console.log("userEmail", state)
+        return state.loginAuth.userName
+    })
+    const postDataViaFireStore = () => {
+        postCollection.get()
+            .then((querySnapShot) => {
+                const option = [];
+                querySnapShot.forEach(async (doc) => {
+                    console.log("id", doc.id);
+                    const postData = doc.data();
+                    console.log("category Data", postData.name);
+                    try {
+                        // const storageRef = storage().ref();
+                        // const fileRef = storageRef.child(postData.image);
+                        // const url = await fileRef.getDownloadURL();
+                        option.push({ name : userName ,link : postData.link, bookName: postData.title , authorName:postData.subTitle});
+                    } catch (error) {
+                        console.error("Error getting download URL:", error);
+                    }
+                });
+                setPostOption(option)
+            })
+            .catch((error) => {
+                console.error("Error fetching category data:", error);
+            });
+    }
+    useEffect(() => {
+        postDataViaFireStore();
+    }, []);
 
-function HomeFlatList(props) {
-    const {onUserIconPress} = props
-    const User = [
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        },
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        },
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        },
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        },
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        },
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        },
-        {
-            readerName: "",
-            timeStatus:"",
-            BookName :"",
-            authorName:"",
-            bookImage :"",
-            bookLink :""
-        }
-    ];
     return (
         <View style={styles.container}>
-            <FlatList data={User} renderItem={(item) => {
+            <FlatList data={postOption} renderItem={(item) => {
                 return (
                     <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
                         <View style={styles.userIcon}>
@@ -74,7 +53,7 @@ function HomeFlatList(props) {
                             <View style={{ flexDirection: 'column' }}>
                                 <TouchableOpacity>
                                     <Text style={{ color: 'black', marginLeft: 10, fontSize: 18 }}>
-                                        Bryan Johnson
+                                       {item.item.name}
                                     </Text>
                                 </TouchableOpacity>
 
@@ -96,16 +75,16 @@ function HomeFlatList(props) {
                             <View style={{ flexDirection: 'column', flex: 1 }}>
                                 <TouchableOpacity>
                                     <Text style={{ color: 'black', marginLeft: 18, marginTop: 12, fontSize: 22 }}>
-                                        Atomic Habits
+                                        {item.item.bookName}
                                     </Text>
                                 </TouchableOpacity>
 
                                 <Text style={{ color: 'gray', marginLeft: 20, fontSize: 15 }}>
-                                    James Cleaner
+                                    {item.item.authorName}
                                 </Text>
                                 <TouchableOpacity style={{ flex: 1 }}>
                                     <Text style={{ color: 'blue', marginLeft: 18, fontSize: 13, marginTop: 20, marginRight: 5, flex: 1 }} numberOfLines={2}>
-                                        https://www.amazon.in/Atomic-Habits-James-Clear...
+                                        {item.item.link}
                                     </Text>
                                 </TouchableOpacity>
 

@@ -5,6 +5,10 @@ import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import storage from "@react-native-firebase/storage";
+import { serverTimestamp } from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore'
+import { useSelector } from "react-redux";
+import { RootState } from "../../reduxIntegration/Store";
 function AddCategory() {
     const [categoryName, setCategoryName] = useState("")
     const [description, setDescription] = useState("")
@@ -14,6 +18,10 @@ function AddCategory() {
     const [anErrorMessage, setAnError] = useState("")
     // const [uploading, setUploading] = useState(false)
     // const [transferred, setTransferred] = useState(0)
+    const userId = useSelector((state: RootState) => {
+        console.log("userEmail", state)
+        return state.loginAuth.userId
+    })
     const openImagePicker = () => {
         const options = {
             mediaType: 'photo',
@@ -56,6 +64,19 @@ function AddCategory() {
         uploadPhoto();
 
     }
+    const createCategory = (FileName: String) => {
+        const categoryData = {
+            createdAt: serverTimestamp(),
+            description: description,
+            image: FileName,
+            name: categoryName,
+            status: "active",
+            updatedAt: serverTimestamp(),
+            userId: userId,
+        }
+        console.log("Post Data", categoryData)
+        firestore().collection("category").doc().set(categoryData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
+    }
     const uploadPhoto = async () => {
         const uploadUri = imageURI
         // setUploading(true)
@@ -66,6 +87,7 @@ function AddCategory() {
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
+                
                 // setTransferred(Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100)
                 // setUploading(false)
             })
@@ -73,6 +95,7 @@ function AddCategory() {
         } catch (error) {
             console.log("photo not uploaded", error)
         }
+        createCategory(fileName)
     }
     return (
         <View style={{ flexDirection: 'column', alignItems: 'flex-start', backgroundColor: 'white', flex: 1 }}>

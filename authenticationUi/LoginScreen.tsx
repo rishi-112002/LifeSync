@@ -3,11 +3,9 @@ import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
-import LoginData from "../apiDataFunctions/LoginData";
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
-import { store } from "../reduxIntegration/Store";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import { useDispatch } from "react-redux";
 
@@ -30,10 +28,12 @@ function LoginScreen() {
         try {
             await auth().signInWithEmailAndPassword(email, password);
             usersCollection.where("email", "==", email).get().then((querySnapShot) => {
-                querySnapShot.forEach((doc) => {
+                querySnapShot.forEach(async (doc) => {
                     console.log("id", doc.id)
                     const userId = doc.id
-                    saveLoginData(email, password, userId)
+                  const userData = doc.data();
+
+                    saveLoginData(email, password, userId, userData.name)
 
                 });
             })
@@ -46,11 +46,12 @@ function LoginScreen() {
             }
         }
     };
-    const saveLoginData = async (email: string, password: string, userId: string) => {
+    const saveLoginData = async (email: string, password: string, userId: string, userName: string) => {
         const object = {
             email: email,
             password: password,
-            userId: userId
+            userId: userId,
+            userName: userName
         }
         console.log(object)
         dispatch(loginAuth(object))

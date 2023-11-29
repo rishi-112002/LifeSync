@@ -14,7 +14,7 @@ function LibraryScreen(this: any) {
                 <Text style={styles.tabTextColor}>
                     Library
                 </Text>
-                <TouchableOpacity onPress={() => navigation.navigate(AddCategory)}>
+                <TouchableOpacity onPress={() => navigation.navigate("LibraryS")}>
                 <Image source={require('../../assets/threeDots.png')} style={{ marginStart: 210, marginTop: 19, alignSelf: 'flex-end' }}  />
                 </TouchableOpacity>
             </View>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
@@ -21,16 +21,35 @@ function AddPost() {
     const [anErrorMessage, setAnError] = useState("")
     const [linkErrorMessage, setLinkError] = useState("")
     const [selectedValue, setSelectedValue] = useState(null);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
+    const categoryCollection = firestore().collection('category');
+    const [categoryOption, setCategoryOption] = useState([])
     const userId = useSelector((state: RootState) => {
         console.log("userEmail", state)
         return state.loginAuth.userId
     })
-    const options = [
-        { label: 'Option 1', value: 'option1' },
-        { label: 'Option 2', value: 'option2' },
-        { label: 'Option 3', value: 'option3' },
-    ];
+
+
+    const categoryDataViaFireStore = () => {
+        categoryCollection.get()
+            .then((querySnapShot) => {
+                const option = [];
+                querySnapShot.forEach((doc) => {
+                    console.log("id", doc.id);
+                    const categoryData = doc.data();
+                    console.log("category Data", categoryData.name);
+                    option.push({ label: categoryData.name, value: doc.id })
+                });
+                setCategoryOption(option)
+                // setCategoryId()
+            })
+            .catch((error) => {
+                console.error("Error fetching category data:", error);
+            });
+    }
+    useEffect(() => {
+        categoryDataViaFireStore();
+    }, []);
 
     const openImagePicker = () => {
         const options = {
@@ -46,15 +65,13 @@ function AddPost() {
                 console.log('Image picker error: ', response.errorMessage);
             } else {
                 let imageUri = response.uri || response.assets?.[0]?.uri;
-                setSelectedImage(imageUri);
+                setImageUri(imageUri);
             }
         });
     };
-    const setSelectedImage = (imageUri: any) => {
-        console.log('Selected Image URI:', imageUri);
-        setImageUri(imageUri)
-    };
+
     const handleAddPost = () => {
+
         if (!bookName) {
             setBnError("book name can'not be empty")
             return
@@ -66,6 +83,14 @@ function AddPost() {
 
         if (!link) {
             setLinkError("link can'not be empty")
+            return
+        }
+        if (!imageURI) {
+            Alert.alert("Warning", "please select a image")
+            return
+        }
+        if (!selectedValue) {
+            Alert.alert("Warning", "please select a Category")
             return
         }
         else {
@@ -91,6 +116,7 @@ function AddPost() {
                 // setTransferred(Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100)
                 // setUploading(false)
             })
+            await task
             navigation.navigate("Homes")
         } catch (error) {
             console.log("photo not uploaded", error)
@@ -98,9 +124,9 @@ function AddPost() {
         addPostToFireStore(FileName);
     }
 
-    const addPostToFireStore = (FileName:String) => {
+    const addPostToFireStore = (FileName: String) => {
         const postData = {
-            categoryId: "",
+            categoryId: selectedValue,
             createdAt: serverTimestamp(),
             image: FileName,
             link: link,
@@ -129,7 +155,7 @@ function AddPost() {
             <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} />
             <View style={{ padding: 20, marginEnd: 15 }}>
                 <DropDownPicker
-                    items={options}
+                    items={categoryOption}
                     open={isOpen}
                     value={selectedValue}
                     setOpen={() => setIsOpen(!isOpen)}

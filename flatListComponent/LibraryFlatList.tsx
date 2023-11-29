@@ -1,54 +1,20 @@
 import React = require("react");
 import { View, FlatList, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-
+import firestore from '@react-native-firebase/firestore'
+import { useEffect, useState } from "react";
+import storage from '@react-native-firebase/storage';
 function LibraryFlatList(props: { searchText: String }) {
     const { searchText } = props
-    const LibraryData = [
-        {
-            type: "Personality Development",
-
-            imageSrc: require('../assets/personalityimage.png'),
-
-
-        },
-        {
-            type: "Growth",
-            imageSrc: require('../assets/growthImage.jpg'),
-
-        },
-        {
-            type: "Habit making",
-            imageSrc: require('../assets/habitMaking.png'),
-
-        }, {
-            type: "Investing",
-            imageSrc: require('../assets/investingImage.jpg')
-        },
-        {
-            type: "Fiction",
-            imageSrc: require('../assets/fiction.png')
-        },
-        {
-            type: "Non-Fiction",
-            imageSrc: require('../assets/nonFiction.jpg')
-        },
-
-        {
-            type: "Mystery",
-            imageSrc: require('../assets/mystery.jpg')
-        },
-        {
-            type: "Biography",
-            imageSrc: require('../assets/biography.jpg')
-        },
-    ];
+    const categoryCollection = firestore().collection('category');
+    const [categoryOption, setCategoryOption] = useState([])
+    const staticUrl = "https://firebasestorage.googleapis.com/v0/b/react-native-training-ad249.appspot.com/o/"
     const filterData = (item) => {
-        console.log(item, searchText);
+        console.log("item Details",item);
         if (searchText === "") {
             return (
                 <View style={styles.view}>
                     <TouchableOpacity>
-                        <Image source={item.imageSrc} style={styles.image} />
+                        <Image source={{ uri: item.imageSrc }} style={styles.image} />
                     </TouchableOpacity>
                     <Text style={styles.typeText}>
                         {item.type}
@@ -60,7 +26,7 @@ function LibraryFlatList(props: { searchText: String }) {
             return (
                 <View style={styles.view}>
                     <TouchableOpacity>
-                        <Image source={item.imageSrc} style={styles.image} />
+                        <Image source={{ uri: item.imageSrc }} style={styles.image} />
                     </TouchableOpacity>
                     <Text style={styles.typeText}>
                         {item.type}
@@ -69,9 +35,37 @@ function LibraryFlatList(props: { searchText: String }) {
             )
         }
     }
+
+    const categoryDataViaFireStore = () => {
+        categoryCollection.get()
+            .then((querySnapShot) => {
+                const option = [];
+                querySnapShot.forEach(async (doc) => {
+                    console.log("id", doc.id);
+                    const categoryData = doc.data();
+                    console.log("category Data", categoryData.name);
+                    try {
+                        const storageRef = storage().ref();
+                        const fileRef = storageRef.child(categoryData.image);
+                        const url = await fileRef.getDownloadURL();
+                        option.push({ type: categoryData.name, imageSrc: url });
+                    } catch (error) {
+                        console.error("Error getting download URL:", error);
+                    }
+                });
+                setCategoryOption(option)
+            })
+            .catch((error) => {
+                console.error("Error fetching category data:", error);
+            });
+    }
+    useEffect(() => {
+        categoryDataViaFireStore();
+    }, []);
+
     return (
         <View style={styles.container}>
-            <FlatList data={LibraryData} renderItem={({ item }) => filterData(item)}
+            <FlatList data={categoryOption} renderItem={({ item }) => filterData(item)}
                 numColumns={2}
                 columnWrapperStyle={styles.viewContainer} />
         </View>
@@ -113,3 +107,11 @@ const styles = StyleSheet.create({
 
 })
 export default LibraryFlatList;
+
+
+
+
+
+
+
+
