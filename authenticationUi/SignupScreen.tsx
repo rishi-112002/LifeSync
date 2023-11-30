@@ -114,7 +114,7 @@ function SignupScreen() {
                     value={password}
                     onChangeText={((text: React.SetStateAction<string>) => setPassword(text))}
                     placeholder="min 6 character" secureTextEntry={true} />
-                <ButtonComponent buttonTittle="Sign up" onPress={() => handleSignInAuth()} />
+                <ButtonComponent buttonTittle="Sign up" onPress={handleSignInAuth} />
                 <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold' }} onPress={() => navigation.navigate('Login')}>
                     Already have an account, Login?
                 </Text>

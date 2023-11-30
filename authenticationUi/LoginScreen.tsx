@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
 import { loginAuth } from "../reduxIntegration/Reducer";
 import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function LoginScreen() {
     const navigation = useNavigation();
@@ -24,23 +25,28 @@ function LoginScreen() {
         }
         handleEmail();
     }
+
+
+    const userDetails = async () => {
+        console.log("hello")
+        await usersCollection.where("email", "==", email).get().then((querySnapShot) => {
+            querySnapShot.forEach(async (doc) => {
+                console.log("id", doc.id)
+                const userId = doc.id
+                const userData = doc.data();
+                saveLoginData(email, password, userId, userData.name)
+            });
+        })
+    }
     const loginUser = async () => {
         try {
             await auth().signInWithEmailAndPassword(email, password);
-            usersCollection.where("email", "==", email).get().then((querySnapShot) => {
-                querySnapShot.forEach(async (doc) => {
-                    console.log("id", doc.id)
-                    const userId = doc.id
-                  const userData = doc.data();
-
-                    saveLoginData(email, password, userId, userData.name)
-
-                });
-            })
+            userDetails();
             console.log('User logged in successfully!');
         } catch (error) {
             if (error === 'auth/user-not-found') {
                 console.log('User does not exist. You may want to redirect to the registration page.');
+                Alert.alert("warning", "user does not exits")
             } else {
                 console.error('Error logging in:', error);
             }
@@ -53,8 +59,10 @@ function LoginScreen() {
             userId: userId,
             userName: userName
         }
-        console.log(object)
+        console.log("object ", object)
         dispatch(loginAuth(object))
+        await AsyncStorage.setItem('email', object.email)
+        await AsyncStorage.setItem('password', object.password)
 
     }
     const handleEmail = () => {
@@ -74,9 +82,8 @@ function LoginScreen() {
             Alert.alert("Warning", "Password is invalid (less than 6 characters)");
             return;
         }
-        else {
-            loginUser()
-        }
+        loginUser()
+
         console.log("Valid email and password");
     };
 

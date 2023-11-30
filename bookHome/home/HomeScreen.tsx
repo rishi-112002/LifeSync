@@ -2,7 +2,13 @@ import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import HomeFlatList from "../../flatListComponent/HomeFlatList";
 import { useNavigation } from "@react-navigation/native";
+import GetAllUserData from "../../fireStoreHandle/GetAllUserData";
+import { useSelector } from "react-redux";
 function HomeScreen() {
+
+// const userNames = useSelector(state => state.allUserData.userData[userId])
+
+    GetAllUserData();
     const navigation = useNavigation()
     return (
         <View style={styles.container}>
