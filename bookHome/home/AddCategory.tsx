@@ -64,7 +64,7 @@ function AddCategory() {
         uploadPhoto();
 
     }
-    const createCategory = (FileName: String) => {
+    const createCategory = async (FileName: String) => {
         const categoryData = {
             createdAt: serverTimestamp(),
             description: description,
@@ -75,7 +75,7 @@ function AddCategory() {
             userId: userId,
         }
         console.log("Post Data", categoryData)
-        firestore().collection("category").doc().set(categoryData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
+      await  firestore().collection("category").doc().set(categoryData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
     }
     const uploadPhoto = async () => {
         const uploadUri = imageURI

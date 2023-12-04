@@ -3,18 +3,36 @@ import { View, FlatList, StyleSheet, Image, Text, TouchableOpacity } from "react
 import firestore from '@react-native-firebase/firestore'
 import { useEffect, useState } from "react";
 import storage from '@react-native-firebase/storage';
+
 function LibraryFlatList(props: { searchText: String }) {
     const { searchText } = props
     const categoryCollection = firestore().collection('category');
     const [categoryOption, setCategoryOption] = useState([])
-    const staticUrl = "https://firebasestorage.googleapis.com/v0/b/react-native-training-ad249.appspot.com/o/"
-    const filterData = (item) => {
-        console.log("item Details",item);
+    const [imageUrl, setImageUrl] = useState("");
+
+    
+
+    async function getImage(imageURL:any) {
+        try {
+            const storageRef = storage().ref();
+            const imageRef = storageRef.child(imageURL);
+            const url = await imageRef.getDownloadURL();
+            console.log("image URL ", url)
+            setImageUrl(url);
+        } catch (error) {
+            console.error('Error getting image URL:', error);
+            throw error;
+        }
+    }
+
+
+    const filterData = (item: any) => {
+        console.log("item Details", item);
         if (searchText === "") {
             return (
                 <View style={styles.view}>
                     <TouchableOpacity>
-                        <Image source={{ uri: item.imageSrc }} style={styles.image} />
+                        <Image source={{ uri: imageUrl }} style={{ height:100, width: 100, alignSelf: 'center' , borderRadius:10 , resizeMode:'cover'}} />
                     </TouchableOpacity>
                     <Text style={styles.typeText}>
                         {item.type}
@@ -22,6 +40,9 @@ function LibraryFlatList(props: { searchText: String }) {
                 </View>
             )
         }
+
+
+
         if (item.type.toLowerCase().includes(searchText.toLowerCase())) {
             return (
                 <View style={styles.view}>
@@ -43,15 +64,10 @@ function LibraryFlatList(props: { searchText: String }) {
                 querySnapShot.forEach(async (doc) => {
                     console.log("id", doc.id);
                     const categoryData = doc.data();
-                    console.log("category Data", categoryData.name);
-                    try {
-                        const storageRef = storage().ref();
-                        const fileRef = storageRef.child(categoryData.image);
-                        const url = await fileRef.getDownloadURL();
-                        option.push({ type: categoryData.name, imageSrc: url });
-                    } catch (error) {
-                        console.error("Error getting download URL:", error);
-                    }
+                    getImage(categoryData.image)
+                    console.log("category Data Image" , categoryData.image)
+                    option.push({ type: categoryData.name });
+
                 });
                 setCategoryOption(option)
             })

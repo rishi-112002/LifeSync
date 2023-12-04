@@ -25,23 +25,19 @@ function AddPost() {
     const categoryCollection = firestore().collection('category');
     const [categoryOption, setCategoryOption] = useState([])
     const userId = useSelector((state: RootState) => {
-        console.log("userEmail", state)
         return state.loginAuth.userId
     })
 
-
+ 
     const categoryDataViaFireStore = () => {
         categoryCollection.get()
             .then((querySnapShot) => {
                 const option = [];
                 querySnapShot.forEach((doc) => {
-                    console.log("id", doc.id);
                     const categoryData = doc.data();
-                    console.log("category Data", categoryData.name);
                     option.push({ label: categoryData.name, value: doc.id })
                 });
                 setCategoryOption(option)
-                // setCategoryId()
             })
             .catch((error) => {
                 console.error("Error fetching category data:", error);
@@ -124,7 +120,7 @@ function AddPost() {
         addPostToFireStore(FileName);
     }
 
-    const addPostToFireStore = (FileName: String) => {
+    const addPostToFireStore = async (FileName: String) => {
         const postData = {
             categoryId: selectedValue,
             createdAt: serverTimestamp(),
@@ -136,7 +132,6 @@ function AddPost() {
             updatedAt: serverTimestamp(),
             userId: userId,
         }
-        console.log("Post Data", postData)
         firestore().collection("posts").doc().set(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
 
     }

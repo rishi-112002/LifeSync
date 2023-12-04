@@ -5,7 +5,6 @@ import { allUserDetails } from '../reduxIntegration/Reducer';
 const usersCollection = firestore().collection('users');
 
 async function GetAllUserData() {
-    const userDataArray: { userId: any; email: any; name: any; mobile: any; gender: any}[] = [];
 
     const allUsersData = {}
     try {
@@ -20,12 +19,8 @@ async function GetAllUserData() {
                 gender: usersData["gender"],
             };
             allUsersData[doc.id] = userObject
-            console.log("UserObject ",userObject)
         });
-
-        console.log("userDataArray", userDataArray);
         store.dispatch(allUserDetails(allUsersData));
-        // console.log(store.getState().userData);
     } catch (error) {
         console.error("Error getting user data:", error);
     }

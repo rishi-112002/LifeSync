@@ -3,24 +3,20 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import HomeFlatList from "../../flatListComponent/HomeFlatList";
 import { useNavigation } from "@react-navigation/native";
 import GetAllUserData from "../../fireStoreHandle/GetAllUserData";
-import { useSelector } from "react-redux";
 function HomeScreen() {
-
-// const userNames = useSelector(state => state.allUserData.userData[userId])
-
     GetAllUserData();
     const navigation = useNavigation()
     return (
         <View style={styles.container}>
-             <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+            <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                 <Text style={styles.tabTextColor}>
                     Home
                 </Text>
-                <TouchableOpacity onPress={() =>navigation.navigate("AddPost")}>
-                <Image source={require("../../assets/addIcon.png")} style={{ marginStart: 225, marginTop: 19, alignSelf: 'flex-end' }} />
+                <TouchableOpacity onPress={() => navigation.navigate("AddPost")}>
+                    <Image source={require("../../assets/addIcon.png")} style={{ marginStart: 225, marginTop: 19, alignSelf: 'flex-end' }} />
                 </TouchableOpacity>
             </View>
-            <HomeFlatList  onUserIconPress ={ () => navigation.navigate('Account')}/>
+            <HomeFlatList onUserIconPress={() => navigation.navigate('Account')} />
         </View>
     )
 };

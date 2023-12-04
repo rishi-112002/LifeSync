@@ -21,11 +21,14 @@ function AppNavigation() {
         try {
             const email = await AsyncStorage.getItem('email');
             const password = await AsyncStorage.getItem('password');
-            console.log("user data ", email, password);
+            const userId = await AsyncStorage.getItem('userId')
+            const userName = await AsyncStorage.getItem('userName')
             if (email && password) {
                 const object = {
                     email,
                     password,
+                    userId,
+                    userName
                 }
                 store.dispatch(loginAuth(object))
                 return
@@ -40,7 +43,6 @@ function AppNavigation() {
         getUserData();
     }, []);
     const userEmail = useSelector((state: RootState) => {
-        console.log("userEmail", state)
         return state.loginAuth.email
     })
     if (loader) {

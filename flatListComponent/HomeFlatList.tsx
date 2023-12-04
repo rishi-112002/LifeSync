@@ -5,32 +5,30 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import HomeFlatListView from "./HomeFlatListView";
+import GetActualTime from "../reuseableComponent/GetActualTime";
 function HomeFlatList(props: { onUserIconPress: any }) {
     const { onUserIconPress } = props
     const postCollection = firestore().collection('posts');
     const [postOption, setPostOption] = useState([])
-    const [userIds, setUserIds] = useState()
     const userName = useSelector((state: RootState) => {
-        console.log("userEmail", state)
         return state.loginAuth.userName
     })
-
-    // console.log("userNames",userNames)
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
-                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any }[] = [];
+                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any , imageUri :any}[] = [];
                 querySnapShot.forEach(async (doc) => {
                     const postData = doc.data();
                     try {
                         // const storageRef = storage().ref();
                         // const fileRef = storageRef.child(postData.image);
                         // const url = await fileRef.getDownloadURL();
-                        // userNames[doc.id]
-                        setUserIds(postData.userId)
+
+                        const result = GetActualTime(postData.createdAt.seconds);
+
                         option.push({
                             name: userName, link: postData.link, bookName: postData.title, authorName: postData.subTitle,
-                            userId: postData.userId
+                            userId: postData.userId, timeResult: result,imageUri: postData.image
                         });
                     } catch (error) {
                         console.error("Error getting download URL:", error);
@@ -46,12 +44,11 @@ function HomeFlatList(props: { onUserIconPress: any }) {
     useEffect(() => {
         postDataViaFireStore();
     }, []);
-    console.log("Post Options", postOption)
     return (
 
-        <View style={styles.container}>
+        <View style={styles.container }>
             <FlatList data={postOption} renderItem={(item) => {
-                return <HomeFlatListView item={item} onUserIconPress={onUserIconPress}  />
+                return <HomeFlatListView item={item} onUserIconPress={onUserIconPress} />
             }} />
         </View>
     )
@@ -65,7 +62,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     }
 })
 export default HomeFlatList;

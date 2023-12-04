@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
-
-function HomeFlatListView(props:{item: ListRenderItemInfo<never> , onUserIconPress:any }) {
-    const {item , onUserIconPress } = props
+import storage from '@react-native-firebase/storage'
+function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPress: any }) {
+    const { item, onUserIconPress } = props
     const userName = useSelector((state: RootState) => {
-        // console.log("userEmail", state)
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
-    // console.log("items", item)
-    // console.log("items", userId)
+
+    const [imageUrl, setImageUrl] = useState("");
+
+    useEffect(() => {
+        getImage();
+    }, []);
+
+    async function getImage() {
+        try {
+            const storageRef = storage().ref();
+            const imageRef = storageRef.child(item.item.imageUri);
+            const url = await imageRef.getDownloadURL();
+            setImageUrl(url);
+        } catch (error) {
+            console.error('Error getting image URL:', error);
+            throw error;
+        }
+    }
 
     return (
         <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
@@ -27,7 +42,7 @@ function HomeFlatListView(props:{item: ListRenderItemInfo<never> , onUserIconPre
                     </TouchableOpacity>
 
                     <Text style={{ color: 'gray', marginLeft: 10, fontSize: 15 }}>
-                        45 min ago
+                        {item.item.timeResult}
                     </Text>
 
                 </View>
@@ -37,9 +52,9 @@ function HomeFlatListView(props:{item: ListRenderItemInfo<never> , onUserIconPre
             </View>
 
             <View style={{ flexDirection: 'row', backgroundColor: "#F6F6F6", borderRadius: 10, marginTop: 15, padding: 12 }}>
-                <TouchableOpacity>
-                    <Image source={require('../assets/bookImageA.png')} style={{ borderRadius: 10, }} />
-                </TouchableOpacity>
+                {imageUrl && <TouchableOpacity>
+                    <Image source={{ uri: imageUrl }} style={{ height:100, width: 100, alignSelf: 'center' , borderRadius:10 , resizeMode:'cover'}} />
+                </TouchableOpacity>}
 
                 <View style={{ flexDirection: 'column', flex: 1 }}>
                     <TouchableOpacity>
@@ -68,7 +83,7 @@ const styles = StyleSheet.create({
     userIcon: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: 20
+        marginTop: 20 , flex:1
     }
 })
 export default HomeFlatListView;

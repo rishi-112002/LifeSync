@@ -7,7 +7,8 @@ import { loginAuth } from "../reduxIntegration/Reducer";
 import GetApiRequest from "../apiCalling/GetRequest";
 import EditProfile from "../bookHome/home/EditProfile";
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore'
+import GetActualTime from "../reuseableComponent/GetActualTime";
+
 function UserFlatList() {
 
     const userEmail = useSelector((state: RootState) => {
@@ -42,6 +43,9 @@ function UserFlatList() {
         logoutUser();
 
     };
+
+
+   
 
     const userMethod = [
         {
@@ -83,6 +87,7 @@ function UserFlatList() {
 
 
                         case 'Privacy Policy':
+                           
                             break;
 
                         case 'Terms Of usage':

@@ -1,47 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import firestore from '@react-native-firebase/firestore';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 function SearchFlatList(props: { searchText: String }) {
     const { searchText } = props
+    const [bookNames, setBookNames] = useState([]);
 
-    const bookNames = [
-        {
-            bookName: "The Magic Tree",
-        },
-        {
-            bookName: "Winter Fairy",
-        },
-        {
-            bookName: "Wizards of Ice",
-        },
-        {
-            bookName: "Call of the Forest",
-        },
-        {
-            bookName: "The Enchanted Ones",
-        },
-        {
-            bookName: "A Spell Too Far",
-        },
-        {
-            bookName: "A Potion For The Wise",
-        },
-        {
-            bookName: "Tower To The Stars.",
-        }
-    ]
-    const filterData = (item: { bookName: any }) => {
-        console.log(item);
+    const GetAllSearchData = async () => {
+
+        const nameArray: any[] = []
+        await firestore().collection("category").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const bookList = doc.data();
+                nameArray.push(bookList)
+            })
+        })
+        setBookNames(nameArray)
+    }
+    useEffect(() => {
+        GetAllSearchData();
+    }, []);
+
+    const filterData = (item: { description: any, name: any }) => {
+
         if (searchText === "") {
             return null
         }
-        if (item.bookName.toLowerCase().includes(searchText.toLowerCase())) {
+        if (item.description.toLowerCase().includes(searchText.toLowerCase()) && item.name.toLowerCase().includes(searchText.toLowerCase())) {
             return (
                 <View>
                     <TouchableOpacity>
                         <Text style={styles.bookList}>
                             {
-                                item.bookName
+                                item.description
+                            }
+                        </Text>
+                        <Text style={styles.bookList}>
+                            {
+                                item.name
                             }
                         </Text>
                     </TouchableOpacity>

@@ -1,18 +1,18 @@
 import React from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native'
+import { View, Image, StyleSheet } from 'react-native'
 
 function SplashScreen() {
     return (
         <View style={style.container}>
             <Image source={require('../assets/appicon.png')} style={style.image} />
-           
+
         </View>
     );
 }
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'white',
+        backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center'
     },

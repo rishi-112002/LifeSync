@@ -28,13 +28,10 @@ function LoginScreen() {
 
 
     const userDetails = async () => {
-        console.log("hello")
         await usersCollection.where("email", "==", email).get().then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
-                console.log("id", doc.id)
-                const userId = doc.id
                 const userData = doc.data();
-                saveLoginData(email, password, userId, userData.name)
+                saveLoginData(email, password, doc.id, userData.name)
             });
         })
     }
@@ -59,11 +56,11 @@ function LoginScreen() {
             userId: userId,
             userName: userName
         }
-        console.log("object ", object)
         dispatch(loginAuth(object))
         await AsyncStorage.setItem('email', object.email)
         await AsyncStorage.setItem('password', object.password)
-
+        await AsyncStorage.setItem('userId', object.userId)
+        await AsyncStorage.setItem('userName', object.userName)
     }
     const handleEmail = () => {
         if (!emailRegex.test(email)) {
