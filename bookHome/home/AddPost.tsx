@@ -99,9 +99,6 @@ function AddPost() {
     }
     const uploadPhoto = async () => {
         const uploadUri = imageURI
-        // setUploading(true)
-        // setTransferred(0);
-
         let FileName = `PostImage/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`
 
         try {
@@ -109,11 +106,13 @@ function AddPost() {
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-                // setTransferred(Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100)
-                // setUploading(false)
+               
             })
-            await task
-            navigation.navigate("Homes")
+            task.then((successfully)=>    {
+                console.log("added" , successfully)
+                navigation.navigate("Homes")} )
+
+          
         } catch (error) {
             console.log("photo not uploaded", error)
         }

@@ -3,12 +3,13 @@ import { View, FlatList, StyleSheet } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../reduxIntegration/Store";
-import HomeFlatListView from "./HomeFlatListView";
-import GetActualTime from "../reuseableComponent/GetActualTime";
-function HomeFlatList(props: { onUserIconPress: any }) {
-    const { onUserIconPress } = props
-    const postCollection = firestore().collection('posts');
+import { RootState } from "../../reduxIntegration/Store";
+import GetActualTime from "../../reuseableComponent/GetActualTime";
+import HomeFlatListView from "../../flatListComponent/HomeFlatListView";
+
+function CategoryFlatList(props: { onUserIconPress: any , categoryId:any}) {
+    const { onUserIconPress , categoryId } = props
+    const postCollection = firestore().collection('posts').where("categoryId", "==",categoryId);
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
@@ -60,4 +61,4 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     }
 })
-export default HomeFlatList;
+export default CategoryFlatList;

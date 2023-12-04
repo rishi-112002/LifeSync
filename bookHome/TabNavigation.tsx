@@ -1,11 +1,11 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import SearchScreen from './home/SearchScreen'; ``
-import LibraryScreen from './home/LibraryScreen';
+import LibraryScreen from './library/LibraryScreen';
 import UserScreen from './home/UserScreen';
 import { Image, StyleSheet } from "react-native";
 import HomeNavigation from "./home/HomeNav";
-import LibraryNavigation from "./home/LibraryNav";
+import LibraryNavigation from "./library/LibraryNav";
 
 function TabNavigation() {
     const Tab = createMaterialBottomTabNavigator();

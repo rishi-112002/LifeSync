@@ -3,7 +3,8 @@ import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import SearchBar from "../../reuseableComponent/CustomSearchBar";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import { useNavigation } from "@react-navigation/native";
-import AddCategory from "./AddCategory";
+import AddCategory from "../home/AddCategory";
+import PopUpModal from "../../reuseableComponent/PopUpModal";
 
 function LibraryScreen(this: any) {
     const navigation = useNavigation();
@@ -23,25 +24,10 @@ function LibraryScreen(this: any) {
                 <TouchableOpacity onPress={togglePopupMenu}>
                     <Image source={require('../../assets/threeDots.png')} style={{ marginStart: 210, marginTop: 19, alignSelf: 'flex-end' }} />
                 </TouchableOpacity>
-                {isPopupMenuVisible && (
-                    <Modal
-                        transparent={true}
-                        visible={isPopupMenuVisible}
-                        onRequestClose={togglePopupMenu}>
-                        <View style={styles.modalContainer}>
-                            <TouchableOpacity onPress={togglePopupMenu}>
-                                <Text style={{ color: 'black' , fontSize:17 }}
-                                    onPress={() => {
-                                        navigation.navigate("AddCategory");
-                                        setPopupMenuVisible(false);
-                                    }}
-                                >
-                                    Add Category
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Modal>)
-
+                {isPopupMenuVisible && (<PopUpModal isPopupMenuVisible={isPopupMenuVisible} togglePopupMenu={togglePopupMenu} onPress={() => {
+                    navigation.navigate("AddCategory");
+                    setPopupMenuVisible(false);
+                }} />)
                 }
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />
@@ -65,9 +51,9 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         width: 130,
-        marginTop:50,
+        marginTop: 50,
         marginStart: 240,
-        padding:5,
+        padding: 5,
         shadowRadius: 10,
         alignContent: 'flex-end',
         backgroundColor: 'white',
