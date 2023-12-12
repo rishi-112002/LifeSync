@@ -45,6 +45,7 @@ function AppNavigation() {
     const userEmail = useSelector((state: RootState) => {
         return state.loginAuth.email
     })
+    console.log("userEmail at login", userEmail)
     if (loader) {
         return <SplashScreen />
     };

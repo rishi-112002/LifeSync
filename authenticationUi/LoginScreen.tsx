@@ -27,12 +27,16 @@ function LoginScreen() {
     }
 
 
-    const userDetails = async () => {
-        await usersCollection.where("email", "==", email).get().then((querySnapShot) => {
+    const userDetails =  () => {
+         usersCollection.where("email", "==", email).get().then((querySnapShot) => {
+            console.log("querySnapShot", querySnapShot.size)
             querySnapShot.forEach(async (doc) => {
                 const userData = doc.data();
+                console.log("userData", userData)
                 saveLoginData(email, password, doc.id, userData.name)
             });
+        }).catch(error => {
+            console.log("error", error)
         })
     }
     const loginUser = async () => {

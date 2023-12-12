@@ -35,7 +35,7 @@ function HomeFlatList(props: { onUserIconPress: any }) {
                 console.error("Error fetching category data:", error);
             });
     }
-
+    
     useEffect(() => {
         postDataViaFireStore();
     }, []);
@@ -43,7 +43,7 @@ function HomeFlatList(props: { onUserIconPress: any }) {
 
         <View style={styles.container}>
             <FlatList data={postOption} renderItem={(item) => {
-                return <HomeFlatListView item={item} onUserIconPress={onUserIconPress} />
+                return <HomeFlatListView item={item} onUserIconPress={onUserIconPress} onPressEditDelete={undefined} />
             }} />
         </View>
     )

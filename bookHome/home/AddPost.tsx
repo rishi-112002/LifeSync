@@ -30,7 +30,7 @@ function AddPost() {
 
  
     const categoryDataViaFireStore = () => {
-        categoryCollection.get()
+        categoryCollection.where("userId" ,"==",userId).get()
             .then((querySnapShot) => {
                 const option = [];
                 querySnapShot.forEach((doc) => {

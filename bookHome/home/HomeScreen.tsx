@@ -16,7 +16,7 @@ function HomeScreen() {
                     <Image source={require("../../assets/addIcon.png")} style={{ marginStart: 225, marginTop: 19, alignSelf: 'flex-end' }} />
                 </TouchableOpacity>
             </View>
-            <HomeFlatList onUserIconPress={() => navigation.navigate('Account')} />
+            <HomeFlatList onUserIconPress={() => navigation.navigate('ProfileScreen')} />
         </View>
     )
 };

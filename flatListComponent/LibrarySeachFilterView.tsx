@@ -29,16 +29,24 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
     {
         if (searchText === "") {
             return (
-                <View style={styles.view}>
-                    {imageUrl &&
-                        <TouchableOpacity onPress={() => navigation.navigate('CategoryTypeScreen', { categoryId : item.item.categoryId  , categoryName :item.item.type})}>
-                            <Image source={{ uri: imageUrl }} style={styles.image} />
-                        </TouchableOpacity>}
-                    <Text style={styles.typeText}>
-                        {item.item.type}
-                    </Text>
-                </View>
-            )
+                imageUrl && (
+                  <View style={styles.view}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('CategoryTypeScreens', {
+                          categoryId: item.item.categoryId,
+                          categoryName: item.item.type,
+                        })
+                      }
+                    >
+                      <Image source={{uri:imageUrl ? imageUrl : null}} style={styles.image} />
+                      {/* <Image source={imageUrl ? { uri: imageUrl } : require('../assets/growthImage.jpg')} /> */}
+
+                    </TouchableOpacity>
+                    <Text style={styles.typeText}>{item.item.type}</Text>
+                  </View>
+                )
+              )
         }
         if (item.item.type.toLowerCase().includes(searchText.toLowerCase())) {
             return (

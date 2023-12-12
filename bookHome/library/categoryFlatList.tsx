@@ -6,14 +6,22 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
 import GetActualTime from "../../reuseableComponent/GetActualTime";
 import HomeFlatListView from "../../flatListComponent/HomeFlatListView";
+import PopUpModal from "../../reuseableComponent/PopUpModal";
 
-function CategoryFlatList(props: { onUserIconPress: any , categoryId:any}) {
-    const { onUserIconPress , categoryId } = props
-    const postCollection = firestore().collection('posts').where("categoryId", "==",categoryId);
+function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
+    const { onUserIconPress, categoryId } = props
+    const postCollection = firestore().collection('posts').where("categoryId", "==", categoryId);
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     })
+    const [isPopupMenuVisible, setPopupMenuVisible] = useState(false);
+
+    const togglePopupMenu = () => {
+        setPopupMenuVisible(!isPopupMenuVisible);
+        console.log("clicked menu");
+    };
+
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
@@ -36,7 +44,10 @@ function CategoryFlatList(props: { onUserIconPress: any , categoryId:any}) {
                 console.error("Error fetching category data:", error);
             });
     }
-
+    const handlePress = () => {
+        // Your code to handle the press event goes here
+        console.log('Modal pressed');
+      };
     useEffect(() => {
         postDataViaFireStore();
     }, []);
@@ -44,7 +55,10 @@ function CategoryFlatList(props: { onUserIconPress: any , categoryId:any}) {
 
         <View style={styles.container}>
             <FlatList data={postOption} renderItem={(item) => {
-                return <HomeFlatListView item={item} onUserIconPress={onUserIconPress} />
+                return <HomeFlatListView item={item}
+                    onUserIconPress={onUserIconPress}
+                    onPressEditDelete={<PopUpModal isPopupMenuVisible={isPopupMenuVisible} togglePopupMenu={togglePopupMenu} onPress={handlePress} />}
+                />
             }} />
         </View>
     )

@@ -3,8 +3,9 @@ import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import SearchBar from "../../reuseableComponent/CustomSearchBar";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import { useNavigation } from "@react-navigation/native";
-import AddCategory from "../home/AddCategory";
 import PopUpModal from "../../reuseableComponent/PopUpModal";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reduxIntegration/Store";
 
 function LibraryScreen(this: any) {
     const navigation = useNavigation();
@@ -15,6 +16,9 @@ function LibraryScreen(this: any) {
         setPopupMenuVisible(!isPopupMenuVisible);
         console.log("clicked menu");
     };
+    const userId = useSelector((state: RootState) => {
+        return state.loginAuth.userId
+    })
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginBottom: 5 }}>
@@ -31,7 +35,7 @@ function LibraryScreen(this: any) {
                 }
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />
-            <LibraryFlatList searchText={searchText} />
+            <LibraryFlatList searchText={searchText} userId={userId} />
         </View>
     )
 };

@@ -4,14 +4,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const loginAuthentication = createSlice({
     name: 'LoginAuth',
     initialState: {
-        email: '',
+        email: "",
         password: '',
         userId: '',
         userName: ""
     },
     reducers: {
         loginAuth: (state, action) => {
-            // console.log("state UserId", action)
+            console.log("state UserId", action, state)
             state.email = action.payload.email
             state.password = action.payload.password
             state.userId = action.payload.userId

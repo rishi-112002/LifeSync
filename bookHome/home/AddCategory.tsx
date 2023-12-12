@@ -16,8 +16,6 @@ function AddCategory() {
     const [imageURI, setImageUri] = useState("")
     const [bnErrorMessage, setBnError] = useState("")
     const [anErrorMessage, setAnError] = useState("")
-    // const [uploading, setUploading] = useState(false)
-    // const [transferred, setTransferred] = useState(0)
     const userId = useSelector((state: RootState) => {
         console.log("userEmail", state)
         return state.loginAuth.userId
@@ -79,17 +77,12 @@ function AddCategory() {
     }
     const uploadPhoto = async () => {
         const uploadUri = imageURI
-        // setUploading(true)
-        // setTransferred(0);
         let fileName = `CategoryImages/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`;
         try {
             const reference = storage().ref(fileName)
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-                
-                // setTransferred(Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100)
-                // setUploading(false)
             })
             navigation.navigate("LibraryS")
         } catch (error) {

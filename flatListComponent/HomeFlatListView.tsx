@@ -3,12 +3,16 @@ import { Image, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } f
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import storage from '@react-native-firebase/storage'
-function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPress: any }) {
-    const { item, onUserIconPress } = props
+import { useNavigation } from "@react-navigation/native";
+import PopUpModal from "../reuseableComponent/PopUpModal";
+function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPress: any, onPressEditDelete: any }) {
+    const { item, onPressEditDelete } = props
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
 
+    const navigation = useNavigation();
+    console.log("userNames", userName)
     const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
@@ -26,11 +30,35 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPr
             throw error;
         }
     }
+    const [isPopupMenuVisible, setPopupMenuVisible] = useState(false);
 
+    const togglePopupMenu = () => {
+        setPopupMenuVisible(!isPopupMenuVisible);
+        console.log("clicked menu");
+    };
+    const handlePress = () => {
+        if (isPopupMenuVisible) {
+            // Render the PopUpModal
+            return (
+                <PopUpModal
+                    isPopupMenuVisible={isPopupMenuVisible}
+                    togglePopupMenu={togglePopupMenu}
+                    onPress={() => {
+                        navigation.navigate("AddCategory");
+                        setPopupMenuVisible(false);
+                    }}
+                />
+            );
+        }
+    
+        // Handle other logic if needed
+        console.log('Modal pressed');
+    };
+    
     return (
         <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
             <View style={styles.userIcon}>
-                <TouchableOpacity onPress={onUserIconPress}>
+                <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName })}>
                     <Image source={require('../assets/accountImage.png')} style={{ marginTop: 5, marginRight: 10 }} />
                 </TouchableOpacity>
 
@@ -46,14 +74,14 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPr
                     </Text>
 
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handlePress}>
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 130, marginBottom: 10 }} />
                 </TouchableOpacity>
             </View>
 
             <View style={{ flexDirection: 'row', backgroundColor: "#F6F6F6", borderRadius: 10, marginTop: 15, padding: 12 }}>
                 {imageUrl && <TouchableOpacity>
-                    <Image source={{ uri: imageUrl }} style={{ height:100, width: 100, alignSelf: 'center' , borderRadius:10 , resizeMode:'cover'}} />
+                    <Image source={{ uri: imageUrl }} style={{ height: 100, width: 100, alignSelf: 'center', borderRadius: 10, resizeMode: 'cover' }} />
                 </TouchableOpacity>}
 
                 <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -83,7 +111,7 @@ const styles = StyleSheet.create({
     userIcon: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: 20 , flex:1
+        marginTop: 20, flex: 1
     }
 })
 export default HomeFlatListView;
