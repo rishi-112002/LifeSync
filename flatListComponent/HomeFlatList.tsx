@@ -1,5 +1,5 @@
 import React = require("react");
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -16,14 +16,14 @@ function HomeFlatList(props: { onUserIconPress: any }) {
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
-                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any }[] = [];
+                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any , postId:any}[] = [];
                 querySnapShot.forEach(async (doc) => {
                     const postData = doc.data();
                     try {
                         const result = GetActualTime(postData.createdAt.seconds);
                         option.push({
                             name: userName, link: postData.link, bookName: postData.title, authorName: postData.subTitle,
-                            userId: postData.userId, timeResult: result, imageUri: postData.image
+                            userId: postData.userId, timeResult: result, imageUri: postData.image , postId:doc.id
                         });
                     } catch (error) {
                         console.error("Error getting download URL:", error);
@@ -35,6 +35,15 @@ function HomeFlatList(props: { onUserIconPress: any }) {
                 console.error("Error fetching category data:", error);
             });
     }
+    const [refreshing, setRefreshing] = useState(false);
+console.log("for deletion post Option " , postOption)
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      postDataViaFireStore();
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 2000);
+    }, []);
     
     useEffect(() => {
         postDataViaFireStore();
@@ -43,8 +52,11 @@ function HomeFlatList(props: { onUserIconPress: any }) {
 
         <View style={styles.container}>
             <FlatList data={postOption} renderItem={(item) => {
-                return <HomeFlatListView item={item} onUserIconPress={onUserIconPress} onPressEditDelete={undefined} />
-            }} />
+                return <HomeFlatListView item={item}/>
+            }} 
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              } />
         </View>
     )
 };

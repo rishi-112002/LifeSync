@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import storage from "@react-native-firebase/storage";
@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
 
-function AddPost() {
+function PostEditScreen(props: { postId: any }) {
+    const { postId } = props
     const [bookName, setBookName] = useState("")
     const [authorName, setAuthorName] = useState("")
     const [link, setLink] = useState("")
@@ -24,13 +25,46 @@ function AddPost() {
     const [isOpen, setIsOpen] = useState(false);
     const categoryCollection = firestore().collection('category');
     const [categoryOption, setCategoryOption] = useState([])
+    const route = useRoute();
+    const data = route.params
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
 
- 
+
+
+    async function getImage(uri:any) {
+        try {
+            const storageRef = storage().ref();
+            const imageRef = storageRef.child(uri);
+            const url = await imageRef.getDownloadURL();
+            setImageUri(url);
+        } catch (error) {
+            console.error('Error getting image URL:', error);
+            throw error;
+        }
+    }
+
+
+    const currentPostDataViaFireStore = async () => {
+        await firestore().collection('posts').doc(data.postId).get().then((doc) => {
+            if (doc.exists) {
+                // const option = []
+                const currentPostData = doc.data();
+                setBookName(currentPostData.title);
+                setAuthorName(currentPostData.subTitle);
+                getImage(currentPostData.image)
+                setSelectedValue(currentPostData.categoryId)
+                setLink(currentPostData.link);
+                
+            } else {
+                console.log('No such document!');
+            }
+        })
+
+    }
     const categoryDataViaFireStore = () => {
-        categoryCollection.where("userId" ,"==",userId).get()
+        categoryCollection.where("userId", "==", userId).get()
             .then((querySnapShot) => {
                 const option = [];
                 querySnapShot.forEach((doc) => {
@@ -38,6 +72,7 @@ function AddPost() {
                     option.push({ label: categoryData.name, value: doc.id })
                 });
                 setCategoryOption(option)
+
             })
             .catch((error) => {
                 console.error("Error fetching category data:", error);
@@ -45,6 +80,7 @@ function AddPost() {
     }
     useEffect(() => {
         categoryDataViaFireStore();
+        currentPostDataViaFireStore();
     }, []);
 
     const openImagePicker = () => {
@@ -106,13 +142,14 @@ function AddPost() {
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-               
-            })
-            task.then((successfully)=>    {
-                console.log("added" , successfully)
-                navigation.navigate("Homes")} )
 
-          
+            })
+            task.then((successfully) => {
+                console.log("added", successfully)
+                navigation.navigate("Homes")
+            })
+
+
         } catch (error) {
             console.log("photo not uploaded", error)
         }
@@ -131,7 +168,7 @@ function AddPost() {
             updatedAt: serverTimestamp(),
             userId: userId,
         }
-        firestore().collection("posts").doc().set(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
+        firestore().collection("posts").doc(data.postId).update(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
 
     }
     return (
@@ -141,7 +178,7 @@ function AddPost() {
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
                 <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold' }}>
-                    Add Post
+                    Edit Post
                 </Text>
             </View>
             <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} />
@@ -185,6 +222,6 @@ const styles = StyleSheet.create({
         color: 'black'
     }
 })
-export default AddPost;
+export default PostEditScreen;
 
 

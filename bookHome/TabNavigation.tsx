@@ -1,8 +1,7 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import SearchScreen from './home/SearchScreen'; ``
-import LibraryScreen from './library/LibraryScreen';
-import UserScreen from './home/UserScreen';
+import SearchScreen from './searchDetails/SearchScreen'; ``
+import UserScreen from './userDetails/UserScreen';
 import { Image, StyleSheet } from "react-native";
 import HomeNavigation from "./home/HomeNav";
 import LibraryNavigation from "./library/LibraryNav";

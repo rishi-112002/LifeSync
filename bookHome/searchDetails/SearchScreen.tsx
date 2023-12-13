@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import SearchBar from "../../reuseableComponent/CustomSearchBar";
 import SearchFlatList from "../../flatListComponent/SearchFlatList";
 

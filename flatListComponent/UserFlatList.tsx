@@ -5,7 +5,6 @@ import { RootState, store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import GetApiRequest from "../apiCalling/GetRequest";
-import EditProfile from "../bookHome/home/EditProfile";
 import auth from '@react-native-firebase/auth';
 import GetActualTime from "../reuseableComponent/GetActualTime";
 
@@ -95,7 +94,6 @@ function UserFlatList() {
                             break;
 
                         case 'Ratting app':
-                            EditProfile();
                             break;
 
                         case 'Share app':

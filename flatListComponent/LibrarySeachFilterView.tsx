@@ -6,7 +6,6 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
     const [imageUrl, setImageUrl] = useState("");
     const { searchText, item } = props
     const navigation = useNavigation()
-    console.log("item for library flat list ", item)
     async function getImage() {
         try {
             const storageRef = storage().ref();
@@ -29,18 +28,18 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
     {
         if (searchText === "") {
             return (
-                imageUrl && (
+                !!imageUrl && (
                   <View style={styles.view}>
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('CategoryTypeScreens', {
                           categoryId: item.item.categoryId,
                           categoryName: item.item.type,
+                          userId :item.item.userId
                         })
                       }
                     >
-                      <Image source={{uri:imageUrl ? imageUrl : null}} style={styles.image} />
-                      {/* <Image source={imageUrl ? { uri: imageUrl } : require('../assets/growthImage.jpg')} /> */}
+                      <Image source={{uri:imageUrl}} style={styles.image} />
 
                     </TouchableOpacity>
                     <Text style={styles.typeText}>{item.item.type}</Text>
@@ -50,15 +49,23 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
         }
         if (item.item.type.toLowerCase().includes(searchText.toLowerCase())) {
             return (
-                <View style={styles.view}>
-                    <TouchableOpacity>
-                        <Image source={{ uri: imageUrl }} style={styles.image} />
+                !!imageUrl && (
+                  <View style={styles.view}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('CategoryTypeScreens', {
+                          categoryId: item.item.categoryId,
+                          categoryName: item.item.type,
+                          userId :item.item.userId
+                        })
+                      }
+                    >
+                      <Image source={{uri:imageUrl}} style={styles.image} />
                     </TouchableOpacity>
-                    <Text style={styles.typeText}>
-                        {item.item.type}
-                    </Text>
-                </View>
-            )
+                    <Text style={styles.typeText}>{item.item.type}</Text>
+                  </View>
+                )
+              )
         }
     }
 }

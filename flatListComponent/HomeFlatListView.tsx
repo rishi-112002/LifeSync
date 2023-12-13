@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Image, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Linking, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import storage from '@react-native-firebase/storage'
 import { useNavigation } from "@react-navigation/native";
-import PopUpModal from "../reuseableComponent/PopUpModal";
-function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPress: any, onPressEditDelete: any }) {
-    const { item, onPressEditDelete } = props
+import ModalPopUp from "../reuseableComponent/ModalPopUp";
+function HomeFlatListView(props: { item: ListRenderItemInfo<never>}) {
+    const { item } = props
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
-
     const navigation = useNavigation();
-    console.log("userNames", userName)
     const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
+        console.log("item data on homeFlatListView",item)
         getImage();
     }, []);
 
@@ -30,31 +29,19 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPr
             throw error;
         }
     }
-    const [isPopupMenuVisible, setPopupMenuVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const togglePopupMenu = () => {
-        setPopupMenuVisible(!isPopupMenuVisible);
-        console.log("clicked menu");
-    };
     const handlePress = () => {
-        if (isPopupMenuVisible) {
-            // Render the PopUpModal
-            return (
-                <PopUpModal
-                    isPopupMenuVisible={isPopupMenuVisible}
-                    togglePopupMenu={togglePopupMenu}
-                    onPress={() => {
-                        navigation.navigate("AddCategory");
-                        setPopupMenuVisible(false);
-                    }}
-                />
-            );
-        }
-    
-        // Handle other logic if needed
-        console.log('Modal pressed');
+        setModalVisible(true);
     };
-    
+    const userId = useSelector((state: RootState) => {
+        return state.loginAuth.userId
+    })
+    const handleLinkClick = () => {
+        const url = item.item.link;  // Replace with your actual URL
+        Linking.openURL(url);
+      };
+
     return (
         <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
             <View style={styles.userIcon}>
@@ -77,6 +64,9 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPr
                 <TouchableOpacity onPress={handlePress}>
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 130, marginBottom: 10 }} />
                 </TouchableOpacity>
+                {item.item.userId === userId && modalVisible && (
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={()=> navigation.navigate("PostEditScreen" , {postId:item.item.postId})} postId ={item.item.postId} />
+                )}
             </View>
 
             <View style={{ flexDirection: 'row', backgroundColor: "#F6F6F6", borderRadius: 10, marginTop: 15, padding: 12 }}>
@@ -94,7 +84,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never>, onUserIconPr
                     <Text style={{ color: 'gray', marginLeft: 20, fontSize: 15 }}>
                         {item.item.authorName}
                     </Text>
-                    <TouchableOpacity style={{ flex: 1 }}>
+                    <TouchableOpacity style={{ flex: 1 }} onPress={handleLinkClick}>
                         <Text style={{ color: 'blue', marginLeft: 18, fontSize: 13, marginTop: 20, marginRight: 5, flex: 1 }} numberOfLines={2}>
                             {item.item.link}
                         </Text>
