@@ -1,8 +1,9 @@
-import React from "react";
+// import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native"
 
-function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; secureTextEntry: any  ; errorMessage:String}) {
-    const { placeholder, value, onChangeText, secureTextEntry , errorMessage } = props;
+function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; secureTextEntry: any  ; errorMessage:String , keyBoardType :any}) {
+    const { placeholder, value, onChangeText, secureTextEntry , errorMessage , keyBoardType } = props;
     return (
         <View>
         <TextInput
@@ -12,6 +13,9 @@ function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; 
             value={value}
             onChangeText={(text) => onChangeText(text)}
             secureTextEntry={secureTextEntry}
+            keyboardType={keyBoardType}
+            autoCapitalize='none'
+
         />
         {errorMessage && (<Text style = {{color:'red', fontSize:12,   alignSelf: "flex-start",marginStart:23}}> {errorMessage}</Text>)}
         </View>
@@ -35,5 +39,6 @@ const style = StyleSheet.create({
         paddingStart: 10,
         fontSize:18
     },
+   
 })
 export default TextInputCom

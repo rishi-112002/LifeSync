@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
@@ -135,7 +135,8 @@ function AddPost() {
 
     }
     return (
-        <View style={{ flexDirection: 'column', alignItems: 'flex-start', backgroundColor: 'white', flex: 1 }}>
+        
+        <ScrollView style={{ flexDirection: 'column',  backgroundColor: 'white', flex: 1 }}  keyboardShouldPersistTaps="handled">
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
@@ -147,7 +148,7 @@ function AddPost() {
             <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} />
             <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={anErrorMessage} />
             <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} />
-            <View style={{ padding: 20, marginEnd: 15 }}>
+            <View style={{ padding: 10, marginStart: 20 , marginEnd:20, marginTop:5 }}>
                 <DropDownPicker
                     items={categoryOption}
                     open={isOpen}
@@ -158,7 +159,7 @@ function AddPost() {
                     style={styles.dropDown}
                     maxHeight={200}
                     autoScroll
-                    placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 17 }}
+                    placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 15 }}
                 />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
@@ -173,7 +174,7 @@ function AddPost() {
                 }
             </View>
             <ButtonComponent buttonTittle="Submit" onPress={handleAddPost} />
-        </View>
+        </ScrollView>
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import SearchBar from "../../reuseableComponent/CustomSearchBar";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import { useNavigation } from "@react-navigation/native";
@@ -19,7 +19,9 @@ function LibraryScreen(this: any) {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
+
     return (
+
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginBottom: 5 }}>
                 <Text style={styles.tabTextColor}>
@@ -28,6 +30,7 @@ function LibraryScreen(this: any) {
                 <TouchableOpacity onPress={togglePopupMenu}>
                     <Image source={require('../../assets/threeDots.png')} style={{ marginStart: 210, marginTop: 19, alignSelf: 'flex-end' }} />
                 </TouchableOpacity>
+
                 {isPopupMenuVisible && (<PopUpModal isPopupMenuVisible={isPopupMenuVisible} togglePopupMenu={togglePopupMenu} onPress={() => {
                     navigation.navigate("AddCategory");
                     setPopupMenuVisible(false);
@@ -37,6 +40,7 @@ function LibraryScreen(this: any) {
             <SearchBar value={searchText} onChangeText={setValue} />
             <LibraryFlatList searchText={searchText} userId={userId} />
         </View>
+
     )
 };
 const styles = StyleSheet.create({
@@ -53,20 +57,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white'
     },
-    modalContainer: {
-        width: 130,
-        marginTop: 50,
-        marginStart: 240,
-        padding: 5,
-        shadowRadius: 10,
-        alignContent: 'flex-end',
-        backgroundColor: 'white',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        borderRadius: 7,
-        borderColor: '#F8F8F8',
-        borderWidth: 0.8
-    },
+
 })
 
 export default LibraryScreen;

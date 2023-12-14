@@ -11,7 +11,6 @@ const style = StyleSheet.create({
         width: 100,
         height: 100,
         alignSelf: 'center',
-        marginTop: 80
     }
 })
 export default AppIconComponent;

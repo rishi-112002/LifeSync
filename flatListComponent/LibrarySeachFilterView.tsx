@@ -83,11 +83,11 @@ const styles = StyleSheet.create({
     },
     typeText: {
         color: 'black',
-        marginLeft: 10,
         fontWeight: '500',
+        flex:1,
+        padding:5,
         fontSize: 15,
-        textAlign: 'auto',
-        alignSelf: 'center',
+        textAlign: 'center',
         marginTop: 8
     }
 

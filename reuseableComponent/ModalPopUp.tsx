@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Text, TouchableOpacity, View , Modal, StyleSheet, Alert } from "react-native";
 import deletePost from "../bookHome/home/Delete";

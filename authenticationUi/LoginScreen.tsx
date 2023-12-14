@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
@@ -9,6 +9,7 @@ import firestore from '@react-native-firebase/firestore';
 import { loginAuth } from "../reduxIntegration/Reducer";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PasswordInput from "../reuseableComponent/PasswordInput";
 
 function LoginScreen() {
     const navigation = useNavigation();
@@ -16,23 +17,18 @@ function LoginScreen() {
     const [password, setPassword] = useState("")
     const usersCollection = firestore().collection('users');
     const dispatch = useDispatch()
-    // const [message, setMessage] = useState(false)
     let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
     const handleLogin = () => {
         if (!email) {
-            Alert.alert("warning", "Please enter E-mail");
+            Alert.alert("warning", "Please enter email");
             return
         }
         handleEmail();
     }
-
-
-    const userDetails =  () => {
-         usersCollection.where("email", "==", email).get().then((querySnapShot) => {
-            console.log("querySnapShot", querySnapShot.size)
+    const userDetails = () => {
+        usersCollection.where("email", "==", email).get().then((querySnapShot) => {    
             querySnapShot.forEach(async (doc) => {
                 const userData = doc.data();
-                console.log("userData", userData)
                 saveLoginData(email, password, doc.id, userData.name)
             });
         }).catch(error => {
@@ -42,8 +38,8 @@ function LoginScreen() {
     const loginUser = async () => {
         try {
             await auth().signInWithEmailAndPassword(email, password);
+            {! email && <ActivityIndicator size="small" color="#0000ff" />}
             userDetails();
-            console.log('User logged in successfully!');
         } catch (error) {
             if (error === 'auth/user-not-found') {
                 console.log('User does not exist. You may want to redirect to the registration page.');
@@ -89,8 +85,8 @@ function LoginScreen() {
     };
 
     return (
-        <ScrollView style={style.container}>
-            <View >
+        <ScrollView style={style.container} keyboardShouldPersistTaps='handled'>
+            <View style={{ marginTop: 70 }}>
                 <AppIconComponent />
                 <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 50, fontSize: 20, fontWeight: 'bold' }}>
                     Login
@@ -100,24 +96,38 @@ function LoginScreen() {
                 </Text>
                 <TextInputCom
                     value={email}
-                    onChangeText={(text: React.SetStateAction<string>) => setEmail(text)}
-                    placeholder="abc@gmial.com" secureTextEntry={false} />
+                    onChangeText={(text: string) => {
+                        if (text.includes(' ')) {
+                            setEmail(text.trim());
+                        } else {
+                            setEmail(text);
+                        }
+                    }
+                    }
+                    placeholder=" " secureTextEntry={false} keyBoardType={"email-address"} />
                 <Text style={style.inputText}>
                     Password
                 </Text>
-                <TextInputCom
-                    value={password}
-                    onChangeText={((text: React.SetStateAction<string>) => setPassword(text))}
-                    placeholder="min 6 character" secureTextEntry={true} />
-                <Text style={{ alignSelf: 'flex-end', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 33, fontWeight: 'bold' }} onPress={() => navigation.navigate('Forgot Password')}>
+                <PasswordInput value={password}
+                    onChangeText={(text: string) => {
+                        if (text.includes(' ')) {
+                            setPassword(text.trim());
+                        } else {
+                            setPassword(text);
+                        }
+                    }
+                    }
+                    placeholder="min 6 character" keyBoardType="normal" />
+                <Text style={{ alignSelf: 'flex-end', color: 'blue', marginTop: 20, fontSize: 14, fontWeight: 'bold', width: 180, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Forgot Password')}>
                     Forgot Password
                 </Text>
                 <ButtonComponent buttonTittle="Login" onPress={handleLogin} />
-                <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold' }} onPress={() => navigation.navigate('sign up')}>
+                <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('sign up')}>
                     Don't have an account, Create new?
                 </Text>
             </View>
-        </ScrollView>)
+        </ScrollView>
+    )
 
 };
 
@@ -125,6 +135,11 @@ const style = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
+    },
+    inner: {
+        padding: 24,
+        flex: 1,
+        justifyContent: 'flex-end',
     },
     inputText: {
         color: 'black',

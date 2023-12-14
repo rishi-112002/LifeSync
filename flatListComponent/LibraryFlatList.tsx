@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, RefreshControl } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl, Image, Text } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import LibrarySearchFilterView from "./LibrarySeachFilterView";
 
@@ -16,7 +16,7 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
 
             querySnapShot.forEach(async (doc) => {
                 const categoryData = doc.data()
-                option.push({ type: categoryData.name, images: categoryData.image, categoryId: doc.id , userId : userId});
+                option.push({ type: categoryData.name, images: categoryData.image, categoryId: doc.id, userId: userId });
             });
 
             setCategoryOption(option);
@@ -27,30 +27,37 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      categoryDataViaFireStore();
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 2000);
+        setRefreshing(true);
+        categoryDataViaFireStore();
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
     }, []);
 
     useEffect(() => {
         categoryDataViaFireStore();
+        console.log("category Options", categoryOption)
     }, []);
-  
+
     return (
-        categoryOption && 
-       ( <View style={styles.container}>
-            <FlatList
-                data={categoryOption}
-                renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
-                numColumns={2}
-                columnWrapperStyle={styles.viewContainer}
-                refreshControl={
-                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }
-            />
-        </View>)
+        !categoryOption || categoryOption.length === 0 ? (<View style={{ marginTop: 170, alignItems: 'center' }}>
+            <Image source={require('../assets/addCategory.png')} style={{ resizeMode: 'contain', padding: 60 }} resizeMode="contain" />
+            <Text style={{ color: 'gray' }}>
+                Add  category
+            </Text>
+        </View>
+        ) :
+            (<View style={styles.container}>
+                <FlatList
+                    data={categoryOption}
+                    renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
+                    numColumns={2}
+                    columnWrapperStyle={styles.viewContainer}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                />
+            </View>)
     )
 }
 
