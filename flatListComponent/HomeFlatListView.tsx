@@ -10,7 +10,7 @@ import ModalPopUp from "../reuseableComponent/ModalPopUp";
 
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const { item } = props
-    console.log("item by categoryFlatList" , item)
+    console.log("item by categoryFlatList", item)
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
@@ -114,7 +114,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
 
     const handlePress = () => {
         setModalVisible(true);
-        console.log("postId " , item)
+        console.log("postId ", item)
     };
 
     const handleLinkClick = () => {
@@ -145,7 +145,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 140 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
-                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={undefined}  />
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} />
                 )}
             </View>
 
@@ -169,7 +169,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                             {item.item.link}
                         </Text>
                     </TouchableOpacity>
-
                 </View>
             </View>
             <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
