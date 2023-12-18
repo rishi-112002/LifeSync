@@ -18,11 +18,10 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
             throw error;
         }
     }
-
+console.log("items for library search List" , item)
     useEffect(() => {
         getImage();
     }, []);
-
 
     {
         if (searchText === "") {

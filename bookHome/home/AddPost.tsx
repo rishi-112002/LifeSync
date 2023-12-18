@@ -113,7 +113,6 @@ function AddPost() {
 
             })
             task.then((successfully) => {
-                console.log("added", successfully)
                 navigation.navigate("Homes")
             })
 
@@ -136,6 +135,8 @@ function AddPost() {
             title: bookName,
             updatedAt: serverTimestamp(),
             userId: userId,
+            likeBy :[] ,
+            likeCount:0,
         }
         firestore().collection("posts").doc().set(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
 

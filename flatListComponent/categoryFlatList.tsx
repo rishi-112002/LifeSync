@@ -15,7 +15,7 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
         return state.loginAuth.userName
     })  
     const [refreshing, setRefreshing] = useState(false);
-
+console.log(categoryId)
     const onRefresh = React.useCallback(() => {
       setRefreshing(true);
       setTimeout(() => {
@@ -26,14 +26,15 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
-                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any}[] = [];
+                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any , postId:any}[] = [];
                 querySnapShot.forEach(async (doc) => {
                     const postData = doc.data();
+                    const postId = doc.id
                     try {
                         const result = GetActualTime(postData.createdAt.seconds);
                         option.push({
                             name: userName, link: postData.link, bookName: postData.title, authorName: postData.subTitle,
-                            userId: postData.userId, timeResult: result, imageUri: postData.image 
+                            userId: postData.userId, timeResult: result, imageUri: postData.image  , postId: postId
                         });
                     } catch (error) {
                         console.error("Error getting download URL:", error);

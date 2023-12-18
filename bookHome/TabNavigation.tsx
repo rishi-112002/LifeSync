@@ -5,6 +5,7 @@ import UserScreen from './userDetails/UserScreen';
 import { Image, StyleSheet } from "react-native";
 import HomeNavigation from "./home/HomeNav";
 import LibraryNavigation from "./library/LibraryNav";
+import UserDetailsNav from "./userDetails/UserDetailsNav";
 
 function TabNavigation() {
     const Tab = createMaterialBottomTabNavigator();
@@ -29,10 +30,10 @@ function TabNavigation() {
                 options={{
                     tabBarLabel: 'Library',
                     tabBarIcon: () => (
-                        <Image source={require('../assets/libraryicon.png')} />
+                        <Image source={require('../assets/libraryicon.png')} />  
                     ),
                 }} />
-            <Tab.Screen name="Account" component={UserScreen}
+            <Tab.Screen name="Account" component={UserDetailsNav}
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: () => (

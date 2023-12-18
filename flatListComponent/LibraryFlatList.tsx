@@ -42,33 +42,28 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
 
     return (
 
-        // <ScrollView
-        //     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-            !categoryOption || categoryOption.length === 0 ?
-                (
-                    <>
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                        <View style={{ marginTop: 170, alignItems: 'center' }}>
-                            <Image source={require('../assets/addCategory.png')} style={{ resizeMode: 'contain', padding: 60 }} resizeMode="contain" />
-                            <Text style={{ color: 'gray' }}>
-                                Add  category
-                            </Text>
-                        </View>
-                    </>
-                ) :
-                (<View style={styles.container}>
-                    <FlatList
-                        data={categoryOption}
-                        renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
-                        numColumns={2}
-                        columnWrapperStyle={styles.viewContainer}
-                        refreshControl={
-                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                        }
-                    />
-                </View>)
 
-        // </ScrollView>
+        !categoryOption || categoryOption.length === 0 ?
+            (
+                <View style={{ marginTop: 170, alignItems: 'center' }}>
+                    <Image source={require('../assets/addCategory.png')} style={{ resizeMode: 'contain', padding: 60 }} resizeMode="contain" />
+                    <Text style={{ color: 'gray' }}>
+                        Add  category
+                    </Text>
+                </View>
+
+            ) :
+            (<View style={styles.container}>
+                <FlatList
+                    data={categoryOption}
+                    renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
+                    numColumns={2}
+                    columnWrapperStyle={styles.viewContainer}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                />
+            </View>)
     )
 }
 

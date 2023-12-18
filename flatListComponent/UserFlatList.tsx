@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import GetApiRequest from "../apiCalling/GetRequest";
 import auth from '@react-native-firebase/auth';
-import GetActualTime from "../reuseableComponent/GetActualTime";
+import { useNavigation } from "@react-navigation/native";
 
 function UserFlatList() {
 
@@ -31,7 +31,7 @@ function UserFlatList() {
             console.log("error", error)
         })
     }
-
+    const navigation = useNavigation()
     const handleLogout = () => {
         handleLogoutUser();
         const object = {
@@ -52,6 +52,9 @@ function UserFlatList() {
         },
         {
             text: "Change Password"
+        },
+        {
+            text: "Liked Posts"
         },
         {
             text: "Privacy Policy"
@@ -85,8 +88,8 @@ function UserFlatList() {
                             break;
 
 
-                        case 'Privacy Policy':
-                           
+                        case 'Liked Posts':
+                           navigation.navigate("LikedPostScreen")
                             break;
 
                         case 'Terms Of usage':

@@ -4,15 +4,97 @@ import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import storage from '@react-native-firebase/storage'
 import { useNavigation } from "@react-navigation/native";
+import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
+
+
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const { item } = props
+    console.log("item by categoryFlatList" , item)
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
     const navigation = useNavigation();
     const [imageUrl, setImageUrl] = useState("");
+    const [like, setLike] = useState(false);
 
+    const userId = useSelector((state: RootState) => {
+        return state.loginAuth.userId
+    });
+
+    const toggleLikeButton = async () => {
+        setLike(!like);
+        if (!like) {
+            await updateLikeCount()
+            return
+        }
+        if (like) {
+            updateDislikeCount();
+            return
+        }
+
+    };
+
+    const updateLikeCount = async () => {
+        const postId = item.item.postId;
+
+
+        try {
+            const postRef = firestore().collection("posts").doc(postId);
+            const postDoc = await postRef.get();
+            const postData = postDoc.data()
+            const likeByArray = postDoc.exists ? (postData.likeBy || []) : [];
+            const hasLiked = likeByArray.includes(userId);
+            console.log("updateLike count", hasLiked, postData, userId)
+            if (!hasLiked) {
+                likeByArray.push(userId);
+
+                await postRef.update({
+                    likeCount: likeByArray.length,
+                    likeBy: likeByArray
+                });
+
+                console.log("Like count updated successfully");
+            }
+            else {
+                console.log("User has already liked the post");
+                return
+            }
+        } catch (error) {
+            console.error("Error updating like count: ", error);
+        }
+    };
+
+    const updateDislikeCount = async () => {
+        const postId = item.item.postId;
+
+
+        try {
+            const postRef = firestore().collection("posts").doc(postId);
+            const postDoc = await postRef.get();
+            const postData = postDoc.data()
+            const likeByArray = postDoc.exists ? (postData.likeBy || []) : [];
+            const hasLiked = likeByArray.includes(userId);
+            console.log("updateLike count", hasLiked, postData, userId)
+            if (hasLiked) {
+                const index = likeByArray.indexOf(userId);
+                likeByArray.splice(index, 1);
+
+                await postRef.update({
+                    likeCount: likeByArray.length,
+                    likeBy: likeByArray
+                });
+
+                console.log("Like count updated successfully");
+            }
+            else {
+                console.log("User has already liked the post");
+                return
+            }
+        } catch (error) {
+            console.error("Error updating like count: ", error);
+        }
+    };
     useEffect(() => {
         getImage();
     }, []);
@@ -32,12 +114,11 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
 
     const handlePress = () => {
         setModalVisible(true);
+        console.log("postId " , item)
     };
-    const userId = useSelector((state: RootState) => {
-        return state.loginAuth.userId
-    })
+
     const handleLinkClick = () => {
-        const url = item.item.link;  // Replace with your actual URL
+        const url = item.item.link;
         Linking.openURL(url);
     };
 
@@ -45,12 +126,12 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
         <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
             <View style={styles.userIcon}>
                 <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName })}>
-                    <Image source={require('../assets/accountImage.png')} style={{ marginTop: 5,}} />
+                    <Image source={require('../assets/accountImage.png')} style={{ marginTop: 5, }} />
                 </TouchableOpacity>
 
                 <View style={{ flexDirection: 'column' }}>
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName })}>
-                        <Text style={{ color: 'black', marginLeft:4, fontSize: 18 }}>
+                        <Text style={{ color: 'black', marginLeft: 4, fontSize: 18 }}>
                             {userName}
                         </Text>
                     </TouchableOpacity>
@@ -64,7 +145,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 140 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
-                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId })} />
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={undefined}  />
                 )}
             </View>
 
@@ -91,6 +172,35 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
 
                 </View>
             </View>
+            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
+                <TouchableOpacity onPress={toggleLikeButton}>
+                    <Image source={!like ? require('../assets/outline_favorite_border_black_36dp.png') : require('../assets/outline_favorite_black_36dp.png')}
+                        style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Image source={require('../assets/outline_mode_comment_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Image source={require('../assets/outline_send_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Image source={require('../assets/outline_save_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
+                <Text style={{ color: "gray", marginStart: 25, marginEnd: 20, marginBottom: 5 }}>
+                    {item.item.likeCount}  like
+                </Text>
+                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 10 }}>
+                    comment
+                </Text>
+                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 25 }}>
+                    share
+                </Text>
+                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 35 }}>
+                    save
+                </Text>
+            </View>
         </View>
     )
 
@@ -101,7 +211,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flexDirection: 'row',
         marginTop: 20, flex: 1,
-        justifyContent:'space-around'
+        justifyContent: 'space-around'
     }
 })
 export default HomeFlatListView;
