@@ -11,8 +11,7 @@ import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
 
-function PostEditScreen(props: { postId: any }) {
-    const { postId } = props
+function PostEditScreen() {
     const [bookName, setBookName] = useState("")
     const [authorName, setAuthorName] = useState("")
     const [link, setLink] = useState("")
@@ -31,9 +30,9 @@ function PostEditScreen(props: { postId: any }) {
         return state.loginAuth.userId
     })
 
+    console.log("data for cuuurent user ", data)
 
-
-    async function getImage(uri:any) {
+    async function getImage(uri: any) {
         try {
             const storageRef = storage().ref();
             const imageRef = storageRef.child(uri);
@@ -56,7 +55,7 @@ function PostEditScreen(props: { postId: any }) {
                 getImage(currentPostData.image)
                 setSelectedValue(currentPostData.categoryId)
                 setLink(currentPostData.link);
-                
+
             } else {
                 console.log('No such document!');
             }

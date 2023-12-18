@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
@@ -16,6 +16,7 @@ function AddCategory() {
     const [imageURI, setImageUri] = useState("")
     const [bnErrorMessage, setBnError] = useState("")
     const [anErrorMessage, setAnError] = useState("")
+    const [loading , setLoading] = useState(false)
     const userId = useSelector((state: RootState) => {
         console.log("userEmail", state)
         return state.loginAuth.userId
@@ -42,13 +43,16 @@ function AddCategory() {
         console.log('Selected Image URI:', imageUri);
         setImageUri(imageUri)
     };
-    const handleAddPost = () => {
+    const handleAddCategory = () => {
         if (!categoryName) {
             setBnError("categoryName can'not be empty")
+            Alert.alert("waning" ,"categoryName can'not be empty" )
             return
         }
         if (!description) {
             setAnError("description Name can'not be empty ")
+            Alert.alert("waning" ,"description Name can'not be empty " )
+
             return
         }
         if (!imageURI) {
@@ -59,6 +63,7 @@ function AddCategory() {
             setAnError("")
             setBnError("")
         }
+        setLoading(true)
         uploadPhoto();
 
     }
@@ -86,6 +91,7 @@ function AddCategory() {
             })
             navigation.navigate("LibraryS")
         } catch (error) {
+            setLoading(false)
             console.log("photo not uploaded", error)
         }
         createCategory(fileName)
@@ -111,19 +117,14 @@ function AddCategory() {
                         {imageURI ? "change Image" : "add image"}
                     </Text>
                 </TouchableOpacity>
-                {/* {uploading && (
-                    <View style = {{width :70 , height:30}}>
-                        <Text style ={{color:"blue"}}> {transferred} % completed</Text>
-                    <ActivityIndicator />
-                    </View>
-                    )
-                } */}
+            
                 {imageURI && (
                     <Image source={({ uri: imageURI })} style={{ width: 140, height: 100, resizeMode: 'contain', marginStart: 80, borderRadius: 5, alignSelf: 'center', alignItems: 'center' }} />
                 )
                 }
             </View>
-            <ButtonComponent buttonTittle="Submit" onPress={handleAddPost} />
+            <ButtonComponent buttonTittle="Submit" onPress={handleAddCategory} />
+            {loading && <ActivityIndicator size="large" color="#0000ff" />}
         </View>
     )
 }

@@ -17,7 +17,8 @@ function LoginScreen() {
     const [password, setPassword] = useState("")
     const usersCollection = firestore().collection('users');
     const dispatch = useDispatch()
-    let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
+    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+    const [loading, setLoading] = useState(false);
     const handleLogin = () => {
         if (!email) {
             Alert.alert("warning", "Please enter email");
@@ -25,8 +26,16 @@ function LoginScreen() {
         }
         handleEmail();
     }
+    const handleEmail = () => {
+        if (!emailRegex.test(email)) {
+            Alert.alert("warning", "entered email is invalid")
+            console.log("InValid email")
+            return
+        }
+        handlePassword();
+    }
     const userDetails = () => {
-        usersCollection.where("email", "==", email).get().then((querySnapShot) => {    
+        usersCollection.where("email", "==", email).get().then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
                 const userData = doc.data();
                 saveLoginData(email, password, doc.id, userData.name)
@@ -38,14 +47,14 @@ function LoginScreen() {
     const loginUser = async () => {
         try {
             await auth().signInWithEmailAndPassword(email, password);
-            {! email && <ActivityIndicator size="small" color="#0000ff" />}
             userDetails();
         } catch (error) {
             if (error === 'auth/user-not-found') {
-                console.log('User does not exist. You may want to redirect to the registration page.');
+                setLoading(false);
                 Alert.alert("warning", "user does not exits")
             } else {
-                console.error('Error logging in:', error);
+                setLoading(false);
+                Alert.alert("warning", "user does not exits")
             }
         }
     };
@@ -62,14 +71,6 @@ function LoginScreen() {
         await AsyncStorage.setItem('userId', object.userId)
         await AsyncStorage.setItem('userName', object.userName)
     }
-    const handleEmail = () => {
-        if (!emailRegex.test(email)) {
-            Alert.alert("warning", "entered email is invalid")
-            console.log("InValid email")
-            return
-        }
-        handlePassword();
-    }
     const handlePassword = () => {
         if (!password) {
             Alert.alert("Warning", "Please enter password");
@@ -79,6 +80,7 @@ function LoginScreen() {
             Alert.alert("Warning", "Password is invalid (less than 6 characters)");
             return;
         }
+        setLoading(true);
         loginUser()
 
         console.log("Valid email and password");
@@ -115,13 +117,14 @@ function LoginScreen() {
                         } else {
                             setPassword(text);
                         }
-                    }
+                    } 
                     }
                     placeholder="min 6 character" keyBoardType="normal" />
                 <Text style={{ alignSelf: 'flex-end', color: 'blue', marginTop: 20, fontSize: 14, fontWeight: 'bold', width: 180, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Forgot Password')}>
-                    Forgot Password
+                    Forgot Password ?
                 </Text>
                 <ButtonComponent buttonTittle="Login" onPress={handleLogin} />
+                {loading && <ActivityIndicator size="large" color="#0000ff" />}
                 <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('sign up')}>
                     Don't have an account, Create new?
                 </Text>

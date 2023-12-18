@@ -38,7 +38,7 @@ function LibraryScreen(this: any) {
                 }
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />
-            <LibraryFlatList searchText={searchText} userId={userId} />
+            <LibraryFlatList searchText={searchText} userId={userId}  />
         </View>
 
     )

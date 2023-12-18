@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, RefreshControl, Image, Text } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl, Image, Text, ScrollView } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import LibrarySearchFilterView from "./LibrarySeachFilterView";
 
@@ -28,6 +28,7 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        console.log("refresh is used ")
         categoryDataViaFireStore();
         setTimeout(() => {
             setRefreshing(false);
@@ -40,24 +41,34 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
     }, []);
 
     return (
-        !categoryOption || categoryOption.length === 0 ? (<View style={{ marginTop: 170, alignItems: 'center' }}>
-            <Image source={require('../assets/addCategory.png')} style={{ resizeMode: 'contain', padding: 60 }} resizeMode="contain" />
-            <Text style={{ color: 'gray' }}>
-                Add  category
-            </Text>
-        </View>
-        ) :
-            (<View style={styles.container}>
-                <FlatList
-                    data={categoryOption}
-                    renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
-                    numColumns={2}
-                    columnWrapperStyle={styles.viewContainer}
-                    refreshControl={
+
+        // <ScrollView
+        //     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+            !categoryOption || categoryOption.length === 0 ?
+                (
+                    <>
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    }
-                />
-            </View>)
+                        <View style={{ marginTop: 170, alignItems: 'center' }}>
+                            <Image source={require('../assets/addCategory.png')} style={{ resizeMode: 'contain', padding: 60 }} resizeMode="contain" />
+                            <Text style={{ color: 'gray' }}>
+                                Add  category
+                            </Text>
+                        </View>
+                    </>
+                ) :
+                (<View style={styles.container}>
+                    <FlatList
+                        data={categoryOption}
+                        renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
+                        numColumns={2}
+                        columnWrapperStyle={styles.viewContainer}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
+                    />
+                </View>)
+
+        // </ScrollView>
     )
 }
 

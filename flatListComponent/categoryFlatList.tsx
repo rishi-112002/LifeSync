@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import GetActualTime from "../reuseableComponent/GetActualTime";
 import HomeFlatListView from "./HomeFlatListView";
-import PopUpModal from "../reuseableComponent/PopUpModal";
 
 function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
     const { categoryId } = props

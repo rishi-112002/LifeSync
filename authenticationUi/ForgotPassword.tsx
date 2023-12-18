@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Image } from "react-native"
+import { Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Image, ActivityIndicator } from "react-native"
 import AppIconComponent from "../reuseableComponent/AppIconImage"
 import ButtonComponent from "../reuseableComponent/ButtonComponent"
 import TextInputCom from "../reuseableComponent/TextInputComponent"
@@ -10,34 +10,45 @@ import { useNavigation } from "@react-navigation/native"
 function ForgotPassword() {
   const [email, setEmail] = useState("")
   const navigation = useNavigation();
-
-  const handleForgotPassword = (email: string) => {
-    auth().sendPasswordResetEmail(email)
-      .then(() => {
-        console.log("Password reset email sent successfully");
-      })
-      .catch((error) => {
-        console.error("Error sending password reset email:", error);
-      });
-  };
-
-  const checkIfEmailExists = (email: string) => {
-    if (email) {
-      auth().fetchSignInMethodsForEmail(email)
-        .then((signInMethods) => {
-          if (signInMethods && signInMethods.length > 0) {
-            console.log("Email is valid and registered");
-            handleForgotPassword(email);
-          } else {
-            console.log("Email is not registered");
-          }
-        })
-        .catch((error) => {
-          console.error("Error checking email existence:", error);
-        });
+  const [loading, setLoading] = useState(false)
+  let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+  const handleLogin = () => {
+    if (!email) {
+        Alert.alert("warning", "Please enter email");
+        return
     }
-    else {
-      Alert.alert("Warning", "please enter email")
+    handleEmail();
+}
+const handleEmail = () => {
+    if (!emailRegex.test(email)) {
+        Alert.alert("warning", "entered email is invalid")
+        console.log("InValid email")
+        return
+    }
+    checkIfEmailIsRegistered();
+}
+  const checkIfEmailIsRegistered = async () => {
+
+    auth().fetchSignInMethodsForEmail(email).then(() => {
+      console.log("email Verified")
+      setLoading(true)
+      initiatePasswordReset();
+    }).catch((error) => {
+
+      console.error('Error checking if email is registered:', error);
+    })
+  }
+  const initiatePasswordReset = async () => {
+    try {
+      await auth().sendPasswordResetEmail(email);
+      Alert.alert("password reset email sent successfully")
+      setLoading(false)
+      setEmail("")
+      navigation.navigate("Login")
+      console.log('Password reset email sent successfully.');
+    } catch (error) {
+      setLoading(false)
+      console.error('Error sending password reset email:', error);
     }
   };
 
@@ -59,7 +70,8 @@ function ForgotPassword() {
         keyBoardType={"email-address"}
         onChangeText={(text: string) => setEmail(text)}
         placeholder="" secureTextEntry={false} />
-      <ButtonComponent buttonTittle="Verify Email" onPress={() => checkIfEmailExists(email)} />
+      <ButtonComponent buttonTittle="Verify Email" onPress={handleLogin} />
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
 
     </ScrollView>
   )

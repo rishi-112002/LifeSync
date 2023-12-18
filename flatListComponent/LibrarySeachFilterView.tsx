@@ -16,7 +16,6 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
         } catch (error) {
             console.error('Error getting image URL:', error);
             throw error;
-
         }
     }
 

@@ -14,7 +14,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
-        console.log("item data on homeFlatListView", item)
         getImage();
     }, []);
 
@@ -65,7 +64,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 140 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
-                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId })} postId={item.item.postId} />
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId })} />
                 )}
             </View>
 

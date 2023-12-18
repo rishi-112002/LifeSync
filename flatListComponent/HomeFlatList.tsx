@@ -51,6 +51,7 @@ console.log("for deletion post Option " , postOption)
     return (
 
         <View style={styles.container}>
+            
             <FlatList data={postOption} renderItem={(item) => {
                 return <HomeFlatListView item={item}/>
             }} 

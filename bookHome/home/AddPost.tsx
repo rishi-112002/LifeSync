@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
@@ -28,9 +28,9 @@ function AddPost() {
         return state.loginAuth.userId
     })
 
- 
+    const [loading, setLoading] = useState(false)
     const categoryDataViaFireStore = () => {
-        categoryCollection.where("userId" ,"==",userId).get()
+        categoryCollection.where("userId", "==", userId).get()
             .then((querySnapShot) => {
                 const option = [];
                 querySnapShot.forEach((doc) => {
@@ -70,14 +70,17 @@ function AddPost() {
 
         if (!bookName) {
             setBnError("book name can'not be empty")
+            Alert.alert("warning", "book name can'not be empty")
             return
         }
         if (!authorName) {
             setAnError("author Name can'not be empty ")
+            Alert.alert("warning", "author name can'not be empty")
             return
         }
 
         if (!link) {
+            Alert.alert("warning", "link can'not be empty")
             setLinkError("link can'not be empty")
             return
         }
@@ -94,6 +97,7 @@ function AddPost() {
             setBnError("")
             setLinkError("")
         }
+        setLoading(true)
         uploadPhoto();
 
     }
@@ -106,14 +110,16 @@ function AddPost() {
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-               
-            })
-            task.then((successfully)=>    {
-                console.log("added" , successfully)
-                navigation.navigate("Homes")} )
 
-          
+            })
+            task.then((successfully) => {
+                console.log("added", successfully)
+                navigation.navigate("Homes")
+            })
+
+
         } catch (error) {
+            setLoading(false)
             console.log("photo not uploaded", error)
         }
         addPostToFireStore(FileName);
@@ -135,8 +141,8 @@ function AddPost() {
 
     }
     return (
-        
-        <ScrollView style={{ flexDirection: 'column',  backgroundColor: 'white', flex: 1 }}  keyboardShouldPersistTaps="handled">
+
+        <View style={{ flexDirection: 'column', backgroundColor: 'white', flex: 1 }} >
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
@@ -145,10 +151,10 @@ function AddPost() {
                     Add Post
                 </Text>
             </View>
-            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} />
-            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={anErrorMessage} />
-            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} />
-            <View style={{ padding: 10, marginStart: 20 , marginEnd:20, marginTop:5 }}>
+            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} />
+            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} />
+            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} />
+            <View style={{ padding: 10, marginStart: 20, marginEnd: 20, marginTop: 5 }}>
                 <DropDownPicker
                     items={categoryOption}
                     open={isOpen}
@@ -159,6 +165,7 @@ function AddPost() {
                     style={styles.dropDown}
                     maxHeight={200}
                     autoScroll
+                    keyboardShouldPersistTaps="handled"
                     placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 15 }}
                 />
             </View>
@@ -174,7 +181,8 @@ function AddPost() {
                 }
             </View>
             <ButtonComponent buttonTittle="Submit" onPress={handleAddPost} />
-        </ScrollView>
+            {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        </View>
     )
 }
 

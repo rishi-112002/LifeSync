@@ -12,7 +12,7 @@ function ProfileScreen() {
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
-                <TouchableOpacity onPress={() => navigation.navigate("Homes")}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
                 <Text style={{ color: 'black', fontSize: 25, fontWeight: 'bold', marginStart: 10, width: 250 }}>

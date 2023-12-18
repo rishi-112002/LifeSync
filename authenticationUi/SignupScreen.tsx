@@ -8,7 +8,7 @@ import firestore from '@react-native-firebase/firestore'
 import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native";
 import PasswordInput from "../reuseableComponent/PasswordInput";
-import Snackbar  from "react-native-snackbar";
+import Snackbar from "react-native-snackbar";
 function SignupScreen() {
     const navigation = useNavigation();
     const [email, setEmail] = useState("")
@@ -29,24 +29,24 @@ function SignupScreen() {
     }
 
 
- const showToast = () => {
-    Snackbar.show({
-        text: 'Welcome You successfully SignedUpl! Please Login?',
-        duration:2000,
-        numberOfLines: 2,
-        textColor: '#fff',
-        backgroundColor: 'green',
-        action: {
-          text: 'Ok',
-          textColor: '#fff',
-          onPress: () => {
-             console.log("toastPressed")
-           }
-        }
-      });
-  };
+    const showToast = () => {
+        Snackbar.show({
+            text: 'Welcome You successfully SignedUpl! Please Login?',
+            duration: 2000,
+            numberOfLines: 2,
+            textColor: '#fff',
+            backgroundColor: 'green',
+            action: {
+                text: 'Ok',
+                textColor: '#fff',
+                onPress: () => {
+                    console.log("toastPressed")
+                }
+            }
+        });
+    };
 
-    let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
+    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
     const handleSignInAuth = () => {
         if (!name) {
             Alert.alert("waning", "Please enter name")
@@ -79,7 +79,7 @@ function SignupScreen() {
         else {
             addNewUser(email, password);
         }
-        console.log("Valid email and password" , email , password , name);
+        console.log("Valid email and password", email, password, name);
     };
 
     const addNewUser = async (email: any, password: any) => {
@@ -87,8 +87,7 @@ function SignupScreen() {
             await auth().createUserWithEmailAndPassword(email, password);
             console.log('User added successfully!');
             addUserData();
-            showToast();
-            navigation.navigate("Login")
+
 
         } catch (error) {
             console.error('Error adding user:', error.message);
@@ -99,7 +98,12 @@ function SignupScreen() {
 
     const addUserData = async () => {
         try {
-            await firestore().collection("users").doc(userId).set(userData)
+            await firestore().collection("users").doc(userId).set(userData).then((success) => {
+                showToast();
+                navigation.navigate("Login")
+                console.log("success fully added user ", success)
+            }).catch((error) => console.log("error while make the user ", error))
+
         } catch (error) {
             console.error('Error adding user:', error.message);
             Alert.alert("warning", "User is already exits Please try to login")
@@ -130,20 +134,30 @@ function SignupScreen() {
             <TextInputCom
                 value={email}
                 keyBoardType={"email-address"}
-                onChangeText={(text: React.SetStateAction<string>) => setEmail(text)}
+                onChangeText={(text: string) => {
+                    if (text.includes(' ')) {
+                        Alert.alert("Warning" ,  "Spaces are not allowed in the email")
+                        setEmail(text.trim());
+                    } else {
+                        setEmail(text);
+                    }
+                }
+                }
                 placeholder="" secureTextEntry={false} />
             <Text style={style.inputText}>
                 Password
             </Text>
             <PasswordInput value={password}
-               onChangeText={(text:string) => {
-                if (text.includes(' ')) {
-                  setPassword(text.trim()); 
-                 } else {
-                    setPassword(text);
-                 }
+                onChangeText={(text: string) => {
+                    if (text.includes(' ')) {
+                        Alert.alert("Warning" ,  "Spaces are not allowed in the password")
+
+                        setPassword(text.trim());
+                    } else {
+                        setPassword(text);
+                    }
                 }
-               }
+                }
                 placeholder="min 6 character" keyBoardType="normal" />
             <ButtonComponent buttonTittle="Sign up" onPress={handleSignInAuth} />
             <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Login')}>
