@@ -7,8 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import LikeComment from "./LikeComment";
-import LikedPostScreen from "../bookHome/userDetails/LikedPostScreen";
-
 
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const { item } = props
@@ -19,9 +17,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const navigation = useNavigation();
     const [imageUrl, setImageUrl] = useState("");
     const [like, setLike] = useState(false);
-    const [likes, setLikes] = useState(false);
-
-
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
@@ -204,7 +199,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} />
+            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })}  postId={ item.item.postId}/>
         </View>
     )
 

@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import firestore from '@react-native-firebase/firestore'
 
-function LikeComment(props: { toggleLikeButton: any, like: any, item: any , navigateToScreen:any }) {
-    const { toggleLikeButton, like, item ,navigateToScreen } = props
+
+
+function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navigateToScreen: any, postId: any }) {
+
+    const { toggleLikeButton, like, item, navigateToScreen, postId } = props
+    const [commentCount, SetCommentCount] = useState(0)
+
+    const commentCountViaFireStore = async () => {
+        try {
+            const querySnapshot = await firestore().collection('posts').doc(postId).collection("comments").get();
+            const commentCount = querySnapshot.docs.length;
+            SetCommentCount(commentCount);
+        } catch (error) {
+            console.error("Error getting comments:", error);
+        }
+    }
+
+    useEffect(() => {
+        commentCountViaFireStore();
+    }, []);
     return (
         <View>
             <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
@@ -25,7 +44,7 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any , navi
                     {item.item.likeCount}  like
                 </Text>
                 <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 10 }}>
-                    comment
+                    {commentCount} comment
                 </Text>
                 <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 25 }}>
                     share

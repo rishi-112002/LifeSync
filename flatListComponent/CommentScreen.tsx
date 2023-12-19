@@ -52,9 +52,7 @@ function CommentScreen() {
     useEffect(() => {
         CommentDataViaFireStore();
     }, []);
-
-
-
+    
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 20, alignItems: 'flex-start' }}>
