@@ -4,6 +4,8 @@ import AddPost from "./AddPost";
 import ProfileScreen from "./ProfileScreen";
 import CategoryTypeScreen from "../../flatListComponent/CategoryTypeScreen";
 import PostEditScreen from "../library/PostEditScreen";
+import CommentScreen from "../../flatListComponent/CommentScreen";
+import CommentEditScreen from "./CommentEditScreen";
 
 const Stack = createNativeStackNavigator();
 function HomeNavigation() {
@@ -14,6 +16,10 @@ function HomeNavigation() {
             <Stack.Screen name="PostEditScreen" component={PostEditScreen}options={{ headerShown: false }} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
             <Stack.Screen name="CategoryTypeScreens" component={CategoryTypeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="CommentScreen" component={CommentScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="CommentEditScreen" component={CommentEditScreen} options={{ headerShown: false }} />
+
+
         </Stack.Navigator>
     );
 }

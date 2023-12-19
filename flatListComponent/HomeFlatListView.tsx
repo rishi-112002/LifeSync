@@ -6,22 +6,29 @@ import storage from '@react-native-firebase/storage'
 import { useNavigation } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
+import LikeComment from "./LikeComment";
+import LikedPostScreen from "../bookHome/userDetails/LikedPostScreen";
 
 
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const { item } = props
-    console.log("item by categoryFlatList", item)
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
+
     const navigation = useNavigation();
     const [imageUrl, setImageUrl] = useState("");
     const [like, setLike] = useState(false);
+    const [likes, setLikes] = useState(false);
+
 
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
 
+    const userNameCurrentUser = useSelector((state: RootState) => {
+        return state.loginAuth.userName
+    });
     const toggleLikeButton = async () => {
         setLike(!like);
         if (!like) {
@@ -45,7 +52,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             const postData = postDoc.data()
             const likeByArray = postDoc.exists ? (postData.likeBy || []) : [];
             const hasLiked = likeByArray.includes(userId);
-            console.log("updateLike count", hasLiked, postData, userId)
+
             if (!hasLiked) {
                 likeByArray.push(userId);
 
@@ -58,6 +65,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             }
             else {
                 console.log("User has already liked the post");
+                setLike(true)
                 return
             }
         } catch (error) {
@@ -75,7 +83,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             const postData = postDoc.data()
             const likeByArray = postDoc.exists ? (postData.likeBy || []) : [];
             const hasLiked = likeByArray.includes(userId);
-            console.log("updateLike count", hasLiked, postData, userId)
             if (hasLiked) {
                 const index = likeByArray.indexOf(userId);
                 likeByArray.splice(index, 1);
@@ -84,19 +91,46 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     likeCount: likeByArray.length,
                     likeBy: likeByArray
                 });
-
+                setLike(false)
                 console.log("Like count updated successfully");
             }
             else {
-                console.log("User has already liked the post");
+                setLike(false)
+                console.log("User has already disliked the post");
                 return
             }
         } catch (error) {
             console.error("Error updating like count: ", error);
         }
     };
+
+
+
+    const checkLike = async () => {
+        const postId = item.item.postId;
+        try {
+            const postRef = firestore().collection("posts").doc(postId);
+            const postDoc = await postRef.get();
+            const postData = postDoc.data()
+            const likeByArray = postDoc.exists ? (postData.likeBy || []) : [];
+            const hasLiked = likeByArray.includes(userId);
+            if (hasLiked) {
+                setLike(true)
+            }
+            else {
+                setLike(false)
+                console.log("User has already disliked the post");
+                return
+            }
+        } catch (error) {
+            console.error("Error updating like count: ", error);
+        }
+    };
+
+
     useEffect(() => {
         getImage();
+        checkLike();
     }, []);
 
     async function getImage() {
@@ -114,7 +148,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
 
     const handlePress = () => {
         setModalVisible(true);
-        console.log("postId ", item)
     };
 
     const handleLinkClick = () => {
@@ -171,35 +204,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
-                <TouchableOpacity onPress={toggleLikeButton}>
-                    <Image source={!like ? require('../assets/outline_favorite_border_black_36dp.png') : require('../assets/outline_favorite_black_36dp.png')}
-                        style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={require('../assets/outline_mode_comment_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={require('../assets/outline_send_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={require('../assets/outline_save_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
-                </TouchableOpacity>
-            </View>
-            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
-                <Text style={{ color: "gray", marginStart: 25, marginEnd: 20, marginBottom: 5 }}>
-                    {item.item.likeCount}  like
-                </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 10 }}>
-                    comment
-                </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 25 }}>
-                    share
-                </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 35 }}>
-                    save
-                </Text>
-            </View>
+            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} />
         </View>
     )
 

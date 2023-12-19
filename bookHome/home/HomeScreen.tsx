@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import HomeFlatList from "../../flatListComponent/HomeFlatList";
 import { useNavigation } from "@react-navigation/native";
 import GetAllUserData from "../../fireStoreHandle/GetAllUserData";
@@ -12,9 +12,13 @@ function HomeScreen() {
                 <Text style={styles.tabTextColor}>
                     Home
                 </Text>
-                <TouchableOpacity onPress={() => navigation.navigate("AddPost")}>
+                {/* <TouchableOpacity onPress={() => navigation.navigate("AddPost")}>
                     <Image source={require("../../assets/addIcon.png")} style={{ marginStart: 225, marginTop: 19, alignSelf: 'flex-end' }} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+
+                <Text style={{ color: "white", backgroundColor: 'green', marginStart: 'auto', fontSize: 19, fontWeight: '500', borderRadius: 10, padding: 5, margin: 15, textAlign: 'center' }} onPress={() => navigation.navigate("AddPost")}>
+                    Post
+                </Text>
             </View>
             <HomeFlatList onUserIconPress={() => navigation.navigate('ProfileScreen')} />
         </View>
