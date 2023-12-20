@@ -13,28 +13,27 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
-    })  
+    })
     const [refreshing, setRefreshing] = useState(false);
-console.log(categoryId)
     const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 2000);
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
     }, []);
 
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
-                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any , postId:any}[] = [];
+                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any, postId: any, likeCount: any, likeBy: [], userProfile: any }[] = [];
+
                 querySnapShot.forEach(async (doc) => {
                     const postData = doc.data();
-                    const postId = doc.id
                     try {
                         const result = GetActualTime(postData.createdAt.seconds);
                         option.push({
                             name: userName, link: postData.link, bookName: postData.title, authorName: postData.subTitle,
-                            userId: postData.userId, timeResult: result, imageUri: postData.image  , postId: postId
+                            userId: postData.userId, timeResult: result, imageUri: postData.image, postId: doc.id, likeBy: postData.likeBy, likeCount: postData.likeCount, userProfile: postData.profileImage
                         });
                     } catch (error) {
                         console.error("Error getting download URL:", error);
@@ -46,7 +45,7 @@ console.log(categoryId)
                 console.error("Error fetching category data:", error);
             });
     }
-   
+
     useEffect(() => {
         postDataViaFireStore();
     }, []);
@@ -54,11 +53,11 @@ console.log(categoryId)
 
         <View style={styles.container} >
             <FlatList data={postOption} renderItem={(item) => {
-                return <HomeFlatListView item={item}/>
+                return <HomeFlatListView item={item} />
             }}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              } />
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                } />
         </View>
     )
 };

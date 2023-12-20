@@ -10,6 +10,7 @@ import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AddPost() {
     const [bookName, setBookName] = useState("")
@@ -45,6 +46,7 @@ function AddPost() {
     }
     useEffect(() => {
         categoryDataViaFireStore();
+        getUserProfile();
     }, []);
 
     const openImagePicker = () => {
@@ -101,6 +103,23 @@ function AddPost() {
         uploadPhoto();
 
     }
+    const [imageUrl, setImageUrl] = useState("")
+
+    const getUserProfile = async () => {
+        try {
+            const userProfile = await AsyncStorage.getItem('userProfile');
+            if (userProfile !== null) {
+                console.log('User Profile:', userProfile);
+                setImageUrl(userProfile) // You can return the value if needed
+            } else {
+                console.log('No user profile found in AsyncStorage.');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error retrieving user profile from AsyncStorage:', error);
+            return null; 
+        }
+    };
     const uploadPhoto = async () => {
         const uploadUri = imageURI
         let FileName = `PostImage/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`
@@ -135,8 +154,9 @@ function AddPost() {
             title: bookName,
             updatedAt: serverTimestamp(),
             userId: userId,
-            likeBy :[] ,
-            likeCount:0,
+            likeBy: [],
+            likeCount: 0,
+            profileImage: imageUrl
         }
         firestore().collection("posts").doc().set(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Image } from "react-native";
-import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import auth from '@react-native-firebase/auth';
@@ -9,24 +8,17 @@ import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native";
 import PasswordInput from "../reuseableComponent/PasswordInput";
 import Snackbar from "react-native-snackbar";
+import { View } from "react-native";
+import { launchImageLibrary } from "react-native-image-picker";
+import storage from "@react-native-firebase/storage";
+
 function SignupScreen() {
     const navigation = useNavigation();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
     const userId = auth().currentUser?.uid;
-    const userData = {
-        address: "Indore",
-        countryCode: "+91",
-        createdAt: serverTimestamp(),
-        email: email,
-        gender: "m",
-        mobile: "1234567890",
-        name: name,
-        status: "active",
-        updatedAt: serverTimestamp(),
-        userId: userId,
-    }
+
 
 
     const showToast = () => {
@@ -76,19 +68,59 @@ function SignupScreen() {
             Alert.alert("Warning", "Password is invalid (less than 6 characters)");
             return;
         }
+        if (!profileImage) {
+            Alert.alert("Warning", "Please select your profile Image");
+            return;
+        }
         else {
             addNewUser(email, password);
         }
-        console.log("Valid email and password", email, password, name);
     };
+    const [profileImage, setProfileImage] = useState("");
+
+    const openImagePicker = () => {
+        const options = {
+            mediaType: 'photo',
+            includeBase64: true,
+            maxHeight: 2000,
+            maxWidth: 2000,
+        };
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.errorMessage) {
+                console.log('Image picker error: ', response.errorMessage);
+            } else {
+                let imageUri = response.uri || response.assets?.[0]?.uri;
+                setProfileImage(imageUri);
+            }
+        });
+    };
+    const uploadPhoto = async () => {
+        const uploadUri = profileImage
+        let FileName = `ProfileImage/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`
+
+        try {
+            const reference = storage().ref(FileName)
+            const task = reference.putFile(uploadUri)
+            task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
+                console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
+
+            })
+        } catch (error) {
+            // setLoading(false)
+            console.log("photo not uploaded", error)
+        }
+        addUserData(FileName);
+    }
+
+
 
     const addNewUser = async (email: any, password: any) => {
         try {
             await auth().createUserWithEmailAndPassword(email, password);
             console.log('User added successfully!');
-            addUserData();
-
-
+            uploadPhoto()
         } catch (error) {
             console.error('Error adding user:', error.message);
             Alert.alert("warning", "User is already exits Please try to login")
@@ -96,12 +128,24 @@ function SignupScreen() {
         }
     };
 
-    const addUserData = async () => {
+    const addUserData = async (fileName: any) => {
+        const userData = {
+            address: "Indore",
+            countryCode: "+91",
+            createdAt: serverTimestamp(),
+            email: email,
+            gender: "m",
+            mobile: "1234567890",
+            name: name,
+            status: "active",
+            updatedAt: serverTimestamp(),
+            userId: userId,
+            profileImage: fileName
+        }
         try {
             await firestore().collection("users").doc(userId).set(userData).then((success) => {
                 showToast();
                 navigation.navigate("Login")
-                console.log("success fully added user ", success)
             }).catch((error) => console.log("error while make the user ", error))
 
         } catch (error) {
@@ -113,14 +157,29 @@ function SignupScreen() {
 
 
     return (
-        <ScrollView style={style.container} keyboardShouldPersistTaps="handled">
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: "contain", marginTop: 18, marginStart: 5 }} />
-            </TouchableOpacity>
-            <AppIconComponent />
-            <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 50, fontSize: 20, fontWeight: 'bold' }}>
-                Sign up
-            </Text>
+        <ScrollView style={style.containers} keyboardShouldPersistTaps="handled">
+            <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: "contain", marginTop: 18, marginStart: 5 }} />
+                </TouchableOpacity>
+
+                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 10, fontSize: 30, fontWeight: 'bold', marginEnd: 'auto', marginStart: 20 }}>
+                    Sign up
+                </Text>
+            </View>
+            <View style={style.container}>
+                <TouchableOpacity onPress={() => openImagePicker()}>
+                    <View style={style.imageContainer}>
+                        {profileImage ? (
+                            <Image source={{ uri: profileImage }} style={style.profileImage} />
+                        ) : (
+                            <View style={style.placeholderContainer}>
+                                <Text style={style.placeholderText}>profileImage</Text>
+                            </View>
+                        )}
+                    </View>
+                </TouchableOpacity>
+            </View>
             <Text style={style.inputText}>
                 Name
             </Text>
@@ -136,7 +195,7 @@ function SignupScreen() {
                 keyBoardType={"email-address"}
                 onChangeText={(text: string) => {
                     if (text.includes(' ')) {
-                        Alert.alert("Warning" ,  "Spaces are not allowed in the email")
+                        Alert.alert("Warning", "Spaces are not allowed in the email")
                         setEmail(text.trim());
                     } else {
                         setEmail(text);
@@ -150,7 +209,7 @@ function SignupScreen() {
             <PasswordInput value={password}
                 onChangeText={(text: string) => {
                     if (text.includes(' ')) {
-                        Alert.alert("Warning" ,  "Spaces are not allowed in the password")
+                        Alert.alert("Warning", "Spaces are not allowed in the password")
 
                         setPassword(text.trim());
                     } else {
@@ -167,7 +226,7 @@ function SignupScreen() {
 };
 
 const style = StyleSheet.create({
-    container: {
+    containers: {
         flex: 1,
         backgroundColor: 'white'
     },
@@ -178,9 +237,36 @@ const style = StyleSheet.create({
         marginStart: 35,
         marginTop: 15
     },
+    container: {
+        alignItems: 'center',
+        margin: 25
+    },
+    imageContainer: {
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+        overflow: 'hidden',
+        backgroundColor: '#f0f0f0',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 50,
+    },
+    placeholderContainer: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    placeholderText: {
+        fontSize: 25,
+        color: '#777',
+    },
 })
 
 export default SignupScreen;
-
 
 

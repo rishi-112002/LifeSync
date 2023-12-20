@@ -13,9 +13,9 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
-
     const navigation = useNavigation();
     const [imageUrl, setImageUrl] = useState("");
+    const [userImage, setUserImage] = useState("")
     const [like, setLike] = useState(false);
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
@@ -126,6 +126,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     useEffect(() => {
         getImage();
         checkLike();
+        getUserImage();
     }, []);
 
     async function getImage() {
@@ -134,6 +135,17 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             const imageRef = storageRef.child(item.item.imageUri);
             const url = await imageRef.getDownloadURL();
             setImageUrl(url);
+        } catch (error) {
+            console.error('Error getting image URL:', error);
+            throw error;
+        }
+    }
+    async function getUserImage() {
+        try {
+            const storageRef = storage().ref();
+            const imageRef = storageRef.child(item.item.userProfile);
+            const url = await imageRef.getDownloadURL();
+            setUserImage(url);
         } catch (error) {
             console.error('Error getting image URL:', error);
             throw error;
@@ -153,12 +165,14 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     return (
         <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
             <View style={styles.userIcon}>
-                <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName })}>
-                    <Image source={require('../assets/accountImage.png')} style={{ marginTop: 5, }} />
-                </TouchableOpacity>
-
+                {
+                    userImage &&
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName , profileUri: userImage})}>
+                        <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 50, height: 50, borderRadius: 30 }} />
+                    </TouchableOpacity>
+                }
                 <View style={{ flexDirection: 'column' }}>
-                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName , profileUri: userImage})}>
                         <Text style={{ color: 'black', marginLeft: 4, fontSize: 18 }}>
                             {userName}
                         </Text>
@@ -173,7 +187,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 140 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
-                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} />
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId  })} postId={item.item.postId} />
                 )}
             </View>
 
@@ -199,7 +213,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })}  postId={ item.item.postId}/>
+            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} postId={item.item.postId} />
         </View>
     )
 

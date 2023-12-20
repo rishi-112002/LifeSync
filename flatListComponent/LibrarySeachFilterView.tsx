@@ -11,14 +11,12 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
             const storageRef = storage().ref();
             const imageRef = storageRef.child(item.item.images);
             const url = await imageRef.getDownloadURL();
-            console.log("image URL ", url)
             setImageUrl(url);
         } catch (error) {
             console.error('Error getting image URL:', error);
             throw error;
         }
     }
-console.log("items for library search List" , item)
     useEffect(() => {
         getImage();
     }, []);

@@ -17,7 +17,7 @@ function CategoryEditScreen() {
     const [bnErrorMessage, setBnError] = useState("")
     const [anErrorMessage, setAnError] = useState("")
     const userId = useSelector((state: RootState) => {
-        console.log("userEmail", state)
+  
         return state.loginAuth.userId
     })
     const openImagePicker = () => {
@@ -39,7 +39,7 @@ function CategoryEditScreen() {
         });
     };
     const setSelectedImage = (imageUri: any) => {
-        console.log('Selected Image URI:', imageUri);
+      
         setImageUri(imageUri)
     };
     const handleAddPost = () => {
@@ -72,7 +72,7 @@ function CategoryEditScreen() {
             updatedAt: serverTimestamp(),
             userId: userId,
         }
-        console.log("Post Data", categoryData)
+ 
       await  firestore().collection("category").doc().update(categoryData).then(() => console.log("updated successfully")).catch((Error) => console.log("error ", Error))
     }
     const uploadPhoto = async () => {

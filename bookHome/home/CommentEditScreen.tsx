@@ -10,7 +10,7 @@ function CommentEditScreen() {
     const [commentText, setCommentText] = useState("")
     const route = useRoute();
     const data = route.params
-    console.log("data for comments", data)
+   
 
     const currentCommentViaFireStore = async () => {
         await firestore().collection('posts').doc(data.postId).collection("comments").doc(data.commentId).get().then((doc) => {

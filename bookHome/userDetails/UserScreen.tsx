@@ -1,14 +1,19 @@
 import React from "react";
 import { StyleSheet, Text, View } from 'react-native'
 import UserFlatList from "../../flatListComponent/UserFlatList";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reduxIntegration/Store";
 
-function UserScreen({}) { 
+function UserScreen({ }) {
+    const userName = useSelector((state: RootState) => {
+        return state.loginAuth.userName
+    });
     return (
         <View style={styles.container}>
             <Text style={styles.tabTextColor}>
-                Bryan Johnson
+                {userName}
             </Text>
-           <UserFlatList/>
+            <UserFlatList />
         </View>
     )
 };

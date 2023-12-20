@@ -18,7 +18,6 @@ function AddCategory() {
     const [anErrorMessage, setAnError] = useState("")
     const [loading , setLoading] = useState(false)
     const userId = useSelector((state: RootState) => {
-        console.log("userEmail", state)
         return state.loginAuth.userId
     })
     const openImagePicker = () => {
@@ -40,7 +39,7 @@ function AddCategory() {
         });
     };
     const setSelectedImage = (imageUri: any) => {
-        console.log('Selected Image URI:', imageUri);
+     
         setImageUri(imageUri)
     };
     const handleAddCategory = () => {
@@ -77,7 +76,7 @@ function AddCategory() {
             updatedAt: serverTimestamp(),
             userId: userId,
         }
-        console.log("Post Data", categoryData)
+      
       await  firestore().collection("category").doc().set(categoryData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
     }
     const uploadPhoto = async () => {

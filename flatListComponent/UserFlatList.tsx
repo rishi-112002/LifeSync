@@ -1,7 +1,6 @@
 import React from "react";
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState, store } from "../reduxIntegration/Store";
+import { store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import GetApiRequest from "../apiCalling/GetRequest";
@@ -9,11 +8,6 @@ import auth from '@react-native-firebase/auth';
 import { useNavigation } from "@react-navigation/native";
 
 function UserFlatList() {
-
-    const userEmail = useSelector((state: RootState) => {
-        console.log('state', state);
-        return state.loginAuth.email
-    })
     const logoutUser = async () => {
         try {
             await AsyncStorage.removeItem('email');
@@ -80,14 +74,12 @@ function UserFlatList() {
                     switch (item.item.text) {
 
                         case 'Edit Profile':
-                            Alert.alert("Bryan Johnson", userEmail)
+                            navigation.navigate("UserProfileScreen")
                             break;
 
-                        case 'Change Password':
-                            Alert.alert("warning", "click on Change Password")
+                        case 'Change Password':     
+                            navigation.navigate("ChangePassword")
                             break;
-
-
                         case 'Liked Posts':
                            navigation.navigate("LikedPostScreen")
                             break;

@@ -15,7 +15,6 @@ function CategoryTypeScreen() {
         return state.loginAuth.userId
     })
 
-    console.log("Login user in id " ,  userId , data)
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginTop:16, marginBottom:10 , marginStart:10 }}>

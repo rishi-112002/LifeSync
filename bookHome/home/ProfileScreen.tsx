@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 
@@ -7,8 +7,11 @@ import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 function ProfileScreen() {
     const navigation = useNavigation();
     const route = useRoute();
-    const  data  = route.params
-    console.log("data for profile", data)
+    const data = route.params
+    const [follow, setFollow] = useState(false)
+    const handleFollow = () => {
+        setFollow(!follow)
+    }
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
@@ -23,15 +26,18 @@ function ProfileScreen() {
                 </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center', marginTop: 20, flexDirection: "column" }}>
-
-                <Image source={require("../../assets/backArrow.png")} style={{ width: 150, height: 100, resizeMode: 'contain', margin: 10 }} />
+                <TouchableOpacity>
+                    <View style={styles.imageContainer}>
+                        <Image source={{ uri: data.profileUri }} style={styles.profileImage} />
+                    </View>
+                </TouchableOpacity>
                 <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', margin: 10 }}>
-                {data.userNames}
+                    {data.userNames}
 
                 </Text>
-                <TouchableOpacity style={{ backgroundColor: "#D9D9D9", padding: 4, margin: 10, borderRadius: 10 }}>
+                <TouchableOpacity style={{ backgroundColor: "#D9D9D9", padding: 4, margin: 10, borderRadius: 10 }} onPress={handleFollow}>
                     <Text style={{ color: 'black', fontWeight: '600', padding: 2, marginStart: 26, marginEnd: 26 }}>
-                        Follow
+                        {!follow ? "Follow" : "UnFollow"}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -58,5 +64,22 @@ const styles = StyleSheet.create({
         marginTop: 18,
         fontSize: 27,
         fontWeight: 'bold'
+    },
+    imageContainer: {
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+        overflow: 'hidden',
+        elevation: 20,
+        shadowColor: 'gray',
+        borderColor: 'gray',
+        backgroundColor: '#f0f0f0',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 50
     },
 })

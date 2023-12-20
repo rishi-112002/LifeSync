@@ -36,14 +36,15 @@ function LikedPostScreen() {
     const postDataViaFireStore = () => {
         postCollection.where("likeBy", "array-contains", userId).get()
             .then((querySnapShot) => {
-                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any, postId: any, likeCount: any, likeBy: [] }[] = [];
+                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any, postId: any, likeCount: any, likeBy: [], userProfile: any }[] = [];
+
                 querySnapShot.forEach(async (doc) => {
                     const postData = doc.data();
                     try {
                         const result = GetActualTime(postData.createdAt.seconds);
                         option.push({
                             name: userName, link: postData.link, bookName: postData.title, authorName: postData.subTitle,
-                            userId: postData.userId, timeResult: result, imageUri: postData.image, postId: doc.id, likeBy: postData.likeBy, likeCount: postData.likeCount
+                            userId: postData.userId, timeResult: result, imageUri: postData.image, postId: doc.id, likeBy: postData.likeBy, likeCount: postData.likeCount, userProfile: postData.profileImage
                         });
                     } catch (error) {
                         console.error("Error getting download URL:", error);
@@ -57,7 +58,7 @@ function LikedPostScreen() {
     }
     return (
         <View style={styles.container}>
-            <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20, alignItems: 'flex-start' }}>
+            <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'flex-start' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>

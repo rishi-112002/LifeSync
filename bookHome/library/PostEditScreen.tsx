@@ -30,8 +30,6 @@ function PostEditScreen() {
         return state.loginAuth.userId
     })
 
-    console.log("data for current user ", data)
-
     async function getImage(uri: any) {
         try {
             const storageRef = storage().ref();

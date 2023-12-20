@@ -24,7 +24,6 @@ function ModalPopUp(props: { modalVisible: any, setModalVisible: any, navigation
         {
           text: "OK",
           onPress: () => {
-            console.log("OK button pressed", postId, commentId);
             if (commentId != "undefined") {
               DeleteComment(postId, commentId)
               return

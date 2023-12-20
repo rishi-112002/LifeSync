@@ -7,7 +7,8 @@ export const loginAuthentication = createSlice({
         email: "",
         password: '',
         userId: '',
-        userName: ""
+        userName: "",
+        userProfile: ""
     },
     reducers: {
         loginAuth: (state, action) => {
@@ -15,13 +16,14 @@ export const loginAuthentication = createSlice({
             state.password = action.payload.password
             state.userId = action.payload.userId
             state.userName = action.payload.userName
+            state.userProfile = action.payload.userProfile
         }
 
     }
 })
 export const allUserDataList = createSlice({
     name: "AllUserData",
-    initialState: { userData:{}},
+    initialState: { userData: {} },
     reducers: {
         allUserDetails: (state, action) => {
             state.userData = action.payload

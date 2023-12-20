@@ -8,7 +8,6 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
     const { searchText, userId } = props
     const categoryCollection = firestore().collection('category').where("userId", "==", userId);
     const [categoryOption, setCategoryOption] = useState([])
-
     const categoryDataViaFireStore = async () => {
         try {
             const querySnapShot = await categoryCollection.get();
@@ -37,7 +36,6 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
 
     useEffect(() => {
         categoryDataViaFireStore();
-        console.log("category Options", categoryOption)
     }, []);
 
     return (

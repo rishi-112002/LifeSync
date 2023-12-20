@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, StyleSheet, TouchableOpacity, Alert, TouchableWithoutFeedback } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 import { serverTimestamp } from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reduxIntegration/Store';
 function CommentModal(props: { visible: any, onClose: any, postId: any, userId: any, userName: any }) {
     const [commentText, setCommentText] = useState('');
     const { visible, onClose, postId, userId, userName } = props
     const handleCancel = () => {
         setCommentText('');
-        console.log("comment modal", postId, userId, userName)
         onClose();
     };
+    const imageUrl = useSelector((state: RootState) => {
+        return state.allUserData.userData[userId]?.profileImage || 'DefaultName';
+    })
 
     const addCommentToFireStore = async () => {
         const commentData = {
@@ -17,7 +21,9 @@ function CommentModal(props: { visible: any, onClose: any, postId: any, userId: 
             userName: userName,
             userId: userId,
             comment: commentText,
-            postId: postId
+            postId: postId,
+            profileImage: imageUrl,
+
         }
         firestore().collection("posts").doc(postId).collection("comments").doc().set(commentData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
 

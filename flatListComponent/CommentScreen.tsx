@@ -25,12 +25,12 @@ function CommentScreen() {
     const CommentDataViaFireStore = async () => {
         try {
             const querySnapShot = await commentCollection.get();
-            const option: ((prevState: never[]) => never[]) | { comment: string; createdTime: any; userId: string; userName: string; commentId: string, postId: string }[] = [];
+            const option: ((prevState: never[]) => never[]) | { comment: string; createdTime: any; userId: string; userName: string; commentId: string, postId: string, profileImage: any }[] = [];
 
             querySnapShot.forEach(async (doc) => {
                 const commentData = doc.data()
                 const result = GetActualTime(commentData.createdAt.seconds);
-                option.push({ comment: commentData.comment, createdTime: result, userName: commentData.userName, userId: commentData.userId, commentId: doc.id, postId: data["postId"] });
+                option.push({ comment: commentData.comment, createdTime: result, userName: commentData.userName, userId: commentData.userId, commentId: doc.id, postId: data["postId"], profileImage: commentData.profileImage });
             });
 
             setCommentOption(option);
@@ -52,7 +52,7 @@ function CommentScreen() {
     useEffect(() => {
         CommentDataViaFireStore();
     }, []);
-    
+
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 20, alignItems: 'flex-start' }}>

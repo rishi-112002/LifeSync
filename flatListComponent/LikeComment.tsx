@@ -40,10 +40,10 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
                 </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
-                <Text style={{ color: "gray", marginStart: 25, marginEnd: 20, marginBottom: 5 }}>
+                <Text style={{ color: "gray", marginStart: 25, marginEnd: 15, marginBottom: 5 }}>
                     {item.item.likeCount}  like
                 </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 10 }}>
+                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5}}>
                     {commentCount} comment
                 </Text>
                 <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 25 }}>

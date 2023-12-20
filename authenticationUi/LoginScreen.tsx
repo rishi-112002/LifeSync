@@ -38,7 +38,7 @@ function LoginScreen() {
         usersCollection.where("email", "==", email).get().then((querySnapShot) => {
             querySnapShot.forEach(async (doc) => {
                 const userData = doc.data();
-                saveLoginData(email, password, doc.id, userData.name)
+                saveLoginData(email, password, doc.id, userData.name, userData.profileImage)
             });
         }).catch(error => {
             console.log("error", error)
@@ -58,18 +58,20 @@ function LoginScreen() {
             }
         }
     };
-    const saveLoginData = async (email: string, password: string, userId: string, userName: string) => {
+    const saveLoginData = async (email: string, password: string, userId: string, userName: string, userProfile: any) => {
         const object = {
             email: email,
             password: password,
             userId: userId,
-            userName: userName
+            userName: userName,
+            userProfile: userProfile
         }
         dispatch(loginAuth(object))
         await AsyncStorage.setItem('email', object.email)
         await AsyncStorage.setItem('password', object.password)
         await AsyncStorage.setItem('userId', object.userId)
         await AsyncStorage.setItem('userName', object.userName)
+        await AsyncStorage.setItem('userProfile', object.userProfile)
     }
     const handlePassword = () => {
         if (!password) {
@@ -117,7 +119,7 @@ function LoginScreen() {
                         } else {
                             setPassword(text);
                         }
-                    } 
+                    }
                     }
                     placeholder="min 6 character" keyBoardType="normal" />
                 <Text style={{ alignSelf: 'flex-end', color: 'blue', marginTop: 20, fontSize: 14, fontWeight: 'bold', width: 180, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Forgot Password')}>

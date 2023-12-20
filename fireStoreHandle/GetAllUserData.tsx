@@ -17,13 +17,14 @@ async function GetAllUserData() {
                 name: usersData['name'],
                 mobile: usersData["mobile"],
                 gender: usersData["gender"],
+                profileImage: usersData["profileImage"]
             };
             allUsersData[doc.id] = userObject
+            console.log("userProfiles" ,usersData["profileImage"] )
         });
         store.dispatch(allUserDetails(allUsersData));
     } catch (error) {
         console.error("Error getting user data:", error);
     }
 }
-
 export default GetAllUserData;
