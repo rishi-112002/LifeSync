@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Image, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import storage from "@react-native-firebase/storage";
 import firestore from '@react-native-firebase/firestore';
@@ -9,7 +9,11 @@ import { RootState } from "../reduxIntegration/Store";
 function SelectProfileImagePopUp(props: { visible: any, onClose: any, profileUri: any }) {
     const { visible, onClose, profileUri } = props
     const handleCancel = () => {
-        uploadPhoto();
+        if (imageUri) {
+            uploadPhoto();
+            return
+        }
+        onClose();
     };
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
@@ -91,7 +95,7 @@ function SelectProfileImagePopUp(props: { visible: any, onClose: any, profileUri
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleCancel}>
                                 <Text style={{ color: "white", backgroundColor: 'gray', marginStart: 'auto', fontSize: 21, fontWeight: '500', borderRadius: 10, padding: 5 }}>
-                                    submit
+                                    {imageUri ? "submit" : "cancel"}
                                 </Text>
                             </TouchableOpacity>
                         </View>

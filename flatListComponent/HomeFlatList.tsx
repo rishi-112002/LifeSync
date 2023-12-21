@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import HomeFlatListView from "./HomeFlatListView";
 import GetActualTime from "../reuseableComponent/GetActualTime";
+import GetAllUserData from "../fireStoreHandle/GetAllUserData";
 function HomeFlatList(props: { onUserIconPress: any }) {
     const { onUserIconPress } = props
     const postCollection = firestore().collection('posts');
@@ -13,6 +14,8 @@ function HomeFlatList(props: { onUserIconPress: any }) {
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     })
+
+
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
@@ -39,6 +42,7 @@ function HomeFlatList(props: { onUserIconPress: any }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         postDataViaFireStore();
+        GetAllUserData();
         setTimeout(() => {
             setRefreshing(false);
         }, 2000);

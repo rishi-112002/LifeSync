@@ -1,26 +1,25 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LibraryScreen from "./LibraryScreen";
-import AddCategory from "./AddCategory";
-import CategoryTypeScreen from "../../flatListComponent/CategoryTypeScreen";
-import AddPost from "../home/AddPost";
-import PostEditScreen from "./PostEditScreen";
 import NewPassword from "../../authenticationUi/NewPassword";
+import CategoryTypeScreen from "../../flatListComponent/CategoryTypeScreen";
 import CommentScreen from "../../flatListComponent/CommentScreen";
+import AddPost from "../home/AddPost";
 import CommentEditScreen from "../home/CommentEditScreen";
 import HomeScreen from "../home/HomeScreen";
 import ProfileScreen from "../home/ProfileScreen";
-import SearchScreen from "../searchDetails/SearchScreen";
+import AddCategory from "../library/AddCategory";
+import LibraryScreen from "../library/LibraryScreen";
+import PostEditScreen from "../library/PostEditScreen";
 import LikedPostScreen from "../userDetails/LikedPostScreen";
 import PrivacyPolicy from "../userDetails/PrivacyPolicy";
 import TermsOfUsageScreen from "../userDetails/TermsOfUsage";
 import UserProfileScreen from "../userDetails/UserProfileScreen";
 import UserScreen from "../userDetails/UserScreen";
-
+import SearchScreen from "./SearchScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
-function LibraryNavigation() {
+function SearchNavigation() {
     return (
-        <Stack.Navigator initialRouteName="LibraryS">
-          <Stack.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
+        <Stack.Navigator initialRouteName="SearchScreen">
+            <Stack.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
             <Stack.Screen name="LibraryS" component={LibraryScreen} options={{ headerShown: false }} />
             <Stack.Screen name="AddCategory" component={AddCategory} options={{ headerShown: false }} />
@@ -39,4 +38,11 @@ function LibraryNavigation() {
         </Stack.Navigator>
     );
 }
-export default LibraryNavigation;
+export default SearchNavigation;
+
+
+
+
+
+
+

@@ -1,12 +1,13 @@
 import React from "react";
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { store } from "../reduxIntegration/Store";
+import { RootState, store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import GetApiRequest from "../apiCalling/GetRequest";
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from "@react-navigation/native";
-
+import Share from 'react-native-share';
+import { useSelector } from "react-redux";
 function UserFlatList() {
     const logoutUser = async () => {
         try {
@@ -36,10 +37,26 @@ function UserFlatList() {
         logoutUser();
 
     };
-
-
-   
-
+    const handleDelete = () => {
+        Alert.alert(
+            "Warning",
+            "Are you sure to Logout ?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        handleLogout();
+                    },
+                },
+            ],
+            { cancelable: false }
+        )
+        console.log('Delete button pressed');
+    };
     const userMethod = [
         {
             text: "Edit Profile"
@@ -66,6 +83,22 @@ function UserFlatList() {
             text: "Logout"
         }
     ];
+    const share = async () => {
+        try {
+            const options = {
+                title: 'BookStore App',
+                message: 'Check out this awesome app!',
+                url: 'https://your-app-url.com',
+            };
+
+            await Share.open(options);
+        } catch (error) {
+            console.log('Error sharing app:', error.message);
+        }
+    };
+    const userId = useSelector((state: RootState) => {
+        return state.loginAuth.userId
+    });
     return (
         <FlatList
             data={userMethod}
@@ -77,26 +110,29 @@ function UserFlatList() {
                             navigation.navigate("UserProfileScreen")
                             break;
 
-                        case 'Change Password':     
-                            navigation.navigate("ChangePassword")
+                        case 'Change Password':
+                            navigation.navigate("ChangePassword", { userId: userId })
                             break;
                         case 'Liked Posts':
-                           navigation.navigate("LikedPostScreen")
+                            navigation.navigate("LikedPostScreen")
                             break;
-
+                        case 'Privacy Policy':
+                            navigation.navigate("PrivacyPolicy")
+                            break;
                         case 'Terms Of usage':
-                            GetApiRequest();
+                            navigation.navigate("TermsOfUsage")
                             break;
 
                         case 'Ratting app':
+
                             break;
 
                         case 'Share app':
-                            Alert.alert("warning", "click on Share app")
+                            share()
                             break;
 
                         case 'Logout':
-                            handleLogout();
+                            handleDelete();
                             break;
 
                         default:

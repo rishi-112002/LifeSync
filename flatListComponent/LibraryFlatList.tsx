@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, RefreshControl, Image, Text, ScrollView } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl, Image, Text } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import LibrarySearchFilterView from "./LibrarySeachFilterView";
 
-function LibraryFlatList(props: { searchText: string, userId: string }) {
-
+function LibraryFlatList(props: { searchText: string, userId: any }) {
     const { searchText, userId } = props
+    console.log("userId", userId)
     const categoryCollection = firestore().collection('category').where("userId", "==", userId);
     const [categoryOption, setCategoryOption] = useState([])
     const categoryDataViaFireStore = async () => {
@@ -49,7 +49,6 @@ function LibraryFlatList(props: { searchText: string, userId: string }) {
                         Add  category
                     </Text>
                 </View>
-
             ) :
             (<View style={styles.container}>
                 <FlatList

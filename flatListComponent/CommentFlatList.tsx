@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ListRenderItemInfo, Text, TouchableOpacity, View } from "react-native";
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import firestore from '@react-native-firebase/firestore';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-function SearchFlatList(props: { searchText: String }) {
+function SearchFlatList(props: { searchText: String ,  profileIma}) {
     const { searchText } = props
     const [bookNames, setBookNames] = useState([]);
 
     const GetAllSearchData = async () => {
 
         const nameArray: any[] = []
-        await firestore().collection("category").get().then((querySnapshot) => {
+        await firestore().collection("users").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 const bookList = doc.data();
                 nameArray.push(bookList)
@@ -20,24 +21,23 @@ function SearchFlatList(props: { searchText: String }) {
     useEffect(() => {
         GetAllSearchData();
     }, []);
-
+    const navigation = useNavigation()
     const filterData = (item: { description: any, name: any }) => {
-
+        console.log("item", item)
+        if (!item || searchText === "") {
+            return null;
+        }
+        const name = item.name ? item.name.toLowerCase() : "";
         if (searchText === "") {
             return null
         }
-        if (item.description.toLowerCase().includes(searchText.toLowerCase()) && item.name.toLowerCase().includes(searchText.toLowerCase())) {
+        if (name.toLowerCase().includes(searchText.toLowerCase())) {
             return (
                 <View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.userId, userNames: name, profileUri: item.profileImage })}>
                         <Text style={styles.bookList}>
                             {
-                                item.description
-                            }
-                        </Text>
-                        <Text style={styles.bookList}>
-                            {
-                                item.name
+                                name
                             }
                         </Text>
                     </TouchableOpacity>

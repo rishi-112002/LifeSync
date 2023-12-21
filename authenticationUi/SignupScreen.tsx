@@ -105,13 +105,15 @@ function SignupScreen() {
             const task = reference.putFile(uploadUri)
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-
+            })
+            task.then((success) => {
+                addUserData(FileName)
             })
         } catch (error) {
             // setLoading(false)
             console.log("photo not uploaded", error)
         }
-        addUserData(FileName);
+       ;
     }
 
 
@@ -120,7 +122,7 @@ function SignupScreen() {
         try {
             await auth().createUserWithEmailAndPassword(email, password);
             console.log('User added successfully!');
-            uploadPhoto()
+           await uploadPhoto()
         } catch (error) {
             console.error('Error adding user:', error.message);
             Alert.alert("warning", "User is already exits Please try to login")
@@ -140,7 +142,11 @@ function SignupScreen() {
             status: "active",
             updatedAt: serverTimestamp(),
             userId: userId,
-            profileImage: fileName
+            profileImage: fileName,
+            followBy:[],
+            follower:0,
+            following:[],
+            followingCount:0
         }
         try {
             await firestore().collection("users").doc(userId).set(userData).then((success) => {
@@ -154,8 +160,6 @@ function SignupScreen() {
             return
         }
     }
-
-
     return (
         <ScrollView style={style.containers} keyboardShouldPersistTaps="handled">
             <View style={{ flexDirection: "row" }}>

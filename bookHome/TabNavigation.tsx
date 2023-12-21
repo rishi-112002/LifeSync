@@ -6,6 +6,7 @@ import { Image, StyleSheet } from "react-native";
 import HomeNavigation from "./home/HomeNav";
 import LibraryNavigation from "./library/LibraryNav";
 import UserDetailsNav from "./userDetails/UserDetailsNav";
+import SearchNavigation from "./searchDetails/SearchNav";
 
 function TabNavigation() {
     const Tab = createMaterialBottomTabNavigator();
@@ -19,7 +20,7 @@ function TabNavigation() {
                     ),
                     tabBarColor: "white"
                 }} />
-            <Tab.Screen name="Search" component={SearchScreen}
+            <Tab.Screen name="Search" component={SearchNavigation}
                 options={{
                     tabBarLabel: 'Search',
                     tabBarIcon: () => (

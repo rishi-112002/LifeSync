@@ -132,6 +132,7 @@ function AddPost() {
 
             })
             task.then((successfully) => {
+                setLoading(false)
                 navigation.navigate("Homes")
             })
 
@@ -155,8 +156,7 @@ function AddPost() {
             updatedAt: serverTimestamp(),
             userId: userId,
             likeBy: [],
-            likeCount: 0,
-            profileImage: imageUrl
+            likeCount: 0
         }
         firestore().collection("posts").doc().set(postData).then(() => console.log("added successfully")).catch((Error) => console.log("error ", Error))
 

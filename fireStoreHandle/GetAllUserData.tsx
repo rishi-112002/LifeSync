@@ -17,10 +17,11 @@ async function GetAllUserData() {
                 name: usersData['name'],
                 mobile: usersData["mobile"],
                 gender: usersData["gender"],
-                profileImage: usersData["profileImage"]
+                profileImage: usersData["profileImage"],
+                followerCount:usersData["follower"],
+                followingCount : usersData["followingCount"]
             };
             allUsersData[doc.id] = userObject
-            console.log("userProfiles" ,usersData["profileImage"] )
         });
         store.dispatch(allUserDetails(allUsersData));
     } catch (error) {

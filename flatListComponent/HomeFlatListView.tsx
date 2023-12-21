@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Image, Linking, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
-import storage from '@react-native-firebase/storage'
+import storage from '@react-native-firebase/storage';
 import { useNavigation } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
@@ -121,6 +121,9 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             console.error("Error updating like count: ", error);
         }
     };
+    const imageUri = useSelector((state: RootState) => {
+        return state.allUserData.userData[item.item.userId]?.profileImage || 'DefaultName';
+    })
 
 
     useEffect(() => {
@@ -143,7 +146,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     async function getUserImage() {
         try {
             const storageRef = storage().ref();
-            const imageRef = storageRef.child(item.item.userProfile);
+            const imageRef = storageRef.child(imageUri);
             const url = await imageRef.getDownloadURL();
             setUserImage(url);
         } catch (error) {
@@ -167,12 +170,12 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             <View style={styles.userIcon}>
                 {
                     userImage &&
-                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName , profileUri: userImage})}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
                         <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 50, height: 50, borderRadius: 30 }} />
                     </TouchableOpacity>
                 }
                 <View style={{ flexDirection: 'column' }}>
-                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName , profileUri: userImage})}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
                         <Text style={{ color: 'black', marginLeft: 4, fontSize: 18 }}>
                             {userName}
                         </Text>
@@ -187,7 +190,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     <Image source={require('../assets/threeDots.png')} style={{ marginStart: 140 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
-                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId  })} postId={item.item.postId} />
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} />
                 )}
             </View>
 

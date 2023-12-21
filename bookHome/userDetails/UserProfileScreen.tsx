@@ -6,16 +6,25 @@ import { RootState } from "../../reduxIntegration/Store";
 import { useNavigation } from "@react-navigation/native";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import SelectProfileImagePopUp from "../../reuseableComponent/SelectProfileImagePopUp";
+import firestore from '@react-native-firebase/firestore'
+
 function UserProfileScreen() {
     const [profileImage, setProfileImage] = useState("");
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     });
+    const [likeCount , setLikeCount] = useState(0)
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
     const imageUrl = useSelector((state: RootState) => {
         return state.allUserData.userData[userId]?.profileImage || 'DefaultName';
+    })
+    const followerCount = useSelector((state: RootState) => {
+        return state.allUserData.userData[userId]?.followerCount || 0;
+    })
+    const followingCount = useSelector((state: RootState) => {
+        return state.allUserData.userData[userId]?.followingCount || 0;
     })
     const navigation = useNavigation()
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,8 +40,22 @@ function UserProfileScreen() {
             throw error;
         }
     }
+    const postCollection = firestore().collection('posts');
+    const postCount = () => {
+        postCollection.where('userId', '==', userId)
+            .get()
+            .then((querySnapShot) => {
+                const data = querySnapShot.docs.map((doc) => doc.id);
+                const likeCount = data.length;
+                setLikeCount(likeCount);
+            })
+            .catch((error) => {
+                console.error("Error fetching like counts:", error);
+            });
+    }
     useEffect(() => {
         getImage();
+        postCount();
         console.log("profileImage", profileImage)
     }, []);
     const handleCloseModal = () => {
@@ -71,18 +94,22 @@ function UserProfileScreen() {
                 <View style={style.containers}>
                     <View style={style.statsContainer}>
                         <Text style={style.label}>Followers</Text>
-                        <Text style={style.count}>{0}</Text>
+                        <Text style={style.count}>{followerCount}</Text>
+                    </View>
+                    <View style={style.statsContainer}>
+                        <Text style={style.label}>Following</Text>
+                        <Text style={style.count}>{followingCount}</Text>
                     </View>
                     <View style={style.statsContainer}>
                         <Text style={style.label}>Posts</Text>
-                        <Text style={style.count}>{0}</Text>
+                        <Text style={style.count}>{likeCount}</Text>
                     </View>
                 </View>
             </View>
             <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold', marginTop: 35, marginStart: 20 }}>
                 Category List :-
             </Text>
-            <LibraryFlatList searchText={" "} userId={userId} />
+            <LibraryFlatList searchText={""} userId={userId} />
         </View>
     )
 }
