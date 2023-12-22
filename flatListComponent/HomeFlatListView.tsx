@@ -98,29 +98,33 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             console.error("Error updating like count: ", error);
         }
     };
-
-
-
-    const checkLike = async () => {
+    const checkLikeRealtime = () => {
         const postId = item.item.postId;
         try {
             const postRef = firestore().collection("posts").doc(postId);
-            const postDoc = await postRef.get();
-            const postData = postDoc.data()
-            const likeByArray = postDoc.exists ? (postData.likeBy || []) : [];
-            const hasLiked = likeByArray.includes(userId);
-            if (hasLiked) {
-                setLike(true)
-            }
-            else {
-                setLike(false)
-                console.log("User has already disliked the post");
-                return
-            }
+
+            const unsubscribe = postRef.onSnapshot((postDoc) => {
+                if (postDoc.exists) {
+                    const postData = postDoc.data();
+                    const likeByArray = postData.likeBy || [];
+                    const hasLiked = likeByArray.includes(userId);
+
+                    if (hasLiked) {
+                        setLike(true);
+                    } else {
+                        setLike(false);
+                        console.log("User has already disliked the post");
+                    }
+                }
+            });
+            return () => unsubscribe();
         } catch (error) {
             console.error("Error updating like count: ", error);
         }
     };
+
+
+
     const imageUri = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.profileImage || 'DefaultName';
     })
@@ -128,7 +132,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
 
     useEffect(() => {
         getImage();
-        checkLike();
+        checkLikeRealtime();
         getUserImage();
     }, []);
 
@@ -174,20 +178,18 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                         <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 50, height: 50, borderRadius: 30 }} />
                     </TouchableOpacity>
                 }
-                <View style={{ flexDirection: 'column' }}>
+                <View style={{ flexDirection: 'column', marginEnd: 'auto', marginStart: 5, marginTop: 2 }}>
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
                         <Text style={{ color: 'black', marginLeft: 4, fontSize: 18 }}>
                             {userName}
                         </Text>
+                        <Text style={{ color: 'gray', marginLeft: 5, fontSize: 15 }}>
+                            {item.item.timeResult}
+                        </Text>
                     </TouchableOpacity>
-
-                    <Text style={{ color: 'gray', marginLeft: 5, fontSize: 15 }}>
-                        {item.item.timeResult}
-                    </Text>
-
                 </View>
                 <TouchableOpacity onPress={handlePress}>
-                    <Image source={require('../assets/threeDots.png')} style={{ marginStart: 140 }} />
+                    <Image source={require('../assets/threeDots.png')} style={{ marginStart: "auto", marginEnd: 15 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
                     <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} />
@@ -227,7 +229,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flexDirection: 'row',
         marginTop: 20, flex: 1,
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginStart: 5
     }
 })
 export default HomeFlatListView;

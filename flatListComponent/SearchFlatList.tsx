@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-function SearchFlatList(props: { searchText: String ,  profileIma}) {
+function SearchFlatList(props: { searchText: String }) {
     const { searchText } = props
     const [bookNames, setBookNames] = useState([]);
 
@@ -33,7 +33,7 @@ function SearchFlatList(props: { searchText: String ,  profileIma}) {
         }
         if (name.toLowerCase().includes(searchText.toLowerCase())) {
             return (
-                <View>
+                <View>{item.profileImage &&
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.userId, userNames: name, profileUri: item.profileImage })}>
                         <Text style={styles.bookList}>
                             {
@@ -41,6 +41,7 @@ function SearchFlatList(props: { searchText: String ,  profileIma}) {
                             }
                         </Text>
                     </TouchableOpacity>
+                    }
                 </View>)
         }
         else {
@@ -52,6 +53,7 @@ function SearchFlatList(props: { searchText: String ,  profileIma}) {
             <FlatList
                 data={bookNames}
                 renderItem={({ item }) => filterData(item)}
+                keyboardShouldPersistTaps='handled'
             />
         </View>
     )

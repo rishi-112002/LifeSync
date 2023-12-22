@@ -5,24 +5,31 @@ import LibrarySearchFilterView from "./LibrarySeachFilterView";
 
 function LibraryFlatList(props: { searchText: string, userId: any }) {
     const { searchText, userId } = props
-    console.log("userId", userId)
     const categoryCollection = firestore().collection('category').where("userId", "==", userId);
     const [categoryOption, setCategoryOption] = useState([])
     const categoryDataViaFireStore = async () => {
         try {
-            const querySnapShot = await categoryCollection.get();
-            const option: ((prevState: never[]) => never[]) | { type: any; images: any; categoryId: string; userId: string; }[] = [];
+            const unsubscribe = categoryCollection.onSnapshot((querySnapshot) => {
+                const option = [];
 
-            querySnapShot.forEach(async (doc) => {
-                const categoryData = doc.data()
-                option.push({ type: categoryData.name, images: categoryData.image, categoryId: doc.id, userId: userId });
+                querySnapshot.forEach((doc) => {
+                    const categoryData = doc.data();
+                    option.push({
+                        type: categoryData.name,
+                        images: categoryData.image,
+                        categoryId: doc.id,
+                        userId: userId,
+                        categoryCount:querySnapshot.size
+                    });
+                });
+                setCategoryOption(option);
             });
-
-            setCategoryOption(option);
+            return () => unsubscribe();
         } catch (error) {
             console.error("Error fetching category data:", error);
         }
-    }
+    };
+
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
@@ -39,8 +46,6 @@ function LibraryFlatList(props: { searchText: string, userId: any }) {
     }, []);
 
     return (
-
-
         !categoryOption || categoryOption.length === 0 ?
             (
                 <View style={{ marginTop: 170, alignItems: 'center' }}>

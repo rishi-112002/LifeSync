@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Image } from "react-native";
+import { Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import auth from '@react-native-firebase/auth';
@@ -11,17 +11,16 @@ import Snackbar from "react-native-snackbar";
 import { View } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import storage from "@react-native-firebase/storage";
+import PopUpLoader from "../reuseableComponent/PopUpLoader";
 
 function SignupScreen() {
     const navigation = useNavigation();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
-    const userId = auth().currentUser?.uid;
-
-
-
+    const [userId, setUserId] = useState<string | null>("");
     const showToast = () => {
+        console.log("hello snack bar ")
         Snackbar.show({
             text: 'Welcome You successfully SignedUpl! Please Login?',
             duration: 2000,
@@ -37,6 +36,7 @@ function SignupScreen() {
             }
         });
     };
+    const [loading, setLoading] = useState(false);
 
     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
     const handleSignInAuth = () => {
@@ -73,6 +73,7 @@ function SignupScreen() {
             return;
         }
         else {
+            setLoading(true)
             addNewUser(email, password);
         }
     };
@@ -106,28 +107,34 @@ function SignupScreen() {
             task.on('state_changed', (taskSnapshot: { bytesTransferred: any; totalBytes: any; }) => {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
             })
-            task.then((success) => {
+            task.then(() => {
                 addUserData(FileName)
             })
         } catch (error) {
-            // setLoading(false)
+            setLoading(false)
             console.log("photo not uploaded", error)
         }
-       ;
+        ;
     }
-
-
-
     const addNewUser = async (email: any, password: any) => {
         try {
-            await auth().createUserWithEmailAndPassword(email, password);
+            await auth().createUserWithEmailAndPassword(email, password).then(async (success) => {
+                const newUserId = auth().currentUser?.uid;
+                setUserId(newUserId) 
+                await uploadPhoto()
+            })
             console.log('User added successfully!');
-           await uploadPhoto()
+
         } catch (error) {
+            setLoading(false)
             console.error('Error adding user:', error.message);
             Alert.alert("warning", "User is already exits Please try to login")
             return
         }
+    };
+    const showToastAndNavigate = () => {
+        showToast();
+         navigation.navigate("Login");
     };
 
     const addUserData = async (fileName: any) => {
@@ -143,19 +150,20 @@ function SignupScreen() {
             updatedAt: serverTimestamp(),
             userId: userId,
             profileImage: fileName,
-            followBy:[],
-            follower:0,
-            following:[],
-            followingCount:0
+            followBy: [],
+            follower: 0,
+            following: [],
+            followingCount: 0
         }
         try {
             await firestore().collection("users").doc(userId).set(userData).then((success) => {
-                showToast();
-                navigation.navigate("Login")
+                setLoading(false)
+                showToastAndNavigate()
             }).catch((error) => console.log("error while make the user ", error))
 
         } catch (error) {
-            console.error('Error adding user:', error.message);
+            setLoading(false)
+            console.log('Error adding user:', error.message, userData);
             Alert.alert("warning", "User is already exits Please try to login")
             return
         }
@@ -223,6 +231,7 @@ function SignupScreen() {
                 }
                 placeholder="min 6 character" keyBoardType="normal" />
             <ButtonComponent buttonTittle="Sign up" onPress={handleSignInAuth} />
+            {loading && <PopUpLoader />}
             <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Login')}>
                 Already have an account, Login?
             </Text>

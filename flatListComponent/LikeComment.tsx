@@ -9,18 +9,23 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
     const { toggleLikeButton, like, item, navigateToScreen, postId } = props
     const [commentCount, SetCommentCount] = useState(0)
 
-    const commentCountViaFireStore = async () => {
+    const commentCountRealtime = () => {
         try {
-            const querySnapshot = await firestore().collection('posts').doc(postId).collection("comments").get();
-            const commentCount = querySnapshot.docs.length;
-            SetCommentCount(commentCount);
+            const commentsRef = firestore().collection('posts').doc(postId).collection("comments");
+
+            // Subscribe to real-time updates
+            const unsubscribe = commentsRef.onSnapshot((querySnapshot) => {
+                const commentCount = querySnapshot.docs.length;
+                SetCommentCount(commentCount);
+            });
+            return () => unsubscribe();
         } catch (error) {
             console.error("Error getting comments:", error);
         }
-    }
+    };
 
     useEffect(() => {
-        commentCountViaFireStore();
+        commentCountRealtime();
     }, []);
     return (
         <View>
@@ -43,7 +48,7 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
                 <Text style={{ color: "gray", marginStart: 25, marginEnd: 15, marginBottom: 5 }}>
                     {item.item.likeCount}  like
                 </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5}}>
+                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5 }}>
                     {commentCount} comment
                 </Text>
                 <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 25 }}>

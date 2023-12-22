@@ -10,17 +10,13 @@ import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import PopUpLoader from "../../reuseableComponent/PopUpLoader";
 function AddPost() {
     const [bookName, setBookName] = useState("")
     const [authorName, setAuthorName] = useState("")
     const [link, setLink] = useState("")
     const navigation = useNavigation()
     const [imageURI, setImageUri] = useState("")
-    const [bnErrorMessage, setBnError] = useState("")
-    const [anErrorMessage, setAnError] = useState("")
-    const [linkErrorMessage, setLinkError] = useState("")
     const [selectedValue, setSelectedValue] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const categoryCollection = firestore().collection('category');
@@ -46,7 +42,6 @@ function AddPost() {
     }
     useEffect(() => {
         categoryDataViaFireStore();
-        getUserProfile();
     }, []);
 
     const openImagePicker = () => {
@@ -68,22 +63,19 @@ function AddPost() {
         });
     };
 
-    const handleAddPost = () => {
+    const handleAddPost = async () => {
 
         if (!bookName) {
-            setBnError("book name can'not be empty")
             Alert.alert("warning", "book name can'not be empty")
             return
         }
         if (!authorName) {
-            setAnError("author Name can'not be empty ")
             Alert.alert("warning", "author name can'not be empty")
             return
         }
 
         if (!link) {
             Alert.alert("warning", "link can'not be empty")
-            setLinkError("link can'not be empty")
             return
         }
         if (!imageURI) {
@@ -94,32 +86,10 @@ function AddPost() {
             Alert.alert("Warning", "please select a Category")
             return
         }
-        else {
-            setAnError("")
-            setBnError("")
-            setLinkError("")
-        }
         setLoading(true)
-        uploadPhoto();
+        await uploadPhoto();
 
     }
-    const [imageUrl, setImageUrl] = useState("")
-
-    const getUserProfile = async () => {
-        try {
-            const userProfile = await AsyncStorage.getItem('userProfile');
-            if (userProfile !== null) {
-                console.log('User Profile:', userProfile);
-                setImageUrl(userProfile) // You can return the value if needed
-            } else {
-                console.log('No user profile found in AsyncStorage.');
-                return null;
-            }
-        } catch (error) {
-            console.error('Error retrieving user profile from AsyncStorage:', error);
-            return null; 
-        }
-    };
     const uploadPhoto = async () => {
         const uploadUri = imageURI
         let FileName = `PostImage/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`
@@ -133,6 +103,7 @@ function AddPost() {
             })
             task.then((successfully) => {
                 setLoading(false)
+                addPostToFireStore(FileName);
                 navigation.navigate("Homes")
             })
 
@@ -141,7 +112,6 @@ function AddPost() {
             setLoading(false)
             console.log("photo not uploaded", error)
         }
-        addPostToFireStore(FileName);
     }
 
     const addPostToFireStore = async (FileName: String) => {
@@ -202,7 +172,7 @@ function AddPost() {
                 }
             </View>
             <ButtonComponent buttonTittle="Submit" onPress={handleAddPost} />
-            {loading && <ActivityIndicator size="large" color="#0000ff" />}
+            {loading && <PopUpLoader />}
         </View>
     )
 }

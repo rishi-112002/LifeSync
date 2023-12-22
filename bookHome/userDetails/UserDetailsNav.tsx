@@ -9,24 +9,18 @@ import CategoryTypeScreen from "../../flatListComponent/CategoryTypeScreen";
 import CommentScreen from "../../flatListComponent/CommentScreen";
 import AddPost from "../home/AddPost";
 import CommentEditScreen from "../home/CommentEditScreen";
-import HomeScreen from "../home/HomeScreen";
 import ProfileScreen from "../home/ProfileScreen";
 import AddCategory from "../library/AddCategory";
-import LibraryScreen from "../library/LibraryScreen";
 import PostEditScreen from "../library/PostEditScreen";
-import SearchScreen from "../searchDetails/SearchScreen";
 
 const Stack = createNativeStackNavigator();
 function UserDetailsNav() {
     return (
         <Stack.Navigator initialRouteName="UserScreen">
-            <Stack.Screen name="SearchScreen" component={SearchScreen} options={{ headerShown: false }} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="LibraryS" component={LibraryScreen} options={{ headerShown: false }} />
             <Stack.Screen name="AddCategory" component={AddCategory} options={{ headerShown: false }} />
             <Stack.Screen name="AddPost" component={AddPost} options={{ headerShown: false }} />
             <Stack.Screen name="CategoryTypeScreens" component={CategoryTypeScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Homes" component={HomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="PostEditScreen" component={PostEditScreen} options={{ headerShown: false }} />
             <Stack.Screen name="CommentScreen" component={CommentScreen} options={{ headerShown: false }} />
             <Stack.Screen name="CommentEditScreen" component={CommentEditScreen} options={{ headerShown: false }} />

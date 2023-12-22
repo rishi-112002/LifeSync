@@ -3,89 +3,89 @@ import { Image, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } f
 import storage from '@react-native-firebase/storage';
 import { useNavigation } from "@react-navigation/native";
 function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemInfo<never> }) {
-    const [imageUrl, setImageUrl] = useState("");
-    const { searchText, item } = props
-    const navigation = useNavigation()
-    async function getImage() {
-        try {
-            const storageRef = storage().ref();
-            const imageRef = storageRef.child(item.item.images);
-            const url = await imageRef.getDownloadURL();
-            setImageUrl(url);
-        } catch (error) {
-            console.error('Error getting image URL:', error);
-            throw error;
-        }
+  const [imageUrl, setImageUrl] = useState("");
+  const { searchText, item } = props
+  const navigation = useNavigation()
+  async function getImage() {
+    try {
+      const storageRef = storage().ref();
+      const imageRef = storageRef.child(item.item.images);
+      const url = await imageRef.getDownloadURL();
+      setImageUrl(url);
+    } catch (error) {
+      console.error('Error getting image URL:', error);
+      throw error;
     }
-    useEffect(() => {
-        getImage();
-    }, []);
+  }
+  useEffect(() => {
+    getImage();
+  }, [item]);
 
-    {
-        if (searchText === "") {
-            return (
-                !!imageUrl && (
-                  <View style={styles.view}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('CategoryTypeScreens', {
-                          categoryId: item.item.categoryId,
-                          categoryName: item.item.type,
-                          userId :item.item.userId
-                        })
-                      }
-                    >
-                      <Image source={{uri:imageUrl}} style={styles.image} />
+  {
+    if (searchText === "") {
+      return (
+        !!imageUrl && (
+          <View style={styles.view}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('CategoryTypeScreens', {
+                  categoryId: item.item.categoryId,
+                  categoryName: item.item.type,
+                  userId: item.item.userId
+                })
+              }
+            >
+              <Image source={{ uri: imageUrl }} style={styles.image} />
 
-                    </TouchableOpacity>
-                    <Text style={styles.typeText}>{item.item.type}</Text>
-                  </View>
-                )
-              )
-        }
-        if (item.item.type.toLowerCase().includes(searchText.toLowerCase())) {
-            return (
-                !!imageUrl && (
-                  <View style={styles.view}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('CategoryTypeScreens', {
-                          categoryId: item.item.categoryId,
-                          categoryName: item.item.type,
-                          userId :item.item.userId
-                        })
-                      }
-                    >
-                      <Image source={{uri:imageUrl}} style={styles.image} />
-                    </TouchableOpacity>
-                    <Text style={styles.typeText}>{item.item.type}</Text>
-                  </View>
-                )
-              )
-        }
+            </TouchableOpacity>
+            <Text style={styles.typeText}>{item.item.type}</Text>
+          </View>
+        )
+      )
     }
+    if (item.item.type.toLowerCase().includes(searchText.toLowerCase())) {
+      return (
+        !!imageUrl && (
+          <View style={styles.view}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('CategoryTypeScreens', {
+                  categoryId: item.item.categoryId,
+                  categoryName: item.item.type,
+                  userId: item.item.userId
+                })
+              }
+            >
+              <Image source={{ uri: imageUrl }} style={styles.image} />
+            </TouchableOpacity>
+            <Text style={styles.typeText}>{item.item.type}</Text>
+          </View>
+        )
+      )
+    }
+  }
 }
 
 const styles = StyleSheet.create({
-    view: {
-        width: "45%",
-        marginBottom: 20,
-        marginTop: 15
-    },
-    image: {
-        width: 150,
-        height: 120,
-        borderRadius: 10
-    },
-    typeText: {
-        color: 'black',
-        fontWeight: '500',
-        flex:1,
-        padding:5,
-        fontSize: 15,
-        textAlign: 'center',
-        marginTop: 8
-    }
+  view: {
+    width: "45%",
+    marginBottom: 20,
+    marginTop: 15
+  },
+  image: {
+    width: 150,
+    height: 120,
+    borderRadius: 10
+  },
+  typeText: {
+    color: 'black',
+    fontWeight: '500',
+    flex: 1,
+    padding: 5,
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 8
+  }
 
 })
 

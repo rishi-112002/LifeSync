@@ -20,7 +20,7 @@ function HomeScreen() {
                     Post
                 </Text>
             </View>
-            <HomeFlatList onUserIconPress={() => navigation.navigate('ProfileScreen')} />
+            <HomeFlatList/>
         </View>
     )
 };

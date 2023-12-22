@@ -10,6 +10,7 @@ import { loginAuth } from "../reduxIntegration/Reducer";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PasswordInput from "../reuseableComponent/PasswordInput";
+import PopUpLoader from "../reuseableComponent/PopUpLoader";
 
 function LoginScreen() {
     const navigation = useNavigation();
@@ -92,8 +93,11 @@ function LoginScreen() {
         <ScrollView style={style.container} keyboardShouldPersistTaps='handled'>
             <View style={{ marginTop: 70 }}>
                 <AppIconComponent />
-                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 50, fontSize: 20, fontWeight: 'bold' }}>
-                    Login
+                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 40, fontSize: 27, fontWeight: 'bold' }}>
+                    Welcome Back  !
+                </Text>
+                <Text style={{ alignSelf: 'center', color: 'black', marginBottom: 20, fontSize: 15, fontWeight: '300' }}>
+                    please enter your details
                 </Text>
                 <Text style={style.inputText}>
                     Email
@@ -126,7 +130,7 @@ function LoginScreen() {
                     Forgot Password ?
                 </Text>
                 <ButtonComponent buttonTittle="Login" onPress={handleLogin} />
-                {loading && <ActivityIndicator size="large" color="#0000ff" />}
+                {loading && <PopUpLoader />}
                 <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('sign up')}>
                     Don't have an account, Create new?
                 </Text>
@@ -151,7 +155,7 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginStart: 35,
-        marginTop: 15
+        marginTop: 10
     },
 })
 

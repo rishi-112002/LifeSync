@@ -11,6 +11,7 @@ import { RootState, store } from './reduxIntegration/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginAuth } from './reduxIntegration/Reducer';
 import SplashScreen from './authenticationUi/SplashScreen';
+import StartScreen from './authenticationUi/StartScreen';
 
 const HomeStack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -57,6 +58,7 @@ function AppNavigation() {
                 </HomeStack.Navigator>
             ) : (
                 <AuthStack.Navigator>
+                    {/* <AuthStack.Screen name='StartScreen' component={StartScreen} options={{ headerShown: false }} /> */}
                     <AuthStack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
                     <AuthStack.Screen name='sign up' component={SignUpScreen} options={{ headerShown: false }} />
                     <AuthStack.Screen name='Forgot Password' component={ForgotPassword} options={{ headerShown: false }} />

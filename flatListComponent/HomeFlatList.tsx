@@ -8,14 +8,11 @@ import HomeFlatListView from "./HomeFlatListView";
 import GetActualTime from "../reuseableComponent/GetActualTime";
 import GetAllUserData from "../fireStoreHandle/GetAllUserData";
 function HomeFlatList(props: { onUserIconPress: any }) {
-    const { onUserIconPress } = props
     const postCollection = firestore().collection('posts');
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     })
-
-
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {

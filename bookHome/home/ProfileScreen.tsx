@@ -17,6 +17,7 @@ function ProfileScreen() {
     });
     const [userImage, setUserImage] = useState("")
     const userId = data.userIds;
+    const [follow, setFollow] = useState(false);
 
     const updateFollower = async () => {
         try {
@@ -27,7 +28,6 @@ function ProfileScreen() {
             const hasFollowed = likeByArray.includes(currentUserId);
             if (!hasFollowed) {
                 likeByArray.push(currentUserId);
-
                 await followerRef.update({
                     follower: likeByArray.length,
                     followBy: likeByArray
@@ -66,6 +66,24 @@ function ProfileScreen() {
             }
         } catch (error) {
             console.error("Error updating like count: ", error);
+        }
+    };
+
+
+
+
+    const checkFollow = async () => {
+        try {
+            const followingRef = firestore().collection("users").doc(currentUserId);
+            followingRef.onSnapshot((followingDoc) => {
+                const followingData = followingDoc.data();
+                const followingByArray = followingDoc.exists ? (followingData.following || []) : [];
+                const hasFollowed = followingByArray.includes(userId);
+
+                setFollow(!hasFollowed);
+            });
+        } catch (error) {
+            console.error("Error checking follow status: ", error);
         }
     };
 
@@ -124,11 +142,20 @@ function ProfileScreen() {
     };
 
     const handleFollow = async () => {
+        setFollow(!follow)
         if (currentUserId != userId) {
-
-            await updateFollower()
-            await updateFollowing()
-            return
+            if (!follow) {
+                await updateFollower()
+                await updateFollowing()
+                console.log("underFollow", follow)
+                return
+            }
+            else {
+                await updateUnFollower();
+                await updateUnFollowing();
+                console.log("unFollow", follow)
+                return
+            }
 
         }
     }
@@ -143,19 +170,12 @@ function ProfileScreen() {
             throw error;
         }
     }
-    const handleUnFollow = async () => {
-        if (currentUserId != userId) {
-            await updateUnFollower();
-            await updateUnFollowing();
-            console.log("unFollow")
-            return
-        }
-        else {
-            return
-        }
-    }
     useEffect(() => {
-        getUserImage();
+
+        if (data.profileUri) {
+            getUserImage();
+            checkFollow()
+        }
     }, []);
 
 
@@ -176,7 +196,7 @@ function ProfileScreen() {
             <View style={{ alignItems: 'center', marginTop: 20, flexDirection: "column" }}>
                 <TouchableOpacity>
                     <View style={styles.imageContainer}>
-                        <Image source={{ uri: userImage }} style={styles.profileImage} />
+                        {userImage && <Image source={{ uri: userImage }} style={styles.profileImage} />}
                     </View>
                 </TouchableOpacity>
                 <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold', margin: 10 }}>
@@ -185,12 +205,7 @@ function ProfileScreen() {
                 </Text>
                 <TouchableOpacity style={{ backgroundColor: "#D9D9D9", padding: 4, margin: 10, borderRadius: 10 }} onPress={handleFollow}>
                     <Text style={{ color: 'black', fontWeight: '600', padding: 2, marginStart: 26, marginEnd: 26 }}>
-                        follow
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ backgroundColor: "#D9D9D9", padding: 4, margin: 10, borderRadius: 10 }} onPress={handleUnFollow}>
-                    <Text style={{ color: 'black', fontWeight: '600', padding: 2, marginStart: 26, marginEnd: 26 }}>
-                        unFollow
+                        {follow ? "Follow" : "unFollow"}
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -202,6 +217,7 @@ function ProfileScreen() {
         </View>
     )
 }
+
 export default ProfileScreen;
 
 const styles = StyleSheet.create({

@@ -99,6 +99,9 @@ function UserFlatList() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
+    const userEmail = useSelector((state: RootState) => {
+        return state.loginAuth.email
+    });
     return (
         <FlatList
             data={userMethod}
@@ -111,7 +114,7 @@ function UserFlatList() {
                             break;
 
                         case 'Change Password':
-                            navigation.navigate("ChangePassword", { userId: userId })
+                            navigation.navigate("ChangePassword", { userId: userId , userEmail: userEmail})
                             break;
                         case 'Liked Posts':
                             navigation.navigate("LikedPostScreen")
