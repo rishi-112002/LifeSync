@@ -12,8 +12,6 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
     const commentCountRealtime = () => {
         try {
             const commentsRef = firestore().collection('posts').doc(postId).collection("comments");
-
-            // Subscribe to real-time updates
             const unsubscribe = commentsRef.onSnapshot((querySnapshot) => {
                 const commentCount = querySnapshot.docs.length;
                 SetCommentCount(commentCount);
@@ -28,34 +26,29 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
         commentCountRealtime();
     }, []);
     return (
-        <View>
-            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
+        <View style={{ marginStart: 5 }}>
+            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 3, justifyContent: 'flex-start' }}>
                 <TouchableOpacity onPress={toggleLikeButton}>
                     <Image source={!like ? require('../assets/outline_favorite_border_black_36dp.png') : require('../assets/outline_favorite_black_36dp.png')}
-                        style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                        style={{ marginEnd: 5, width: 70, height: 50, resizeMode: 'center' }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={navigateToScreen}>
-                    <Image source={require('../assets/outline_mode_comment_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                    <Image source={require('../assets/commentFour.png')} style={{ marginStart: 5, marginEnd: 5, width: 70, height: 50, resizeMode: "center" }} />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Image source={require('../assets/outline_send_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
+                    <Image source={require('../assets/outline_send_black_36dp.png')} style={{ marginStart: 5, marginEnd: 5, width: 70, height: 50, resizeMode: 'center' }} />
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image source={require('../assets/outline_save_black_36dp.png')} style={{ marginStart: 10, marginEnd: 10, width: 70, height: 50, resizeMode: 'center' }} />
-                </TouchableOpacity>
+
             </View>
-            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 10, alignItems: "center" }}>
-                <Text style={{ color: "gray", marginStart: 25, marginEnd: 15, marginBottom: 5 }}>
+            <View style={{ flexDirection: 'row', backgroundColor: "white", marginTop: 2, justifyContent: 'flex-start' }}>
+                <Text style={{ color: "gray", marginStart: 20, }}>
                     {item.item.likeCount}  like
                 </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5 }}>
+                <Text style={{ color: "gray", marginStart: 30 }}>
                     {commentCount} comment
                 </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 25 }}>
+                <Text style={{ color: "gray", marginStart: 25 }}>
                     share
-                </Text>
-                <Text style={{ color: "gray", marginStart: 30, marginBottom: 5, marginEnd: 35 }}>
-                    save
                 </Text>
             </View>
         </View>

@@ -170,7 +170,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     };
 
     return (
-        <View style={{ flexDirection: 'column', flex: 1, padding: 10 }}>
+        <View style={{ flexDirection: 'column', flex: 1, padding: 5 }}>
             <View style={styles.userIcon}>
                 {
                     userImage &&
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     userIcon: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        marginTop: 20, flex: 1,
+        marginTop: 20,
         justifyContent: 'space-around',
         marginStart: 5
     }

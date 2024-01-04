@@ -189,7 +189,7 @@ function ProfileScreen() {
                 <Text style={{ color: 'black', fontSize: 25, fontWeight: 'bold', marginStart: 10, width: 250 }}>
                     {data.userNames}
                 </Text>
-                <TouchableOpacity >
+                <TouchableOpacity style={{ marginStart: 'auto' ,  marginEnd:20}}>
                     <Image source={require("../../assets/threeDots.png")} style={{ marginTop: 3 }} />
                 </TouchableOpacity>
             </View>
@@ -227,8 +227,6 @@ const styles = StyleSheet.create({
     },
     tabTextColor: {
         color: 'black',
-        alignContent: 'flex-start',
-        alignSelf: 'flex-start',
         marginStart: 23,
         marginTop: 18,
         fontSize: 27,

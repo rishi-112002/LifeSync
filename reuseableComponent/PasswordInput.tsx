@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'react-native';
 
 function PasswordInput(props: { placeholder: any; value: any; onChangeText: any; keyBoardType: any }) {
-  const { placeholder, value, onChangeText} = props;
+  const { placeholder, value, onChangeText } = props;
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -31,18 +31,16 @@ function PasswordInput(props: { placeholder: any; value: any; onChangeText: any;
 const styles = StyleSheet.create({
   inputs: {
     flexDirection: 'row',
-    width: 320,
-    marginStart: 20,
-    height: 50,
-    alignSelf: 'center',
     color: 'black',
     borderColor: 'grey',
     borderWidth: 1.0,
     borderRadius: 10,
     alignItems: 'center',
     alignContent: 'center',
-    marginEnd: 20,
-    marginTop: 10,
+    marginStart: 15,
+    marginEnd: 15,
+    marginTop: 15,
+    flex: 1,
     paddingStart: 10,
     fontSize: 18
   },

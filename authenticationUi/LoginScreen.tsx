@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
@@ -91,12 +91,12 @@ function LoginScreen() {
 
     return (
         <ScrollView style={style.container} keyboardShouldPersistTaps='handled'>
-            <View style={{ marginTop: 70 }}>
+            <View>
                 <AppIconComponent />
-                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 40, fontSize: 27, fontWeight: 'bold' }}>
+                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, fontSize: 27, fontWeight: 'bold' }}>
                     Welcome Back  !
                 </Text>
-                <Text style={{ alignSelf: 'center', color: 'black', marginBottom: 20, fontSize: 15, fontWeight: '300' }}>
+                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 20, fontSize: 15, fontWeight: '300' }}>
                     please enter your details
                 </Text>
                 <Text style={style.inputText}>
@@ -154,8 +154,8 @@ const style = StyleSheet.create({
         color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
-        marginStart: 35,
-        marginTop: 10
+        marginStart: 25,
+        marginTop: 22
     },
 })
 

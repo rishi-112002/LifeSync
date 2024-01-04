@@ -114,7 +114,7 @@ function UserFlatList() {
                             break;
 
                         case 'Change Password':
-                            navigation.navigate("ChangePassword", { userId: userId , userEmail: userEmail})
+                            navigation.navigate("ChangePassword", { userId: userId, userEmail: userEmail })
                             break;
                         case 'Liked Posts':
                             navigation.navigate("LikedPostScreen")
@@ -143,8 +143,8 @@ function UserFlatList() {
                     }
                 };
                 return (
-                    <View>
-                        <TouchableOpacity onPress={handlePress}>
+                    <View style={styles.methodListContainer}>
+                        <TouchableOpacity onPress={handlePress} >
                             <Text style={styles.methodList} >
                                 {item.item.text}
                             </Text>
@@ -157,17 +157,19 @@ function UserFlatList() {
 }
 
 const styles = StyleSheet.create({
-
+    methodListContainer: {
+        flex: 1,
+        marginStart: 10,
+        marginEnd: 10
+    },
     methodList: {
         color: 'black',
         marginTop: 10,
         marginBottom: 10,
-        textAlign: 'left',
-        alignContent: 'space-between',
-        width: 330,
-        borderRadius: 2,
+        borderRadius: 10,
         borderWidth: 1,
-        padding: 8,
+        paddingTop: 5,
+        paddingStart: 20,
         borderBottomColor: 'lightgrey',
         borderRightColor: 'white',
         borderTopColor: 'white',

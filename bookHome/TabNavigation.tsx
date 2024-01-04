@@ -1,7 +1,5 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import SearchScreen from './searchDetails/SearchScreen'; ``
-import UserScreen from './userDetails/UserScreen';
 import { Image, StyleSheet } from "react-native";
 import HomeNavigation from "./home/HomeNav";
 import LibraryNavigation from "./library/LibraryNav";
@@ -31,14 +29,14 @@ function TabNavigation() {
                 options={{
                     tabBarLabel: 'Library',
                     tabBarIcon: () => (
-                        <Image source={require('../assets/libraryicon.png')} />  
+                        <Image source={require('../assets/libraryicon.png')} />
                     ),
                 }} />
             <Tab.Screen name="Account" component={UserDetailsNav}
                 options={{
                     tabBarLabel: 'Account',
                     tabBarIcon: () => (
-                        <Image source={require('../assets/accounticon.png')} />
+                        <Image source={require('../assets/user.png')} />
                     ),
                 }} />
         </Tab.Navigator>

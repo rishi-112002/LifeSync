@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, RefreshControl, Image, Text } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl, Image, Text, TouchableOpacity } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import LibrarySearchFilterView from "./LibrarySeachFilterView";
+import { useNavigation } from "@react-navigation/native";
 
-function LibraryFlatList(props: { searchText: string, userId: any }) {
-    const { searchText, userId } = props
+function LibraryFlatList(props: { searchText: string, userId: any , onNavigate:any }) {
+    const { searchText, userId ,onNavigate} = props
     const categoryCollection = firestore().collection('category').where("userId", "==", userId);
     const [categoryOption, setCategoryOption] = useState([])
     const categoryDataViaFireStore = async () => {
@@ -19,7 +20,7 @@ function LibraryFlatList(props: { searchText: string, userId: any }) {
                         images: categoryData.image,
                         categoryId: doc.id,
                         userId: userId,
-                        categoryCount:querySnapshot.size
+                        categoryCount: querySnapshot.size
                     });
                 });
                 setCategoryOption(option);
@@ -31,7 +32,7 @@ function LibraryFlatList(props: { searchText: string, userId: any }) {
     };
 
     const [refreshing, setRefreshing] = useState(false);
-
+const navigation = useNavigation();
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         console.log("refresh is used ")
@@ -48,11 +49,13 @@ function LibraryFlatList(props: { searchText: string, userId: any }) {
     return (
         !categoryOption || categoryOption.length === 0 ?
             (
-                <View style={{ marginTop: 170, alignItems: 'center' }}>
-                    <Image source={require('../assets/addCategory.png')} style={{ resizeMode: 'contain', padding: 60 }} resizeMode="contain" />
-                    <Text style={{ color: 'gray' }}>
-                        Add  category
-                    </Text>
+                <View style={{ marginTop: 170, alignItems: "center" }}>
+                    <TouchableOpacity onPress={onNavigate}>
+                        <Image source={require('../assets/addCategory.png')} style={{ padding: 50 }} resizeMode="contain" />
+                        <Text style={{ color: 'gray' }}>
+                            Add  category
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             ) :
             (<View style={styles.container}>

@@ -27,8 +27,8 @@ function LibraryScreen(this: any) {
                 <Text style={styles.tabTextColor}>
                     Library
                 </Text>
-                <TouchableOpacity onPress={togglePopupMenu}>
-                    <Image source={require('../../assets/threeDots.png')} style={{ marginStart: 210, marginTop: 19, alignSelf: 'flex-end' }} />
+                <TouchableOpacity onPress={togglePopupMenu} style={{ marginStart: 'auto', marginEnd: 30 }}>
+                    <Image source={require('../../assets/threeDots.png')} style={{ marginTop: 19 }} />
                 </TouchableOpacity>
 
                 {isPopupMenuVisible && (<PopUpModal isPopupMenuVisible={isPopupMenuVisible} togglePopupMenu={togglePopupMenu} onPress={() => {
@@ -38,7 +38,7 @@ function LibraryScreen(this: any) {
                 }
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />
-            <LibraryFlatList searchText={searchText} userId={userId}  />
+            <LibraryFlatList searchText={searchText} userId={userId} onNavigate={()=> navigation.navigate("AddCategory")} />
         </View>
 
     )

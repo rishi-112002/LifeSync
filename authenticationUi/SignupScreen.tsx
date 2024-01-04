@@ -120,7 +120,7 @@ function SignupScreen() {
         try {
             await auth().createUserWithEmailAndPassword(email, password).then(async (success) => {
                 const newUserId = auth().currentUser?.uid;
-                setUserId(newUserId) 
+                setUserId(newUserId)
                 await uploadPhoto()
             })
             console.log('User added successfully!');
@@ -134,7 +134,7 @@ function SignupScreen() {
     };
     const showToastAndNavigate = () => {
         showToast();
-         navigation.navigate("Login");
+        navigation.navigate("Login");
     };
 
     const addUserData = async (fileName: any) => {
@@ -172,7 +172,7 @@ function SignupScreen() {
         <ScrollView style={style.containers} keyboardShouldPersistTaps="handled">
             <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: "contain", marginTop: 18, marginStart: 5 }} />
+                    <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: "contain", marginTop: 15, marginStart: 5 }} />
                 </TouchableOpacity>
 
                 <Text style={{ alignSelf: 'center', color: 'black', marginTop: 10, fontSize: 30, fontWeight: 'bold', marginEnd: 'auto', marginStart: 20 }}>
@@ -232,7 +232,7 @@ function SignupScreen() {
                 placeholder="min 6 character" keyBoardType="normal" />
             <ButtonComponent buttonTittle="Sign up" onPress={handleSignInAuth} />
             {loading && <PopUpLoader />}
-            <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Login')}>
+            <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', flex: 1 }} onPress={() => navigation.navigate('Login')}>
                 Already have an account, Login?
             </Text>
         </ScrollView>)
@@ -247,12 +247,13 @@ const style = StyleSheet.create({
         color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
-        marginStart: 35,
-        marginTop: 15
+        marginStart: 25,
+        marginTop: 20,
+  
     },
     container: {
         alignItems: 'center',
-        margin: 25
+        marginTop: 25
     },
     imageContainer: {
         width: 150,

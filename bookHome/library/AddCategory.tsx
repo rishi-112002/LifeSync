@@ -92,7 +92,7 @@ function AddCategory() {
 
     }
     return (
-        <View style={{ flexDirection: 'column', alignItems: 'flex-start', backgroundColor: 'white', flex: 1 }}>
+        <View style={{ flexDirection: 'column',  backgroundColor: 'white', flex: 1 }}>
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.navigate("LibraryS")}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
@@ -104,8 +104,7 @@ function AddCategory() {
             </View>
             <TextInputCom placeholder="Category name" value={categoryName} onChangeText={setCategoryName} secureTextEntry={false} errorMessage={""} />
             <TextInputCom placeholder="Description" value={description} onChangeText={setDescription} secureTextEntry={false} errorMessage={""} />
-            <View style={{ padding: 20, marginEnd: 15 }}>
-            </View>
+          
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
                 <TouchableOpacity onPress={() => openImagePicker()} >
                     <Text style={{ color: 'blue', fontSize: 15, fontWeight: 'bold', marginTop: 15, marginStart: 35, marginBottom: 20 }}>

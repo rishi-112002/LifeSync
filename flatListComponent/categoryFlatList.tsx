@@ -63,13 +63,11 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
 };
 const styles = StyleSheet.create({
     userIcon: {
-        alignItems: 'flex-start',
         flexDirection: 'row',
         marginTop: 20
     },
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: 'white',
     }
 })

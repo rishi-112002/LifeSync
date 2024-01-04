@@ -20,7 +20,7 @@ function HomeScreen() {
                     Post
                 </Text>
             </View>
-            <HomeFlatList/>
+            <HomeFlatList onUserIconPress={undefined} />
         </View>
     )
 };
