@@ -1,15 +1,31 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { Image, StyleSheet } from "react-native";
+import { Image, Platform, StyleSheet, View } from "react-native";
 import HomeNavigation from "./home/HomeNav";
 import LibraryNavigation from "./library/LibraryNav";
 import UserDetailsNav from "./userDetails/UserDetailsNav";
 import SearchNavigation from "./searchDetails/SearchNav";
 
 function TabNavigation() {
+
     const Tab = createMaterialBottomTabNavigator();
+
+    const screenOptions = {
+        tabBarShowLabel: false,
+        headerShown: false,
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: {
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            left: 0,
+            elevation: 0,
+            height: 60,
+            backgroundColor: "white",
+        },
+    };
     return (
-        <Tab.Navigator style={styles.tabContainer} barStyle={styles.tabContainer} initialRouteName="Home">
+        <Tab.Navigator barStyle={styles.tabContainer} initialRouteName="Home" screenOptions={screenOptions}>
             <Tab.Screen name="Home" component={HomeNavigation}
                 options={{
                     tabBarLabel: 'Home',
@@ -45,7 +61,15 @@ function TabNavigation() {
 }
 const styles = StyleSheet.create({
     tabContainer: {
-        backgroundColor: 'white'
+        bottom: 0,
+        position: "absolute",
+        right: 0,
+        left: 0,
+        elevation: 2,
+        backgroundColor: "white",
+        borderTopWidth: 1,  // Add a top border
+        borderTopColor: "lightgray",
+
     }
 })
 export default TabNavigation;

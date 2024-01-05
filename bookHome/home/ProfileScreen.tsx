@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
@@ -181,7 +181,7 @@ function ProfileScreen() {
 
     console.log("current user and user", currentUserId, userId)
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
@@ -213,8 +213,8 @@ function ProfileScreen() {
                 Categories
             </Text>
 
-            <LibraryFlatList searchText={" "} userId={data.userIds} />
-        </View>
+            <LibraryFlatList searchText={" "} userId={data.userIds} onNavigate={undefined} />
+        </ScrollView>
     )
 }
 

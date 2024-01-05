@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { RootState, store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
-import GetApiRequest from "../apiCalling/GetRequest";
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from "@react-navigation/native";
 import Share from 'react-native-share';
 import { useSelector } from "react-redux";
+import ThemeSelectionModal from "../reuseableComponent/ThemeSelectionModal";
 function UserFlatList() {
+    const [modal, setModal] = useState(false)
     const logoutUser = async () => {
         try {
             await AsyncStorage.removeItem('email');
@@ -19,6 +20,9 @@ function UserFlatList() {
         }
 
     };
+    const handleThemeModal = () => {
+        setModal(!modal)
+    }
     const handleLogoutUser = () => {
         auth().signOut().then(() => {
             console.log("LogoutUser Successfully")
@@ -66,6 +70,9 @@ function UserFlatList() {
         },
         {
             text: "Liked Posts"
+        },
+        {
+            text: "Theme"
         },
         {
             text: "Privacy Policy"
@@ -119,6 +126,10 @@ function UserFlatList() {
                         case 'Liked Posts':
                             navigation.navigate("LikedPostScreen")
                             break;
+                        case 'Theme':
+                            handleThemeModal()
+                            console.log("hello")
+                            break;
                         case 'Privacy Policy':
                             navigation.navigate("PrivacyPolicy")
                             break;
@@ -149,6 +160,10 @@ function UserFlatList() {
                                 {item.item.text}
                             </Text>
                         </TouchableOpacity>
+                        {
+                            modal &&
+                            <ThemeSelectionModal modalVisible={modal} setModalVisible={setModal} navigationToScreen={undefined} postId={undefined} commentId={undefined} />
+                        }
                     </View>
                 )
             }}
@@ -159,13 +174,13 @@ function UserFlatList() {
 const styles = StyleSheet.create({
     methodListContainer: {
         flex: 1,
-        marginStart: 10,
+        marginStart: 20,
         marginEnd: 10
     },
     methodList: {
         color: 'black',
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 7,
         borderRadius: 10,
         borderWidth: 1,
         paddingTop: 5,

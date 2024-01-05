@@ -5,18 +5,19 @@ import NewPassword from './authenticationUi/NewPassword';
 import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigation from './bookHome/TabNavigation';
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import ForgotPassword from './authenticationUi/ForgotPassword';
 import { RootState, store } from './reduxIntegration/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginAuth } from './reduxIntegration/Reducer';
 import SplashScreen from './authenticationUi/SplashScreen';
-import StartScreen from './authenticationUi/StartScreen';
 
 const HomeStack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
 function AppNavigation() {
-
+    const [theme, setTheme] = useState('Light');
+    
+    const themeData = { theme, setTheme };
     const [loader, setLoader] = useState(true)
     const getUserData = async () => {
         try {
@@ -50,25 +51,31 @@ function AppNavigation() {
     if (loader) {
         return <SplashScreen />
     };
+    console.log("theme" , theme)
+    
     return (
-        <NavigationContainer>
-            {userEmail ? (
-                <HomeStack.Navigator>
-                    <HomeStack.Screen name='home' component={TabNavigation} options={{ headerShown: false }} />
-                </HomeStack.Navigator>
-            ) : (
-                <AuthStack.Navigator>
-                    {/* <AuthStack.Screen name='StartScreen' component={StartScreen} options={{ headerShown: false }} /> */}
-                    <AuthStack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
-                    <AuthStack.Screen name='sign up' component={SignUpScreen} options={{ headerShown: false }} />
-                    <AuthStack.Screen name='Forgot Password' component={ForgotPassword} options={{ headerShown: false }} />
-                    <AuthStack.Screen name='new Password' component={NewPassword} options={{ headerShown: false }} />
-                </AuthStack.Navigator>
-            )
+        <ThemeContext.Provider value={themeData}>
+            <NavigationContainer theme={theme == 'Light' ? DefaultTheme : DarkTheme}>
+                {userEmail ? (
+                    <HomeStack.Navigator>
+                        <HomeStack.Screen name='home' component={TabNavigation} options={{ headerShown: false }} />
+                    </HomeStack.Navigator>
+                ) : (
+                    <AuthStack.Navigator>
+                        <AuthStack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
+                        <AuthStack.Screen name='sign up' component={SignUpScreen} options={{ headerShown: false }} />
+                        <AuthStack.Screen name='Forgot Password' component={ForgotPassword} options={{ headerShown: false }} />
+                        <AuthStack.Screen name='new Password' component={NewPassword} options={{ headerShown: false }} />
+                    </AuthStack.Navigator>
+                )
             }
-        </NavigationContainer>
-    )
+            </NavigationContainer>
+        </ThemeContext.Provider>
+
+)
 }
 export default AppNavigation;
 
 
+
+export const ThemeContext = React.createContext(AppNavigation);

@@ -33,7 +33,7 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
                         style={{ marginEnd: 5, width: 70, height: 50, resizeMode: 'center' }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={navigateToScreen}>
-                    <Image source={require('../assets/commentFour.png')} style={{ marginStart: 5, marginEnd: 5, width: 70, height: 50, resizeMode: "center" }} />
+                    <Image source={require('../assets/commentSix.png')} style={{ marginStart: 5, marginEnd: 5, width: 70, height: 50 , resizeMode:'center' }} />
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Image source={require('../assets/outline_send_black_36dp.png')} style={{ marginStart: 5, marginEnd: 5, width: 70, height: 50, resizeMode: 'center' }} />

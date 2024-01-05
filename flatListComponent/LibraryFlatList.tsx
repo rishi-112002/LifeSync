@@ -4,8 +4,8 @@ import firestore from '@react-native-firebase/firestore'
 import LibrarySearchFilterView from "./LibrarySeachFilterView";
 import { useNavigation } from "@react-navigation/native";
 
-function LibraryFlatList(props: { searchText: string, userId: any , onNavigate:any }) {
-    const { searchText, userId ,onNavigate} = props
+function LibraryFlatList(props: { searchText: string, userId: any, onNavigate: any }) {
+    const { searchText, userId, onNavigate } = props
     const categoryCollection = firestore().collection('category').where("userId", "==", userId);
     const [categoryOption, setCategoryOption] = useState([])
     const categoryDataViaFireStore = async () => {
@@ -32,7 +32,7 @@ function LibraryFlatList(props: { searchText: string, userId: any , onNavigate:a
     };
 
     const [refreshing, setRefreshing] = useState(false);
-const navigation = useNavigation();
+    const navigation = useNavigation();
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         console.log("refresh is used ")
@@ -60,6 +60,7 @@ const navigation = useNavigation();
             ) :
             (<View style={styles.container}>
                 <FlatList
+                    scrollEnabled={false}
                     data={categoryOption}
                     renderItem={(item) => <LibrarySearchFilterView item={item} searchText={searchText} />}
                     numColumns={2}

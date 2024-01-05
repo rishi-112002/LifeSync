@@ -11,14 +11,14 @@ function ButtonComponent(props: { buttonTittle: any, onPress: any }) {
 }
 const style = StyleSheet.create({
     button: {
-        borderRadius: 20,
+        borderRadius: 10,
         marginStart: 25,
         marginEnd: 25,
         height: 47,
         backgroundColor: '#52AFFF',
         alignContent: 'center',
         marginTop: 25,
-        elevation: 10,
+        elevation: 2,
 
     },
     buttonText: {

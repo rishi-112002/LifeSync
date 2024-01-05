@@ -97,7 +97,7 @@ function NewPassword() {
                         : (<AppIconComponent />)
                     }
 
-                    <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 50, fontSize: 20, fontWeight: 'bold' }}>
+                    <Text style={{ alignSelf: 'center', color: 'black', marginTop: 5, marginBottom: 10, fontSize: 20, fontWeight: 'bold' }}>
                         Enter New Password
                     </Text>
                     {data.userEmail &&
@@ -158,7 +158,7 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginStart: 35,
-        marginTop: 10
+        marginTop: 5
     },
     imageContainer: {
         width: 150,
@@ -175,7 +175,8 @@ const style = StyleSheet.create({
     profileImage: {
         width: '100%',
         height: '100%',
-        borderRadius: 50
+        borderRadius: 40,
+        alignSelf: 'center'
     },
     placeholderContainer: {
         width: '100%',

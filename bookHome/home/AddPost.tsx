@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
 import PopUpLoader from "../../reuseableComponent/PopUpLoader";
+import AddCategory from "../library/AddCategory";
 function AddPost() {
     const [bookName, setBookName] = useState("")
     const [authorName, setAuthorName] = useState("")
@@ -158,6 +159,15 @@ function AddPost() {
                     autoScroll
                     keyboardShouldPersistTaps="handled"
                     placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 15 }}
+                    renderEmpty={() => (
+                        <View>
+                            <Text style={{ color: 'black' }}>No categories available</Text>
+                            <TouchableOpacity onPress={() => <AddCategory />}>
+                                <Text style={{ color: 'blue' }}>Add Category</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                    
                 />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
