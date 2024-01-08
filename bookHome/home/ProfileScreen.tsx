@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
@@ -15,6 +15,7 @@ function ProfileScreen() {
     const currentUserId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
+    const { colors } = useTheme()
     const [userImage, setUserImage] = useState("")
     const userId = data.userIds;
     const [follow, setFollow] = useState(false);
@@ -181,15 +182,18 @@ function ProfileScreen() {
 
     console.log("current user and user", currentUserId, userId)
     return (
-        <ScrollView style={styles.container}>
-            <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
+        <ScrollView style={{
+            backgroundColor: colors.background,
+            flex: 1
+        }}>
+            <View style={{ flexDirection: 'row', marginTop: 1, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
-                <Text style={{ color: 'black', fontSize: 25, fontWeight: 'bold', marginStart: 10, width: 250 }}>
+                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold', marginStart: 10, width: 250 }}>
                     {data.userNames}
                 </Text>
-                <TouchableOpacity style={{ marginStart: 'auto' ,  marginEnd:20}}>
+                <TouchableOpacity style={{ marginStart: 'auto', marginEnd: 20 }}>
                     <Image source={require("../../assets/threeDots.png")} style={{ marginTop: 3 }} />
                 </TouchableOpacity>
             </View>
@@ -209,7 +213,7 @@ function ProfileScreen() {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <Text style={{ color: 'black', fontSize: 22, fontWeight: 'bold', margin: 20 }}>
+            <Text style={{ color: colors.text, fontSize: 22, fontWeight: 'bold', margin: 20 }}>
                 Categories
             </Text>
 

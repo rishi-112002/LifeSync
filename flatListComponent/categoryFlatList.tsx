@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import GetActualTime from "../reuseableComponent/GetActualTime";
 import HomeFlatListView from "./HomeFlatListView";
+import { useTheme } from "@react-navigation/native";
 
 function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
     const { categoryId } = props
@@ -21,6 +22,7 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
             setRefreshing(false);
         }, 2000);
     }, []);
+    const {colors} = useTheme()
 
     const postDataViaFireStore = () => {
         postCollection.get()
@@ -51,7 +53,10 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
     }, []);
     return (
 
-        <View style={styles.container} >
+        <View style={ {
+            flex: 1,
+            backgroundColor: colors.background,
+        }} >
             <FlatList data={postOption} renderItem={(item) => {
                 return <HomeFlatListView item={item} />
             }}

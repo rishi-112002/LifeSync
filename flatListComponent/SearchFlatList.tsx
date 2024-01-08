@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import firestore from '@react-native-firebase/firestore';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 function SearchFlatList(props: { searchText: String }) {
     const { searchText } = props
     const [bookNames, setBookNames] = useState([]);
-
+    const { colors } = useTheme()
     const GetAllSearchData = async () => {
 
         const nameArray: any[] = []
@@ -35,13 +35,28 @@ function SearchFlatList(props: { searchText: String }) {
             return (
                 <View>{item.profileImage &&
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.userId, userNames: name, profileUri: item.profileImage })}>
-                        <Text style={styles.bookList}>
+                        <Text style={{
+                            color: colors.text,
+                            marginStart: 15,
+                            marginTop: 10,
+                            textAlign: 'left',
+                            fontSize: 18,
+                            flex: 1,
+                            width: 320,
+                            borderRadius: 5,
+                            borderWidth: 1,
+                            padding: 8,
+                            borderBottomColor: 'lightgrey',
+                            borderRightColor: 'white',
+                            borderTopColor: 'white',
+                            borderLeftColor: 'white'
+                        }}>
                             {
                                 name
                             }
                         </Text>
                     </TouchableOpacity>
-                    }
+                }
                 </View>)
         }
         else {
@@ -49,7 +64,12 @@ function SearchFlatList(props: { searchText: String }) {
         }
     }
     return (
-        <View style={styles.container}>
+        <View style={{
+            flex: 1,
+            alignItems: 'center',
+            marginEnd: 20,
+            backgroundColor: colors.background
+        }}>
             <FlatList
                 data={bookNames}
                 renderItem={({ item }) => filterData(item)}
@@ -58,28 +78,4 @@ function SearchFlatList(props: { searchText: String }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    bookList: {
-        color: 'black',
-        marginStart: 15,
-        marginTop: 10,
-        textAlign: 'left',
-        fontSize: 18,
-        flex: 1,
-        width: 320,
-        borderRadius: 5,
-        borderWidth: 1,
-        padding: 8,
-        borderBottomColor: 'lightgrey',
-        borderRightColor: 'white',
-        borderTopColor: 'white',
-        borderLeftColor: 'white'
-    },
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: 'white'
-    }
-})
 export default SearchFlatList;

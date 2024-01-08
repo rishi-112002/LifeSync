@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import CommentModal from "../reuseableComponent/CommentModalPOpUp"
@@ -16,7 +16,7 @@ function CommentScreen() {
         setIsModalVisible(true);
     };
     const [commentOption, setCommentOption] = useState([])
-
+    const { colors } = useTheme()
 
     const handleCloseModal = () => {
         setIsModalVisible(false);
@@ -54,12 +54,16 @@ function CommentScreen() {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={{
+            backgroundColor: colors.background,
+            flex: 1,
+            flexDirection: 'column'
+        }}>
             <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 20, alignItems: 'flex-start' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
                     Comments
                 </Text>
                 <TouchableOpacity style={{ backgroundColor: 'green', marginStart: 'auto', borderRadius: 10, padding: 5, marginEnd: 15, marginTop: 5 }}>

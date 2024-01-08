@@ -1,8 +1,10 @@
+import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { View, TextInput, StyleSheet, Image, TouchableOpacity } from "react-native";;
 
 function SearchBar(props: { value: any; onChangeText: any }) {
     const { value, onChangeText } = props;
+    const {colors , dark } = useTheme()
     return (
         <View style={style.container}>
             <TouchableOpacity>

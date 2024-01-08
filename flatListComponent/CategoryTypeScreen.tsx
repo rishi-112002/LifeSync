@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import GetAllUserData from "../fireStoreHandle/GetAllUserData";
 import CategoryFlatList from "./categoryFlatList";
 import { useSelector } from "react-redux";
@@ -14,14 +14,17 @@ function CategoryTypeScreen() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-
+const {colors} = useTheme()
     return (
-        <View style={styles.container}>
+        <View style={{
+            backgroundColor:colors.background,
+            flex: 1
+        }}>
             <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold', marginStart: 10, width: 250 }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginStart: 10, width: 250 }}>
                     {data.categoryName}
                 </Text>
                 {data.userId === userId && (

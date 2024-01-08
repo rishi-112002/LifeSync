@@ -1,27 +1,33 @@
+import { useTheme } from '@react-navigation/native';
 import React from 'react';
-import { View, StyleSheet, Modal, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { ThemeContext } from '../AppNavigation';
+import { View, StyleSheet, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, Appearance } from 'react-native';
 const ThemeSelectionModal = (props: { modalVisible: any, setModalVisible: any, navigationToScreen: any, postId: any, commentId: any }) => {
-    const { theme, setTheme } = React.useContext(ThemeContext);
     const { modalVisible, setModalVisible } = props
+
     const handleLightTheme = () => {
-        setTheme(theme === 'Light' ? 'Dark' : 'Light')
+        Appearance.setColorScheme("light")
         setModalVisible(false)
     }
     const handleDarkTheme = () => {
-        setTheme(theme === 'Light' ? 'Light':'Dark')
+        Appearance.setColorScheme("dark")
         setModalVisible(false)
     }
+    const { colors } = useTheme()
     return (
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => setModalVisible(false)}
         >
             <TouchableWithoutFeedback onPress={() => setModalVisible(false)} accessible={false} >
                 <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
+                    <View style={{
+                        backgroundColor: colors.background,
+                        padding: 20,
+                        borderRadius: 10,
+                        elevation: 5,
+                    }}>
 
                         <TouchableOpacity onPress={() => handleDarkTheme()}>
                             <Text style={{
@@ -33,14 +39,13 @@ const ThemeSelectionModal = (props: { modalVisible: any, setModalVisible: any, n
                                 marginTop: 10,
                                 fontSize: 17,
                                 fontWeight: "500",
-                                color: 'black',
+                                color: colors.text,
                                 marginStart: 5
                             }}>Dark Theme</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => handleLightTheme()}>
                             <Text style={{
-                                // backgroundColor: 'red',
                                 padding: 4,
                                 paddingStart: 16,
                                 borderColor: "white",
@@ -49,13 +54,12 @@ const ThemeSelectionModal = (props: { modalVisible: any, setModalVisible: any, n
                                 marginTop: 10,
                                 fontSize: 17,
                                 fontWeight: "500",
-                                color: 'black',
+                                color: colors.text,
                                 marginStart: 5
                             }}>Light theme</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setModalVisible(false)}>
                             <Text style={{
-                                // backgroundColor: 'gray',
                                 padding: 4,
                                 paddingStart: 16,
                                 borderColor: "white",
@@ -64,7 +68,7 @@ const ThemeSelectionModal = (props: { modalVisible: any, setModalVisible: any, n
                                 marginTop: 10,
                                 fontSize: 17,
                                 fontWeight: "500",
-                                color: 'gray',
+                                color: colors.text,
                                 marginStart: 5
                             }}>Default or System</Text>
                         </TouchableOpacity>
@@ -82,24 +86,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        elevation: 5,
-    },
     modalTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
-    },
-    themeButton: {
-        marginVertical: 5,
-        color: 'black'
-    },
-    applyButton: {
-        marginTop: 15,
-        backgroundColor: 'green', // Customize the color as needed
     },
 });
 

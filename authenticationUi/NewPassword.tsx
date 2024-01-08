@@ -5,7 +5,7 @@ import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import React from "react";
 import storage from "@react-native-firebase/storage";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import { firebase } from '@react-native-firebase/firestore'
@@ -41,13 +41,7 @@ function NewPassword() {
             getImage()
         }
     }, []);
-
-
-
-
-
-
-
+    const { colors , dark } = useTheme()
     const handleChange = async () => {
         if (!oldPassword) {
             Alert.alert("warning", "please enter oldPassword not empty")
@@ -74,17 +68,22 @@ function NewPassword() {
         }
 
     }
+    
 
 
     return (
-        <ScrollView style={style.container}>
+        <ScrollView style={{
+            flex: 1,
+            backgroundColor: colors.background,
+        }}
+            contentContainerStyle={{ paddingBottom: 90, }}>
             <KeyboardAvoidingView>
-                <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'flex-start' }}>
+                <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'flex-start' }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                        <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginTop: 10, }}>
+                <View>
                     {data.userId ? (<View style={style.imageContainer}>
                         {profileImage ? (
                             <Image source={{ uri: profileImage }} style={style.profileImage} />
@@ -97,11 +96,17 @@ function NewPassword() {
                         : (<AppIconComponent />)
                     }
 
-                    <Text style={{ alignSelf: 'center', color: 'black', marginTop: 5, marginBottom: 10, fontSize: 20, fontWeight: 'bold' }}>
+                    <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 5, marginBottom: 10, fontSize: 20, fontWeight: 'bold' }}>
                         Enter New Password
                     </Text>
                     {data.userEmail &&
-                        <><Text style={style.inputText}>
+                        <><Text style={{
+                            color: colors.text,
+                            fontSize: 16,
+                            fontWeight: 'bold',
+                            marginStart: 35,
+                            marginTop: 10
+                        }}>
                             old Password
                         </Text><PasswordInput value={oldPassword}
                             onChangeText={(text: string) => {
@@ -112,7 +117,13 @@ function NewPassword() {
                                 }
                             }}
                             placeholder="" keyBoardType="normal" /></>}
-                    <Text style={style.inputText}>
+                    <Text style={{
+                        color: colors.text,
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        marginStart: 35,
+                        marginTop: 10
+                    }}>
                         New Password
                     </Text>
                     <PasswordInput value={password}
@@ -125,7 +136,13 @@ function NewPassword() {
                         }
                         }
                         placeholder="min 6 character" keyBoardType="normal" />
-                    <Text style={style.inputText}>
+                    <Text style={{
+                        color: colors.text,
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        marginStart: 35,
+                        marginTop: 10
+                    }}>
                         Confirm Password
                     </Text>
 
@@ -150,8 +167,7 @@ export default NewPassword;
 
 const style = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'white'
+
     },
     inputText: {
         color: 'black',
@@ -161,16 +177,15 @@ const style = StyleSheet.create({
         marginTop: 5
     },
     imageContainer: {
-        width: 150,
-        height: 150,
+        width: 140,
+        height: 140,
         borderRadius: 100,
-        marginStart: 110,
+        marginStart: '30%',
         overflow: 'hidden',
-        elevation: 20,
+        elevation: 10,
+        marginEnd: 10,
         borderColor: 'gray',
         backgroundColor: '#f0f0f0',
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     profileImage: {
         width: '100%',

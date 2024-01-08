@@ -5,19 +5,17 @@ import NewPassword from './authenticationUi/NewPassword';
 import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigation from './bookHome/TabNavigation';
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider, useTheme } from '@react-navigation/native';
 import ForgotPassword from './authenticationUi/ForgotPassword';
 import { RootState, store } from './reduxIntegration/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginAuth } from './reduxIntegration/Reducer';
 import SplashScreen from './authenticationUi/SplashScreen';
-
+import { useColorScheme } from 'react-native';
 const HomeStack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
 function AppNavigation() {
-    const [theme, setTheme] = useState('Light');
-    
-    const themeData = { theme, setTheme };
+    const scheme = useColorScheme();
     const [loader, setLoader] = useState(true)
     const getUserData = async () => {
         try {
@@ -51,11 +49,14 @@ function AppNavigation() {
     if (loader) {
         return <SplashScreen />
     };
-    console.log("theme" , theme)
-    
+    const theme = {
+        dark: scheme === 'dark' ? DarkTheme.dark : DefaultTheme.dark,
+        colors: scheme === 'dark' ? DarkTheme.colors : DefaultTheme.colors,
+    };
+    console.log("theme", theme)
     return (
-        <ThemeContext.Provider value={themeData}>
-            <NavigationContainer theme={theme == 'Light' ? DefaultTheme : DarkTheme}>
+        <ThemeProvider value={theme}>
+            <NavigationContainer theme={theme}>
                 {userEmail ? (
                     <HomeStack.Navigator>
                         <HomeStack.Screen name='home' component={TabNavigation} options={{ headerShown: false }} />
@@ -68,11 +69,11 @@ function AppNavigation() {
                         <AuthStack.Screen name='new Password' component={NewPassword} options={{ headerShown: false }} />
                     </AuthStack.Navigator>
                 )
-            }
+                }
             </NavigationContainer>
-        </ThemeContext.Provider>
+        </ThemeProvider>
 
-)
+    )
 }
 export default AppNavigation;
 

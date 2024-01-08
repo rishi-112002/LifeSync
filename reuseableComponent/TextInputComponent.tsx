@@ -1,9 +1,11 @@
-// import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native"
+import { Text, TextInput, View } from "react-native"
 
 function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; secureTextEntry: any; errorMessage: String, keyBoardType: any }) {
     const { placeholder, value, onChangeText, secureTextEntry, errorMessage, keyBoardType } = props;
+    const { colors } = useTheme()
+
     return (
         <View style={{
             marginStart: 15,
@@ -12,7 +14,17 @@ function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; 
 
         }}>
             <TextInput
-                style={style.input}
+                style={{
+                    color: colors.text,
+                    borderColor: 'grey',
+                    borderWidth: 1.0,
+                    borderRadius: 10,
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    paddingStart: 10,
+                    fontSize: 18,
+                    paddingLeft: 15
+                }}
                 placeholder={placeholder}
                 placeholderTextColor={'grey'}
                 value={value}
@@ -27,18 +39,4 @@ function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; 
     )
 
 };
-const style = StyleSheet.create({
-    input: {
-        color: 'black',
-        borderColor: 'grey',
-        borderWidth: 1.0,
-        borderRadius: 10,
-        alignItems: 'center',
-        alignContent: 'center',
-        paddingStart: 10,
-        fontSize: 18,
-        paddingLeft: 15
-    },
-
-})
 export default TextInputCom;

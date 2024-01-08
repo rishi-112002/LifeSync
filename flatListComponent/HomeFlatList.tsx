@@ -7,12 +7,15 @@ import { RootState } from "../reduxIntegration/Store";
 import HomeFlatListView from "./HomeFlatListView";
 import GetActualTime from "../reuseableComponent/GetActualTime";
 import GetAllUserData from "../fireStoreHandle/GetAllUserData";
-function HomeFlatList(props: { onUserIconPress: any }) {
+import { useTheme } from "@react-navigation/native";
+function HomeFlatList(_props: { onUserIconPress: any }) {
     const postCollection = firestore().collection('posts');
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     })
+    const { colors } = useTheme()
+
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
@@ -50,7 +53,10 @@ function HomeFlatList(props: { onUserIconPress: any }) {
     }, []);
     return (
 
-        <View style={styles.container}>
+        <View style={{
+            flex: 1,
+            backgroundColor: colors.background
+        }}>
 
             <FlatList data={postOption} renderItem={(item) => {
                 return <HomeFlatListView item={item} />
@@ -68,8 +74,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     container: {
-        flex: 1,
-        backgroundColor: 'white',
+
     }
 })
 export default HomeFlatList;

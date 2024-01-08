@@ -4,7 +4,7 @@ import { RootState, store } from "../reduxIntegration/Store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginAuth } from "../reduxIntegration/Reducer";
 import auth from '@react-native-firebase/auth';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import Share from 'react-native-share';
 import { useSelector } from "react-redux";
 import ThemeSelectionModal from "../reuseableComponent/ThemeSelectionModal";
@@ -20,6 +20,7 @@ function UserFlatList() {
         }
 
     };
+    const { colors } = useTheme()
     const handleThemeModal = () => {
         setModal(!modal)
     }
@@ -156,7 +157,21 @@ function UserFlatList() {
                 return (
                     <View style={styles.methodListContainer}>
                         <TouchableOpacity onPress={handlePress} >
-                            <Text style={styles.methodList} >
+                            <Text style={{
+                                color: colors.text,
+                                marginTop: 10,
+                                marginBottom: 7,
+                                borderRadius: 10,
+                                borderWidth: 1,
+                                paddingTop: 5,
+                                paddingStart: 20,
+                                borderBottomColor: 'lightgrey',
+                                borderRightColor: 'white',
+                                borderTopColor: 'white',
+                                borderLeftColor: 'white',
+                                fontSize: 20,
+                                fontWeight: 'bold'
+                            }} >
                                 {item.item.text}
                             </Text>
                         </TouchableOpacity>
@@ -176,21 +191,6 @@ const styles = StyleSheet.create({
         flex: 1,
         marginStart: 20,
         marginEnd: 10
-    },
-    methodList: {
-        color: 'black',
-        marginTop: 10,
-        marginBottom: 7,
-        borderRadius: 10,
-        borderWidth: 1,
-        paddingTop: 5,
-        paddingStart: 20,
-        borderBottomColor: 'lightgrey',
-        borderRightColor: 'white',
-        borderTopColor: 'white',
-        borderLeftColor: 'white',
-        fontSize: 20,
-        fontWeight: 'bold'
     }
 })
 

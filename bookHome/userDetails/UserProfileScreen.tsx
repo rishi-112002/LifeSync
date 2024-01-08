@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import storage from "@react-native-firebase/storage";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import SelectProfileImagePopUp from "../../reuseableComponent/SelectProfileImagePopUp";
 import firestore from '@react-native-firebase/firestore'
@@ -13,7 +13,8 @@ function UserProfileScreen() {
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     });
-    const [likeCount , setLikeCount] = useState(0)
+    const { colors } = useTheme()
+    const [likeCount, setLikeCount] = useState(0)
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
@@ -64,16 +65,21 @@ function UserProfileScreen() {
     const handleOpenModal = () => {
         setIsModalVisible(true);
     };
+    const {dark} = useTheme()
 
     return (
-        <View style={{ backgroundColor: 'white', flex: 1 }}>
-            <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'flex-start' }}>
+        <ScrollView style={{ backgroundColor: colors.background, flex: 1 }} contentContainerStyle={{paddingBottom:90}}>
+            <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'flex-start' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>
 
             </View>
-            <View style={style.container}>
+            <View style={{
+                alignItems: 'center',
+                marginTop: 15,
+                backgroundColor: colors.background
+            }}>
                 <TouchableOpacity onPress={handleOpenModal}>
                     <View style={style.imageContainer}>
                         {profileImage ? (
@@ -88,29 +94,38 @@ function UserProfileScreen() {
                 {isModalVisible &&
                     <SelectProfileImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={profileImage} />
                 }
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
                     {userName}
                 </Text>
-                <View style={style.containers}>
-                    <View style={style.statsContainer}>
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: 16,
+                    marginStart:5,
+                    marginEnd:5,
+                    justifyContent: 'space-between',
+                    backgroundColor: colors.card,
+                    borderRadius: 20
+                }}>
+                    <View style={{marginEnd:20 , marginStart:20 , alignItems:'center'}}>
                         <Text style={style.label}>Followers</Text>
                         <Text style={style.count}>{followerCount}</Text>
                     </View>
-                    <View style={style.statsContainer}>
+                    <View style={{marginEnd:20 , marginStart:20  , alignItems:'center'}}>
                         <Text style={style.label}>Following</Text>
                         <Text style={style.count}>{followingCount}</Text>
                     </View>
-                    <View style={style.statsContainer}>
+                    <View style={{marginEnd:20 , marginStart:20 , alignItems:'center'}}>
                         <Text style={style.label}>Posts</Text>
                         <Text style={style.count}>{likeCount}</Text>
                     </View>
                 </View>
             </View>
-            <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold', marginTop: 35, marginStart: 20 }}>
+            <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 35, marginStart: 20 }}>
                 Category List :-
             </Text>
-            <LibraryFlatList searchText={""} userId={userId} />
-        </View>
+            <LibraryFlatList searchText={""} userId={userId} onNavigate={undefined} />
+        </ScrollView >
     )
 }
 
@@ -157,9 +172,6 @@ const style = StyleSheet.create({
         justifyContent: 'space-around',
         backgroundColor: '#f0f0f0',
         borderRadius: 20
-    },
-    statsContainer: {
-        alignItems: 'center',
     },
     label: {
         fontSize: 16,

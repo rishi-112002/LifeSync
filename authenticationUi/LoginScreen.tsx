@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, Appearance, ScrollView, StyleSheet, Text, View } from 'react-native'
 import TextInputCom from "../reuseableComponent/TextInputComponent";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
 import auth from '@react-native-firebase/auth';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme, } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore';
 import { loginAuth } from "../reduxIntegration/Reducer";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PasswordInput from "../reuseableComponent/PasswordInput";
 import PopUpLoader from "../reuseableComponent/PopUpLoader";
-
 function LoginScreen() {
     const navigation = useNavigation();
+    const { colors } = useTheme()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const usersCollection = firestore().collection('users');
@@ -88,18 +88,27 @@ function LoginScreen() {
 
         console.log("Valid email and password");
     };
+    const handleTheme =() =>{
+        Appearance.setColorScheme("dark")
+    }
 
     return (
-        <ScrollView style={style.container} keyboardShouldPersistTaps='handled'>
+        <ScrollView style={{ flex: 1, backgroundColor: colors.background }} keyboardShouldPersistTaps='handled'>
             <View>
                 <AppIconComponent />
-                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, fontSize: 27, fontWeight: 'bold' }}>
+                <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 20, fontSize: 27, fontWeight: 'bold' }}>
                     Welcome Back  !
                 </Text>
-                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 20, fontSize: 15, fontWeight: '300' }}>
+                <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 20, marginBottom: 20, fontSize: 15, fontWeight: '300' }}>
                     please enter your details
                 </Text>
-                <Text style={style.inputText}>
+                <Text style={{
+                    color: colors.text,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    marginStart: 25,
+                    marginTop: 22
+                }}>
                     Email
                 </Text>
                 <TextInputCom
@@ -111,9 +120,16 @@ function LoginScreen() {
                             setEmail(text);
                         }
                     }
+
                     }
                     placeholder=" " secureTextEntry={false} keyBoardType={"email-address"} />
-                <Text style={style.inputText}>
+                <Text style={{
+                    color: colors.text,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    marginStart: 25,
+                    marginTop: 22
+                }}>
                     Password
                 </Text>
                 <PasswordInput value={password}
@@ -149,13 +165,6 @@ const style = StyleSheet.create({
         padding: 24,
         flex: 1,
         justifyContent: 'flex-end',
-    },
-    inputText: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginStart: 25,
-        marginTop: 22
     },
 })
 

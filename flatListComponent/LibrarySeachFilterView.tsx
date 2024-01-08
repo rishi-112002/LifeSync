@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Image, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import storage from '@react-native-firebase/storage';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemInfo<never> }) {
   const [imageUrl, setImageUrl] = useState("");
   const { searchText, item } = props
   const navigation = useNavigation()
+  const { colors } = useTheme()
+
   async function getImage() {
     try {
       const storageRef = storage().ref();
@@ -38,7 +40,15 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
               <Image source={{ uri: imageUrl }} style={styles.image} />
 
             </TouchableOpacity>
-            <Text style={styles.typeText}>{item.item.type}</Text>
+            <Text style={{
+              color: colors.text,
+              fontWeight: '500',
+              flex: 1,
+              padding: 5,
+              fontSize: 15,
+              textAlign: 'center',
+              marginTop: 8
+            }}>{item.item.type}</Text>
           </View>
         )
       )
@@ -58,7 +68,15 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
             >
               <Image source={{ uri: imageUrl }} style={styles.image} />
             </TouchableOpacity>
-            <Text style={styles.typeText}>{item.item.type}</Text>
+            <Text style={{
+              color: colors.text,
+              fontWeight: '500',
+              flex: 1,
+              padding: 5,
+              fontSize: 15,
+              textAlign: 'center',
+              marginTop: 8
+            }}>{item.item.type}</Text>
           </View>
         )
       )
@@ -68,25 +86,15 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
 
 const styles = StyleSheet.create({
   view: {
-    width: "45%",
+    padding: 10,
+    width: "50%",
     marginBottom: 20,
     marginTop: 15
   },
   image: {
-    width: 150,
     height: 120,
     borderRadius: 10
   },
-  typeText: {
-    color: 'black',
-    fontWeight: '500',
-    flex: 1,
-    padding: 5,
-    fontSize: 15,
-    textAlign: 'center',
-    marginTop: 8
-  }
-
 })
 
 export default LibrarySearchFilterView;

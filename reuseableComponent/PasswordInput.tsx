@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Image } from 'react-native';
@@ -5,6 +6,7 @@ import { Image } from 'react-native';
 function PasswordInput(props: { placeholder: any; value: any; onChangeText: any; keyBoardType: any }) {
   const { placeholder, value, onChangeText } = props;
   const [showPassword, setShowPassword] = useState(false);
+  const { colors } = useTheme()
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -13,7 +15,9 @@ function PasswordInput(props: { placeholder: any; value: any; onChangeText: any;
   return (
     <View style={styles.inputs}>
       <TextInput
-        style={styles.input}
+        style={{ flex: 1,
+          color: colors.text,
+          fontSize: 17}}
         secureTextEntry={!showPassword}
         placeholder={placeholder}
         value={value}
@@ -39,15 +43,13 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginStart: 15,
     marginEnd: 15,
-    marginTop: 15,
+    marginTop: 5,
     flex: 1,
     paddingStart: 10,
     fontSize: 18
   },
   input: {
-    flex: 1,
-    color: "black",
-    fontSize: 17
+   
   },
   iconContainer: {
     padding: 10,

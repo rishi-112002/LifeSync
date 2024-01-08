@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import storage from "@react-native-firebase/storage";
@@ -10,6 +10,7 @@ import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
+import AddCategory from "./AddCategory";
 
 function PostEditScreen() {
     const [bookName, setBookName] = useState("")
@@ -29,7 +30,7 @@ function PostEditScreen() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-
+    const { colors } = useTheme()
     async function getImage(uri: any) {
         try {
             const storageRef = storage().ref();
@@ -169,12 +170,12 @@ function PostEditScreen() {
 
     }
     return (
-        <View style={{ flexDirection: 'column', backgroundColor: 'white', flex: 1 }}>
+        <View style={{ flexDirection: 'column', backgroundColor: colors.background, flex: 1 }}>
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold' }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
                     Edit Post
                 </Text>
             </View>
@@ -189,10 +190,15 @@ function PostEditScreen() {
                     setOpen={() => setIsOpen(!isOpen)}
                     setValue={(val) => setSelectedValue(val)}
                     placeholder="Categories"
-                    style={styles.dropDown}
+                    style={{
+                        alignItems: 'center',
+                        backgroundColor: colors.background
+                    }}
                     maxHeight={200}
-                    autoScroll
-                    placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 17 }}
+                    keyboardShouldPersistTaps="handled"
+                    placeholderStyle={{ color: colors.text, fontWeight: 'bold', fontSize: 15 }}
+
+
                 />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>

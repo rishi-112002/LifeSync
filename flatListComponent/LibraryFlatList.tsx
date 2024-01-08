@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, RefreshControl, Image, Text, TouchableOpacity } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import LibrarySearchFilterView from "./LibrarySeachFilterView";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 function LibraryFlatList(props: { searchText: string, userId: any, onNavigate: any }) {
     const { searchText, userId, onNavigate } = props
+    const { colors , dark} = useTheme()
     const categoryCollection = firestore().collection('category').where("userId", "==", userId);
     const [categoryOption, setCategoryOption] = useState([])
     const categoryDataViaFireStore = async () => {
@@ -32,7 +33,6 @@ function LibraryFlatList(props: { searchText: string, userId: any, onNavigate: a
     };
 
     const [refreshing, setRefreshing] = useState(false);
-    const navigation = useNavigation();
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         console.log("refresh is used ")
@@ -49,16 +49,19 @@ function LibraryFlatList(props: { searchText: string, userId: any, onNavigate: a
     return (
         !categoryOption || categoryOption.length === 0 ?
             (
-                <View style={{ marginTop: 170, alignItems: "center" }}>
+                <View style={{ marginTop: 170, alignItems: "center"  , backgroundColor:colors.background }}>
                     <TouchableOpacity onPress={onNavigate}>
-                        <Image source={require('../assets/addCategory.png')} style={{ padding: 50 }} resizeMode="contain" />
+                        <Image source={dark ? require('../assets/addCategoryLightTheme.png'):require('../assets/addCategoryDarkTheme.png')} style={{ padding: 50 }} resizeMode="contain" />
                         <Text style={{ color: 'gray' }}>
                             Add  category
                         </Text>
                     </TouchableOpacity>
                 </View>
             ) :
-            (<View style={styles.container}>
+            (<View style={{
+                alignItems: 'center',
+                backgroundColor:colors.background
+            }}>
                 <FlatList
                     scrollEnabled={false}
                     data={categoryOption}

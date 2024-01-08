@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import SearchBar from "../../reuseableComponent/CustomSearchBar";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import PopUpModal from "../../reuseableComponent/PopUpModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 function LibraryScreen(this: any) {
     const navigation = useNavigation();
@@ -19,12 +20,24 @@ function LibraryScreen(this: any) {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
+    const { colors } = useTheme()
 
     return (
 
-        <View style={styles.container}>
+        <View style={{
+            flex: 1,
+            backgroundColor: colors.background
+        }}>
             <View style={{ flexDirection: 'row', marginBottom: 5 }}>
-                <Text style={styles.tabTextColor}>
+                <Text style={{
+                    color: colors.text,
+                    alignContent: 'flex-start',
+                    alignSelf: 'flex-start',
+                    marginStart: 23,
+                    marginTop: 18,
+                    fontSize: 27,
+                    fontWeight: 'bold'
+                }}>
                     Library
                 </Text>
                 <TouchableOpacity onPress={togglePopupMenu} style={{ marginStart: 'auto', marginEnd: 30 }}>
@@ -38,24 +51,17 @@ function LibraryScreen(this: any) {
                 }
             </View>
             <SearchBar value={searchText} onChangeText={setValue} />
-            <LibraryFlatList searchText={searchText} userId={userId} onNavigate={()=> navigation.navigate("AddCategory")} />
+            <LibraryFlatList searchText={searchText} userId={userId} onNavigate={() => navigation.navigate("AddCategory")} />
         </View>
 
     )
 };
 const styles = StyleSheet.create({
     tabTextColor: {
-        color: 'black',
-        alignContent: 'flex-start',
-        alignSelf: 'flex-start',
-        marginStart: 23,
-        marginTop: 18,
-        fontSize: 27,
-        fontWeight: 'bold'
+
     },
     container: {
-        flex: 1,
-        backgroundColor: 'white'
+
     },
 
 })

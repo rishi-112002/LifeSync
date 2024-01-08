@@ -3,7 +3,7 @@ import { Image, Linking, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity,
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import storage from '@react-native-firebase/storage';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import LikeComment from "./LikeComment";
@@ -20,6 +20,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
+    const {colors} = useTheme()
 
     const userNameCurrentUser = useSelector((state: RootState) => {
         return state.loginAuth.userName
@@ -180,7 +181,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                 }
                 <View style={{ flexDirection: 'column', marginEnd: 'auto', marginStart: 5, marginTop: 2 }}>
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
-                        <Text style={{ color: 'black', marginLeft: 4, fontSize: 18 }}>
+                        <Text style={{ color: colors.text, marginLeft: 4, fontSize: 18 }}>
                             {userName}
                         </Text>
                         <Text style={{ color: 'gray', marginLeft: 5, fontSize: 15 }}>
@@ -196,23 +197,23 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                 )}
             </View>
 
-            <View style={{ flexDirection: 'row', backgroundColor: "#F6F6F6", borderRadius: 10, marginTop: 15, padding: 12 }}>
+            <View style={{ flexDirection: 'row', backgroundColor: colors.card, borderRadius: 10, marginTop: 15, padding: 12 }}>
                 {imageUrl && <TouchableOpacity>
                     <Image source={{ uri: imageUrl }} style={{ height: 100, width: 100, alignSelf: 'center', borderRadius: 10, resizeMode: 'cover' }} />
                 </TouchableOpacity>}
 
                 <View style={{ flexDirection: 'column', flex: 1 }}>
                     <TouchableOpacity>
-                        <Text style={{ color: 'black', marginLeft: 18, marginTop: 12, fontSize: 22 }}>
+                        <Text style={{ color: colors.text, marginLeft: 18, marginTop: 12, fontSize: 22 }}>
                             {item.item.bookName}
                         </Text>
                     </TouchableOpacity>
 
-                    <Text style={{ color: 'gray', marginLeft: 20, fontSize: 15 }}>
+                    <Text style={{ color: colors.text, marginLeft: 20, fontSize: 15 }}>
                         {item.item.authorName}
                     </Text>
                     <TouchableOpacity style={{ flex: 1 }} onPress={handleLinkClick}>
-                        <Text style={{ color: 'blue', marginLeft: 18, fontSize: 13, marginTop: 20, marginRight: 5, flex: 1 }} numberOfLines={2}>
+                        <Text style={{ color: 'lightblue', marginLeft: 18, fontSize: 13, marginTop: 20, marginRight: 5, flex: 1 }} numberOfLines={2}>
                             {item.item.link}
                         </Text>
                     </TouchableOpacity>

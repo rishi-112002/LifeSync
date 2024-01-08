@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import storage from "@react-native-firebase/storage";
 import { serverTimestamp } from '@react-native-firebase/firestore';
@@ -19,6 +19,7 @@ function AddCategory() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
+    const {colors} = useTheme()
     const openImagePicker = () => {
         const options = {
             mediaType: 'photo',
@@ -92,18 +93,18 @@ function AddCategory() {
 
     }
     return (
-        <View style={{ flexDirection: 'column',  backgroundColor: 'white', flex: 1 }}>
+        <View style={{ flexDirection: 'column',  backgroundColor: colors.background, flex: 1 }}>
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.navigate("LibraryS")}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
 
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold' }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
                     Add Category
                 </Text>
             </View>
-            <TextInputCom placeholder="Category name" value={categoryName} onChangeText={setCategoryName} secureTextEntry={false} errorMessage={""} />
-            <TextInputCom placeholder="Description" value={description} onChangeText={setDescription} secureTextEntry={false} errorMessage={""} />
+            <TextInputCom placeholder="Category name" value={categoryName} onChangeText={setCategoryName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
+            <TextInputCom placeholder="Description" value={description} onChangeText={setDescription} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
           
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
                 <TouchableOpacity onPress={() => openImagePicker()} >

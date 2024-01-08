@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { launchImageLibrary } from "react-native-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
 import storage from "@react-native-firebase/storage";
@@ -25,7 +25,7 @@ function AddPost() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-
+    const { colors } = useTheme()
     const [loading, setLoading] = useState(false)
     const categoryDataViaFireStore = () => {
         categoryCollection.where("userId", "==", userId).get()
@@ -134,12 +134,12 @@ function AddPost() {
     }
     return (
 
-        <View style={{ flexDirection: 'column', backgroundColor: 'white', flex: 1 }} >
+        <View style={{ flexDirection: 'column', backgroundColor: colors.background, flex: 1 }} >
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
                 </TouchableOpacity>
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold' }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
                     Add Post
                 </Text>
             </View>
@@ -154,20 +154,23 @@ function AddPost() {
                     setOpen={() => setIsOpen(!isOpen)}
                     setValue={(val) => setSelectedValue(val)}
                     placeholder="Categories"
-                    style={styles.dropDown}
+                    style={{
+                        alignItems: 'center',
+                        backgroundColor: colors.background
+                    }}
                     maxHeight={200}
                     autoScroll
                     keyboardShouldPersistTaps="handled"
-                    placeholderStyle={{ color: "black", fontWeight: 'bold', fontSize: 15 }}
+                    placeholderStyle={{ color: colors.text, fontWeight: 'bold', fontSize: 15 }}
                     renderEmpty={() => (
                         <View>
-                            <Text style={{ color: 'black' }}>No categories available</Text>
+                            <Text style={{ color: colors.text }}>No categories available</Text>
                             <TouchableOpacity onPress={() => <AddCategory />}>
                                 <Text style={{ color: 'blue' }}>Add Category</Text>
                             </TouchableOpacity>
                         </View>
                     )}
-                    
+
                 />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
@@ -187,14 +190,6 @@ function AddPost() {
     )
 }
 
-const styles = StyleSheet.create({
-
-    dropDown: {
-        alignItems: 'center',
-        backgroundColor: 'white',
-        color: 'black'
-    }
-})
 export default AddPost;
 
 

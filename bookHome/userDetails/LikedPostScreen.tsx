@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import HomeFlatListView from "../../flatListComponent/HomeFlatListView";
 import firestore from '@react-native-firebase/firestore'
 import { useSelector } from "react-redux";
@@ -17,9 +17,8 @@ function LikedPostScreen() {
     const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     })
+    const { colors,dark } = useTheme()
     const [postOption, setPostOption] = useState([])
-
-
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -57,12 +56,16 @@ function LikedPostScreen() {
             });
     }
     return (
-        <View style={styles.container}>
+        <ScrollView style={{
+            backgroundColor:colors.background,
+            flex: 1,
+            flexDirection: 'column'
+        }} contentContainerStyle={{ paddingBottom: 90 }}>
             <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'flex-start' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>
-                <Text style={{ color: 'black', fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
                     Liked Posts
                 </Text>
             </View>
@@ -71,8 +74,9 @@ function LikedPostScreen() {
             }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                } />
-        </View>
+                }
+                scrollEnabled={false} />
+        </ScrollView>
     )
 };
 const styles = StyleSheet.create({

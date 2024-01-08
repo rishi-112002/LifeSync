@@ -3,7 +3,7 @@ import { Image, ListRenderItemInfo, Text, TouchableOpacity, View } from "react-n
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import storage from "@react-native-firebase/storage";
 
 function CommentFlatList(item: ListRenderItemInfo<never>) {
@@ -13,6 +13,7 @@ function CommentFlatList(item: ListRenderItemInfo<never>) {
     const handlePress = () => {
         setModalVisible(true);
     };
+    const {colors} = useTheme()
     const navigation = useNavigation()
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
@@ -43,7 +44,7 @@ function CommentFlatList(item: ListRenderItemInfo<never>) {
                 }
                 <View style={{ flexDirection: 'column', marginStart: 5 }}>
                     <TouchableOpacity>
-                        <Text style={{ color: 'black', marginLeft: 4, fontSize: 18 }}>
+                        <Text style={{ color: colors.text, marginLeft: 4, fontSize: 18 }}>
                             {item.item.item.userName}
                         </Text>
                     </TouchableOpacity>
