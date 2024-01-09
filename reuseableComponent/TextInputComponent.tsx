@@ -16,7 +16,7 @@ function TextInputCom(props: { placeholder: any; value: any; onChangeText: any; 
             <TextInput
                 style={{
                     color: colors.text,
-                    borderColor: 'grey',
+                    borderColor: colors.border,
                     borderWidth: 1.0,
                     borderRadius: 10,
                     alignItems: 'center',

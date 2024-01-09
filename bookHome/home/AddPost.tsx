@@ -25,7 +25,7 @@ function AddPost() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-    const { colors } = useTheme()
+    const { colors, dark } = useTheme()
     const [loading, setLoading] = useState(false)
     const categoryDataViaFireStore = () => {
         categoryCollection.where("userId", "==", userId).get()
@@ -137,16 +137,16 @@ function AddPost() {
         <View style={{ flexDirection: 'column', backgroundColor: colors.background, flex: 1 }} >
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 36, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>
                 <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
                     Add Post
                 </Text>
             </View>
-            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} />
-            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} />
-            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} />
-            <View style={{ padding: 10, marginStart: 20, marginEnd: 20, marginTop: 5 }}>
+            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
+            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
+            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={''} keyBoardType={undefined} />
+            <View style={{ padding: 10, marginStart: 7, marginEnd: 5, marginTop: 5 }}>
                 <DropDownPicker
                     items={categoryOption}
                     open={isOpen}
@@ -156,26 +156,19 @@ function AddPost() {
                     placeholder="Categories"
                     style={{
                         alignItems: 'center',
-                        backgroundColor: colors.background
+                        backgroundColor: colors.background,
+                        borderColor:colors.border
                     }}
                     maxHeight={200}
                     autoScroll
                     keyboardShouldPersistTaps="handled"
                     placeholderStyle={{ color: colors.text, fontWeight: 'bold', fontSize: 15 }}
-                    renderEmpty={() => (
-                        <View>
-                            <Text style={{ color: colors.text }}>No categories available</Text>
-                            <TouchableOpacity onPress={() => <AddCategory />}>
-                                <Text style={{ color: 'blue' }}>Add Category</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
 
                 />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
                 <TouchableOpacity onPress={() => openImagePicker()} >
-                    <Text style={{ color: 'blue', fontSize: 15, fontWeight: 'bold', marginTop: 15, marginStart: 35, marginBottom: 20 }}>
+                    <Text style={{ color: colors.primary, fontSize: 15, fontWeight: 'bold', marginTop: 15, marginStart: 35, marginBottom: 20 }}>
                         {imageURI ? "change Image" : "add image"}
                     </Text>
                 </TouchableOpacity>

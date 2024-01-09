@@ -20,7 +20,7 @@ function LibraryScreen(this: any) {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-    const { colors } = useTheme()
+    const { colors , dark} = useTheme()
 
     return (
 
@@ -41,7 +41,8 @@ function LibraryScreen(this: any) {
                     Library
                 </Text>
                 <TouchableOpacity onPress={togglePopupMenu} style={{ marginStart: 'auto', marginEnd: 30 }}>
-                    <Image source={require('../../assets/threeDots.png')} style={{ marginTop: 19 }} />
+                <Image source={dark ?require('../../assets/threeDotLightTheme.png'):require('../../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto", marginEnd: -25  ,  resizeMode:'center' , height:35 , marginTop:20}} />
+
                 </TouchableOpacity>
 
                 {isPopupMenuVisible && (<PopUpModal isPopupMenuVisible={isPopupMenuVisible} togglePopupMenu={togglePopupMenu} onPress={() => {

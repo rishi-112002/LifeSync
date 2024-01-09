@@ -4,14 +4,34 @@ import { View, TextInput, StyleSheet, Image, TouchableOpacity } from "react-nati
 
 function SearchBar(props: { value: any; onChangeText: any }) {
     const { value, onChangeText } = props;
-    const {colors , dark } = useTheme()
+    const { colors, dark } = useTheme()
     return (
-        <View style={style.container}>
+        <View style={{
+            flexDirection: 'row',
+            marginStart: 10,
+            marginEnd: 10,
+            marginTop: 20,
+            height: 40,
+            backgroundColor: colors.card,
+            borderBlockColor: 'black',
+            borderRadius: 14,
+            alignContent: 'center',
+            alignItems: 'center'
+        }}>
             <TouchableOpacity>
-                <Image source={require('../assets/search.png')} style={style.image} />
+                <Image source={!dark ? require('../assets/search.png') : require('../assets/searchDarkTheme.png')} style={style.image} />
             </TouchableOpacity>
             <TextInput
-                style={style.input}
+                style={{
+                    marginStart: 15,
+                    height: 45,
+                    color: 'black',
+                    borderColor: 'grey',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    marginTop: 2,
+                    fontSize: 18
+                }}
                 placeholder="Search"
                 placeholderTextColor={'grey'}
                 value={value}
@@ -45,8 +65,11 @@ const style = StyleSheet.create({
         fontSize: 18
     },
     image: {
-        marginStart: 15,
-        marginTop: 7
+        marginStart: 10,
+        marginTop: 5,
+        height: 20,
+        width: 25,
+        resizeMode: 'contain',
     }
 })
 export default SearchBar;

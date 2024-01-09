@@ -62,7 +62,8 @@ function CategoryFlatList(props: { onUserIconPress: any, categoryId: any }) {
             }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                } />
+                } 
+                scrollEnabled={false}/>
         </View>
     )
 };

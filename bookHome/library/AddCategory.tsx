@@ -19,7 +19,7 @@ function AddCategory() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-    const {colors} = useTheme()
+    const {colors , dark} = useTheme()
     const openImagePicker = () => {
         const options = {
             mediaType: 'photo',
@@ -96,7 +96,7 @@ function AddCategory() {
         <View style={{ flexDirection: 'column',  backgroundColor: colors.background, flex: 1 }}>
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.navigate("LibraryS")}>
-                    <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
+                <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>
 
                 <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>

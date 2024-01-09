@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import GetAllUserData from "../fireStoreHandle/GetAllUserData";
 import CategoryFlatList from "./categoryFlatList";
@@ -14,15 +14,16 @@ function CategoryTypeScreen() {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     })
-const {colors} = useTheme()
+const {colors, dark} = useTheme()
     return (
-        <View style={{
+        <ScrollView style={{
             backgroundColor:colors.background,
             flex: 1
-        }}>
+        }} contentContainerStyle={{paddingBottom:90}}>
             <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
+                <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+
                 </TouchableOpacity>
                 <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginStart: 10, width: 250 }}>
                     {data.categoryName}
@@ -35,7 +36,7 @@ const {colors} = useTheme()
                 }
             </View>
             <CategoryFlatList onUserIconPress={undefined} categoryId={data.categoryId} currentUserId={data.userId} />
-        </View>
+        </ScrollView>
     )
 };
 const styles = StyleSheet.create({

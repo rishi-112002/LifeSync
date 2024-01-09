@@ -173,16 +173,16 @@ function PostEditScreen() {
         <View style={{ flexDirection: 'column', backgroundColor: colors.background, flex: 1 }}>
             <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
+                    <Image source={require("../../assets/backButtonForDarkTheme.png")} style={{ width: 40, height: 35, resizeMode: 'center', marginEnd: 5, tintColor: colors.text }} />
                 </TouchableOpacity>
                 <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
                     Edit Post
                 </Text>
             </View>
-            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} />
-            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={anErrorMessage} />
-            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} />
-            <View style={{ padding: 20, marginEnd: 15 }}>
+            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} keyBoardType={undefined} />
+            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={anErrorMessage} keyBoardType={undefined} />
+            <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} keyBoardType={undefined} />
+            <View style={{ padding: 20, marginEnd: 15, }}>
                 <DropDownPicker
                     items={categoryOption}
                     open={isOpen}
@@ -192,13 +192,14 @@ function PostEditScreen() {
                     placeholder="Categories"
                     style={{
                         alignItems: 'center',
-                        backgroundColor: colors.background
+                        backgroundColor: colors.card,
                     }}
                     maxHeight={200}
+                    autoScroll
+                    textStyle={{ color: colors.text }}
+                    dropDownContainerStyle={{ backgroundColor: colors.card }}
                     keyboardShouldPersistTaps="handled"
                     placeholderStyle={{ color: colors.text, fontWeight: 'bold', fontSize: 15 }}
-
-
                 />
             </View>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>

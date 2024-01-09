@@ -1,9 +1,11 @@
+import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 
 
 function PopUpModal(props: { isPopupMenuVisible: any, togglePopupMenu: any, onPress: any }) {
     const { isPopupMenuVisible, togglePopupMenu, onPress, } = props
+    const { colors, dark } = useTheme()
     return (
 
         <Modal
@@ -13,9 +15,14 @@ function PopUpModal(props: { isPopupMenuVisible: any, togglePopupMenu: any, onPr
             pointerEvents="box-none">
             <TouchableWithoutFeedback onPress={togglePopupMenu} accessible={false} >
 
-                <View style={styles.modalContainer}>
+                <View style={{
+                    flex: 1,
+                    margin: 10,
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                    alignItems: 'flex-end'
+                }}>
                     <TouchableOpacity onPress={togglePopupMenu}>
-                        <Text style={{ color: 'black', fontSize: 17, backgroundColor: 'white', margin: 35, borderWidth: 0.1, borderColor: 'gray', borderRadius: 10, padding: 5 }}
+                        <Text style={{ color: colors.text, fontSize: 17, backgroundColor: colors.card, margin: 35, borderWidth: 0.1, borderColor: 'gray', borderRadius: 10, padding: 5 }}
                             onPress={onPress}>
                             Add Category
                         </Text>

@@ -15,7 +15,7 @@ function ProfileScreen() {
     const currentUserId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
-    const { colors } = useTheme()
+    const { colors , dark} = useTheme()
     const [userImage, setUserImage] = useState("")
     const userId = data.userIds;
     const [follow, setFollow] = useState(false);
@@ -184,17 +184,17 @@ function ProfileScreen() {
     return (
         <ScrollView style={{
             backgroundColor: colors.background,
-            flex: 1
-        }}>
-            <View style={{ flexDirection: 'row', marginTop: 1, marginBottom: 10, marginStart: 10 }}>
+           
+        }} contentContainerStyle={{paddingBottom:80}}>
+            <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../../assets/backArrow.png")} style={{ width: 40, height: 27, resizeMode: 'contain', marginTop: 8, marginEnd: 5 }} />
+                <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
                 </TouchableOpacity>
-                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold', marginStart: 10, width: 250 }}>
+                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold'}}>
                     {data.userNames}
                 </Text>
                 <TouchableOpacity style={{ marginStart: 'auto', marginEnd: 20 }}>
-                    <Image source={require("../../assets/threeDots.png")} style={{ marginTop: 3 }} />
+                <Image source={dark ?require('../../assets/threeDotLightTheme.png'):require('../../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto"  ,  resizeMode:'center' , height:42  , marginEnd:-20}} />
                 </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center', marginTop: 20, flexDirection: "column" }}>

@@ -28,27 +28,27 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
         commentCountRealtime();
     }, []);
     return (
-        <View style={{ marginStart: 5 }}>
+        <View style={{ marginStart: 5  ,justifyContent:'space-around'}}>
             <View style={{ flexDirection: 'row', backgroundColor: colors.background, marginTop: 3, justifyContent: 'flex-start' }}>
                 <TouchableOpacity onPress={toggleLikeButton}>
                     <Image source={dark ? (!like ? require('../assets/likeDarkTheme.png') : require('../assets/likedDarkTheme.png')) : (!like ? require('../assets/likeLightTheme.png') : require('../assets/likedLightTheme.png'))}
-                        style={{ marginStart: 5, marginEnd: 15, marginTop: 13, width: 45, height: 30, resizeMode: 'contain' }} />
+                        style={{ marginStart: 5, width: 50, height: 30, resizeMode: 'center' }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={navigateToScreen}>
-                    <Image source={!dark ? require('../assets/commentLightTheme.png') : require('../assets/commentDarkTheme.png')} style={{ marginStart: 5, marginEnd: 15, marginTop: 13, width: 40, height: 28, resizeMode: 'contain' }} />
+                    <Image source={!dark ? require('../assets/commentLightTheme.png') : require('../assets/commentDarkTheme.png')} style={{ marginStart: 4,marginTop:2, width: 50, height: 28, resizeMode: 'center' }} />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Image source={!dark ? require('../assets/shareLightTheme.png') : require('../assets/shareDarkTheme.png')} style={{ marginStart: 12, marginEnd: 5, marginTop: 10, width: 40, height: 30, resizeMode: 'contain' }} />
+                    <Image source={!dark ? require('../assets/shareLightTheme.png') : require('../assets/shareDarkTheme.png')} style={{ marginStart: 4, width: 50, height: 30, resizeMode: 'center' }} />
                 </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row', backgroundColor: colors.background, marginTop: 2, justifyContent: 'flex-start' }}>
-                <Text style={{ color: colors.text, marginStart: 14, }}>
+            <View style={{ flexDirection: 'row', backgroundColor: colors.background, marginTop: -2, justifyContent: 'flex-start' }}>
+                <Text style={{ color: colors.text, marginStart: 17, fontSize:11}}>
                     {item.item.likeCount}  like
                 </Text>
-                <Text style={{ color: colors.text, marginStart: 16 }}>
+                <Text style={{ color: colors.text, marginStart: 16 , fontSize:11}}>
                     {commentCount} comment
                 </Text>
-                <Text style={{ color: colors.text, marginStart: 15 }}>
+                <Text style={{ color: colors.text, marginStart: 16 , fontSize:11 }}>
                     share
                 </Text>
             </View>

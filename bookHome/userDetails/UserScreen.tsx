@@ -21,7 +21,7 @@ function UserScreen({ }) {
                 alignContent: 'flex-start',
                 alignSelf: 'flex-start',
                 marginStart: 23,
-                marginBottom: 50,
+                marginBottom: 20,
                 marginTop: 18,
                 fontSize: 27,
                 fontWeight: 'bold'

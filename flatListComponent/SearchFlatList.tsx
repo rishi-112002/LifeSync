@@ -46,10 +46,10 @@ function SearchFlatList(props: { searchText: String }) {
                             borderRadius: 5,
                             borderWidth: 1,
                             padding: 8,
-                            borderBottomColor: 'lightgrey',
-                            borderRightColor: 'white',
-                            borderTopColor: 'white',
-                            borderLeftColor: 'white'
+                            borderBottomColor: colors.notification,
+                            borderRightColor: colors.background,
+                            borderTopColor: colors.background,
+                            borderLeftColor: colors.background
                         }}>
                             {
                                 name

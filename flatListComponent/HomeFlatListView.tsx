@@ -20,7 +20,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
-    const {colors} = useTheme()
+    const {colors , dark} = useTheme()
 
     const userNameCurrentUser = useSelector((state: RootState) => {
         return state.loginAuth.userName
@@ -176,7 +176,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                 {
                     userImage &&
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
-                        <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 50, height: 50, borderRadius: 30 }} />
+                        <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 40, height: 40, borderRadius: 30 }} />
                     </TouchableOpacity>
                 }
                 <View style={{ flexDirection: 'column', marginEnd: 'auto', marginStart: 5, marginTop: 2 }}>
@@ -184,42 +184,43 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                         <Text style={{ color: colors.text, marginLeft: 4, fontSize: 18 }}>
                             {userName}
                         </Text>
-                        <Text style={{ color: 'gray', marginLeft: 5, fontSize: 15 }}>
+                        <Text style={{ color: colors.border, marginLeft: 5, fontSize: 12 }}>
                             {item.item.timeResult}
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handlePress}>
-                    <Image source={require('../assets/threeDots.png')} style={{ marginStart: "auto", marginEnd: 15 }} />
+                <TouchableOpacity onPress={handlePress} style={{paddingBottom:20}}>
+                    <Image source={dark ?require('../assets/threeDotLightTheme.png'):require('../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto", marginEnd: -20  ,  resizeMode:'center' , height:45 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
-                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} />
+                    <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} commentId={undefined} />
                 )}
             </View>
 
-            <View style={{ flexDirection: 'row', backgroundColor: colors.card, borderRadius: 10, marginTop: 15, padding: 12 }}>
+            <View style={{ flexDirection: 'row', backgroundColor: colors.card, borderRadius: 10, marginTop: -10, padding: 7 , marginEnd:8 , marginStart:8 }}>
                 {imageUrl && <TouchableOpacity>
-                    <Image source={{ uri: imageUrl }} style={{ height: 100, width: 100, alignSelf: 'center', borderRadius: 10, resizeMode: 'cover' }} />
+                    <Image source={{ uri: imageUrl }} style={{ height: 80, width: 80, alignSelf: 'center', borderRadius: 10, resizeMode: 'cover' }} />
                 </TouchableOpacity>}
 
                 <View style={{ flexDirection: 'column', flex: 1 }}>
                     <TouchableOpacity>
-                        <Text style={{ color: colors.text, marginLeft: 18, marginTop: 12, fontSize: 22 }}>
+                        <Text style={{ color: colors.text, marginLeft: 18, marginTop: 2, fontSize: 19 }}>
                             {item.item.bookName}
                         </Text>
                     </TouchableOpacity>
 
-                    <Text style={{ color: colors.text, marginLeft: 20, fontSize: 15 }}>
+                    <Text style={{ color: colors.border, marginLeft: 20, fontSize: 13 }}>
                         {item.item.authorName}
                     </Text>
                     <TouchableOpacity style={{ flex: 1 }} onPress={handleLinkClick}>
-                        <Text style={{ color: 'lightblue', marginLeft: 18, fontSize: 13, marginTop: 20, marginRight: 5, flex: 1 }} numberOfLines={2}>
+                        <Text style={{ color: colors.primary, marginLeft: 18, fontSize: 12, marginTop: 15, marginRight: 5, flex: 1 }} numberOfLines={2}>
                             {item.item.link}
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
             <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} postId={item.item.postId} />
+        <View style={{borderColor:colors.card , borderWidth:0.3 , borderRadius:10 , marginTop:4}}></View>
         </View>
     )
 
@@ -230,8 +231,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flexDirection: 'row',
         marginTop: 20,
-        justifyContent: 'space-around',
-        marginStart: 5
+        justifyContent: 'space-between',
+        marginStart: 10
     }
 })
 export default HomeFlatListView;
