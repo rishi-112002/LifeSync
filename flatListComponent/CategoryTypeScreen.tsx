@@ -20,18 +20,18 @@ const {colors, dark} = useTheme()
             backgroundColor:colors.background,
             flex: 1
         }} contentContainerStyle={{paddingBottom:90}}>
-            <View style={{ flexDirection: 'row', marginTop: 16, marginBottom: 10, marginStart: 10 }}>
+            <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginTop: 5 }} />
 
                 </TouchableOpacity>
-                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginStart: 10, width: 250 }}>
+                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginStart: 5 , marginTop:-3}}>
                     {data.categoryName}
                 </Text>
                 {data.userId === userId && (
 
-                    <TouchableOpacity onPress={() => navigation.navigate("AddPost")} style={{ marginStart: 'auto', marginEnd: 30 }}>
-                        <Image source={require("../assets/addIcon.png")} style={{ marginTop: 3 }} />
+                    <TouchableOpacity onPress={() => navigation.navigate("AddPost")} style={{ marginStart: 'auto', marginEnd: 10 }}>
+                        <Image source={dark ? require("../assets/addDarkThemeIcon.png"):require("../assets/addLightThemeIcon.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginTop: 3 }}  />
                     </TouchableOpacity>)
                 }
             </View>

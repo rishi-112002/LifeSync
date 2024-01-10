@@ -4,7 +4,6 @@ import SignUpScreen from './authenticationUi/SignupScreen'
 import NewPassword from './authenticationUi/NewPassword';
 import { useSelector } from 'react-redux';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabNavigation from './bookHome/TabNavigation';
 import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider } from '@react-navigation/native';
 import ForgotPassword from './authenticationUi/ForgotPassword';
 import { RootState, store } from './reduxIntegration/Store';

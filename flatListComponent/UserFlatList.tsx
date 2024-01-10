@@ -22,7 +22,7 @@ function UserFlatList() {
     };
     const { colors } = useTheme()
     const handleThemeModal = () => {
-        setModal(!modal)
+        setModal(true)
     }
     const handleLogoutUser = () => {
         auth().signOut().then(() => {
@@ -64,7 +64,7 @@ function UserFlatList() {
     };
     const userMethod = [
         {
-            text: "Edit Profile"
+            text: "Profile"
         },
         {
             text: "Change Password"
@@ -110,6 +110,9 @@ function UserFlatList() {
     const userEmail = useSelector((state: RootState) => {
         return state.loginAuth.email
     });
+    const userName= useSelector((state: RootState) => {
+        return state.loginAuth.userName
+    });
     return (
         <FlatList
             data={userMethod}
@@ -117,19 +120,18 @@ function UserFlatList() {
                 const handlePress = () => {
                     switch (item.item.text) {
 
-                        case 'Edit Profile':
+                        case 'Profile':
                             navigation.navigate("UserProfileScreen")
                             break;
 
                         case 'Change Password':
-                            navigation.navigate("ChangePassword", { userId: userId, userEmail: userEmail })
+                            navigation.navigate("ChangePassword", { userId: userId, userEmail: userEmail , userName: userName})
                             break;
                         case 'Liked Posts':
                             navigation.navigate("LikedPostScreen")
                             break;
                         case 'Theme':
                             handleThemeModal()
-                            console.log("hello")
                             break;
                         case 'Privacy Policy':
                             navigation.navigate("PrivacyPolicy")
@@ -177,7 +179,7 @@ function UserFlatList() {
                         </TouchableOpacity>
                         {
                             modal &&
-                            <ThemeSelectionModal modalVisible={modal} setModalVisible={setModal} navigationToScreen={undefined} postId={undefined} commentId={undefined} />
+                            <ThemeSelectionModal modalVisible={modal} setModalVisible={setModal} />
                         }
                     </View>
                 )

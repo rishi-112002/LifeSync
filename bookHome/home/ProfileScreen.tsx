@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage';
+import FullScreenImagePopUp from "../../reuseableComponent/FullScreenImageModalPopUp";
 
 
 function ProfileScreen() {
@@ -179,8 +180,13 @@ function ProfileScreen() {
         }
     }, []);
 
-
-    console.log("current user and user", currentUserId, userId)
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
+    const handleOpenModal = () => {
+        setIsModalVisible(true);
+    };
     return (
         <ScrollView style={{
             backgroundColor: colors.background,
@@ -188,17 +194,17 @@ function ProfileScreen() {
         }} contentContainerStyle={{paddingBottom:80}}>
             <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")}  style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5 , marginTop:6 }}/>
                 </TouchableOpacity>
                 <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold'}}>
                     {data.userNames}
                 </Text>
-                <TouchableOpacity style={{ marginStart: 'auto', marginEnd: 20 }}>
-                <Image source={dark ?require('../../assets/threeDotLightTheme.png'):require('../../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto"  ,  resizeMode:'center' , height:42  , marginEnd:-20}} />
+                <TouchableOpacity style={{ marginStart: 'auto', marginEnd: 20 }} >
+                <Image source={dark ?require('../../assets/threeDotLightTheme.png'):require('../../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto"  ,  resizeMode:'center' , height:42  , marginEnd:-25}} />
                 </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center', marginTop: 20, flexDirection: "column" }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleOpenModal}>
                     <View style={styles.imageContainer}>
                         {userImage && <Image source={{ uri: userImage }} style={styles.profileImage} />}
                     </View>
@@ -218,6 +224,9 @@ function ProfileScreen() {
             </Text>
 
             <LibraryFlatList searchText={" "} userId={data.userIds} onNavigate={undefined} />
+            {isModalVisible &&
+                    <FullScreenImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={userImage} />
+                }
         </ScrollView>
     )
 }
@@ -237,8 +246,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     imageContainer: {
-        width: 150,
-        height: 150,
+        width: 120,
+        height: 120,
         borderRadius: 100,
         overflow: 'hidden',
         elevation: 20,

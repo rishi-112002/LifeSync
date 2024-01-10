@@ -61,11 +61,11 @@ function LikedPostScreen() {
             flex: 1,
             flexDirection: 'column'
         }} contentContainerStyle={{ paddingBottom: 90 }}>
-            <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'flex-start' }}>
+            <View style={{ flexDirection: 'row', marginTop: 13, alignItems: 'flex-start' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")}  style={{ width: 40, height: 25, resizeMode: 'contain', marginTop: 5 , marginStart:5 }} />
                 </TouchableOpacity>
-                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
+                <Text style={{ color: colors.text, fontSize: 26, fontWeight: 'bold' }}>
                     Liked Posts
                 </Text>
             </View>

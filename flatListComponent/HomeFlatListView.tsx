@@ -9,7 +9,7 @@ import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import LikeComment from "./LikeComment";
 
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
-    const { item } = props
+    const { item } = props  
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
@@ -20,7 +20,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
-    const {colors , dark} = useTheme()
+    const { colors, dark } = useTheme()
 
     const userNameCurrentUser = useSelector((state: RootState) => {
         return state.loginAuth.userName
@@ -123,10 +123,8 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             console.error("Error updating like count: ", error);
         }
     };
-
-
-
     const imageUri = useSelector((state: RootState) => {
+        console.log("userIds" , item.item.userId)
         return state.allUserData.userData[item.item.userId]?.profileImage || 'DefaultName';
     })
 
@@ -150,15 +148,38 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     }
     async function getUserImage() {
         try {
+            console.log("hello" , imageUri)
             const storageRef = storage().ref();
             const imageRef = storageRef.child(imageUri);
             const url = await imageRef.getDownloadURL();
             setUserImage(url);
         } catch (error) {
+            console.log("hy" , )
             console.error('Error getting image URL:', error);
             throw error;
         }
     }
+
+    // async function getUserImage() {
+    //     try {
+    //         const storageRef = storage().ref();
+    //         const imageRef = storageRef.child(imageUri);
+    //         const url = await imageRef.getDownloadURL();
+    //         setUserImage(url);
+    //     } catch (error) {
+    //         if (error.code === 'storage/object-not-found') {
+    //             // Handle the case where the image is not found.
+    //             // For example, you can set a default image URL.
+    //             setUserImage('URL_TO_DEFAULT_IMAGE');
+    //         } else {
+    //             // Handle other storage-related errors.
+    //             console.error('Error getting image URL:', error);
+    //             throw error;
+    //         }
+    //     }
+    // }
+    
+
     const [modalVisible, setModalVisible] = useState(false);
 
     const handlePress = () => {
@@ -189,15 +210,15 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handlePress} style={{paddingBottom:20}}>
-                    <Image source={dark ?require('../assets/threeDotLightTheme.png'):require('../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto", marginEnd: -20  ,  resizeMode:'center' , height:45 }} />
+                <TouchableOpacity onPress={handlePress} style={{ paddingBottom: 20 }}>
+                    <Image source={dark ? require('../assets/threeDotLightTheme.png') : require('../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto", marginEnd: -20, resizeMode: 'center', height: 45 }} />
                 </TouchableOpacity>
                 {item.item.userId === userId && modalVisible && (
                     <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} commentId={undefined} />
                 )}
             </View>
 
-            <View style={{ flexDirection: 'row', backgroundColor: colors.card, borderRadius: 10, marginTop: -10, padding: 7 , marginEnd:8 , marginStart:8 }}>
+            <View style={{ flexDirection: 'row', backgroundColor: colors.card, borderRadius: 10, marginTop: -10, padding: 7, marginEnd: 8, marginStart: 8 }}>
                 {imageUrl && <TouchableOpacity>
                     <Image source={{ uri: imageUrl }} style={{ height: 80, width: 80, alignSelf: 'center', borderRadius: 10, resizeMode: 'cover' }} />
                 </TouchableOpacity>}
@@ -220,7 +241,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                 </View>
             </View>
             <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} postId={item.item.postId} />
-        <View style={{borderColor:colors.card , borderWidth:0.3 , borderRadius:10 , marginTop:4}}></View>
+            <View style={{ borderColor: colors.card, borderWidth: 0.3, borderRadius: 10, marginTop: 4 }}></View>
         </View>
     )
 

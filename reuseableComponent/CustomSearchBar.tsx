@@ -10,8 +10,8 @@ function SearchBar(props: { value: any; onChangeText: any }) {
             flexDirection: 'row',
             marginStart: 10,
             marginEnd: 10,
-            marginTop: 20,
-            height: 40,
+            marginTop: 25,
+            height: 45,
             backgroundColor: colors.card,
             borderBlockColor: 'black',
             borderRadius: 14,
@@ -25,12 +25,13 @@ function SearchBar(props: { value: any; onChangeText: any }) {
                 style={{
                     marginStart: 15,
                     height: 45,
-                    color: 'black',
+                    color: colors.text,
                     borderColor: 'grey',
                     alignItems: 'center',
                     alignContent: 'center',
                     marginTop: 2,
-                    fontSize: 18
+                    fontSize: 18,
+                    flex:1
                 }}
                 placeholder="Search"
                 placeholderTextColor={'grey'}

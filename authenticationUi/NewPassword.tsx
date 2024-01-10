@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppIconComponent from "../reuseableComponent/AppIconImage";
 import ButtonComponent from "../reuseableComponent/ButtonComponent";
-import TextInputCom from "../reuseableComponent/TextInputComponent";
 import React from "react";
 import storage from "@react-native-firebase/storage";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
-import { firebase } from '@react-native-firebase/firestore'
 import PasswordInput from "../reuseableComponent/PasswordInput";
 
 function NewPassword() {
@@ -24,6 +22,7 @@ function NewPassword() {
     const imageUrl = useSelector((state: RootState) => {
         return state.allUserData.userData[data.userId]?.profileImage || 'DefaultName';
     })
+    console.log("data" , data)
 
     async function getImage() {
         try {
@@ -41,7 +40,7 @@ function NewPassword() {
             getImage()
         }
     }, []);
-    const { colors , dark } = useTheme()
+    const { colors, dark } = useTheme()
     const handleChange = async () => {
         if (!oldPassword) {
             Alert.alert("warning", "please enter oldPassword not empty")
@@ -68,7 +67,7 @@ function NewPassword() {
         }
 
     }
-    
+
 
 
     return (
@@ -78,10 +77,14 @@ function NewPassword() {
         }}
             contentContainerStyle={{ paddingBottom: 90, }}>
             <KeyboardAvoidingView>
-                <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'flex-start' }}>
+                <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginStart: 10 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                        <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5, marginTop: 6 }} />
                     </TouchableOpacity>
+                    {data.userName && <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold' }}>
+                        {data.userName}
+                    </Text>
+                    }
                 </View>
                 <View>
                     {data.userId ? (<View style={style.imageContainer}>
@@ -96,7 +99,7 @@ function NewPassword() {
                         : (<AppIconComponent />)
                     }
 
-                    <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 5, marginBottom: 10, fontSize: 20, fontWeight: 'bold' }}>
+                    <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 15, marginBottom: 10, fontSize: 20, fontWeight: 'bold' }}>
                         Enter New Password
                     </Text>
                     {data.userEmail &&
@@ -177,10 +180,10 @@ const style = StyleSheet.create({
         marginTop: 5
     },
     imageContainer: {
-        width: 140,
-        height: 140,
+        width: 110,
+        height: 110,
         borderRadius: 100,
-        marginStart: '30%',
+        marginStart: '35%',
         overflow: 'hidden',
         elevation: 10,
         marginEnd: 10,

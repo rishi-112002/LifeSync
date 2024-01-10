@@ -28,7 +28,7 @@ function SearchScreen() {
                 alignContent: 'flex-start',
                 alignSelf: 'flex-start',
                 marginStart: 23,
-                marginTop: 18,
+                marginTop: 13,
                 fontSize: 27,
                 fontWeight: 'bold'
             }}>
@@ -39,7 +39,7 @@ function SearchScreen() {
                 (searchText === "") &&
                 (<View style={{ marginTop: "30%", alignItems: 'center' }}>
                     <TouchableOpacity onPress={handlePress}>
-                        <Image source={dark ? require('../../assets/defaultSeachForDarkTheme.png') : require('../../assets/defaultSeachForLightTheme.png')} style={{ width: 110, height: 110, resizeMode: 'contain' , marginStart:5 }} />
+                        <Image source={dark ? require('../../assets/defaultSeachForDarkTheme.png') : require('../../assets/defaultSeachForLightTheme.png')} style={{ width: 110, height: 110, resizeMode: 'contain', marginStart: 5 }} />
                         <Text style={{ color: 'darkgray', marginStart: 20 }}>
                             Type to search
                         </Text>

@@ -171,7 +171,7 @@ function PostEditScreen() {
     }
     return (
         <View style={{ flexDirection: 'column', backgroundColor: colors.background, flex: 1 }}>
-            <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
+            <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image source={require("../../assets/backButtonForDarkTheme.png")} style={{ width: 40, height: 35, resizeMode: 'center', marginEnd: 5, tintColor: colors.text }} />
                 </TouchableOpacity>
@@ -182,7 +182,7 @@ function PostEditScreen() {
             <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={bnErrorMessage} keyBoardType={undefined} />
             <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={anErrorMessage} keyBoardType={undefined} />
             <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={linkErrorMessage} keyBoardType={undefined} />
-            <View style={{ padding: 20, marginEnd: 15, }}>
+            <View style={{ padding: 10, marginStart: 7, marginEnd: 5, marginTop: 5 }}>
                 <DropDownPicker
                     items={categoryOption}
                     open={isOpen}
@@ -192,12 +192,12 @@ function PostEditScreen() {
                     placeholder="Categories"
                     style={{
                         alignItems: 'center',
-                        backgroundColor: colors.card,
+                        backgroundColor: colors.background,
                     }}
                     maxHeight={200}
                     autoScroll
                     textStyle={{ color: colors.text }}
-                    dropDownContainerStyle={{ backgroundColor: colors.card }}
+                    dropDownContainerStyle={{ backgroundColor: colors.background }}
                     keyboardShouldPersistTaps="handled"
                     placeholderStyle={{ color: colors.text, fontWeight: 'bold', fontSize: 15 }}
                 />
@@ -209,7 +209,7 @@ function PostEditScreen() {
                     </Text>
                 </TouchableOpacity>
                 {imageURI && (
-                    <Image source={({ uri: imageURI })} style={{ width: 140, height: 100, resizeMode: 'contain', marginStart: 80, borderRadius: 5, alignSelf: 'center', alignItems: 'center' }} />
+                    <Image source={({ uri: imageURI })} style={{ width: 110, height: 90, resizeMode: 'contain', marginStart: "auto", borderRadius: 5, alignSelf: 'center', alignItems: 'center', marginEnd: 15 }} />
                 )
                 }
             </View>

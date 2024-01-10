@@ -87,12 +87,12 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
 const styles = StyleSheet.create({
   view: {
     padding: 10,
-    width: "50%",
+    width: "48%",
     marginBottom: 20,
     marginTop: 15
   },
   image: {
-    height: 120,
+    height: 100,
     borderRadius: 10
   },
 })

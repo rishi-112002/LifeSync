@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import UserFlatList from "../../flatListComponent/UserFlatList";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
@@ -21,10 +21,10 @@ function UserScreen({ }) {
                 alignContent: 'flex-start',
                 alignSelf: 'flex-start',
                 marginStart: 23,
-                marginBottom: 20,
-                marginTop: 18,
+                marginTop: 13,
                 fontSize: 27,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                marginBottom:15
             }}>
                 {userName}
             </Text>

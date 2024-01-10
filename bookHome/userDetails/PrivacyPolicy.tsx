@@ -15,14 +15,15 @@ const PrivacyPolicy = () => {
             <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', alignItems: 'flex-start', marginTop: 5 }} />
+                        <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")}  style={{ width: 40, height: 25, resizeMode: 'contain', marginTop: 12 , marginStart:5 }} />
                     </TouchableOpacity>
 
                     <Text style={{
                         fontSize: 25,
                         fontWeight: 'bold',
                         color: colors.text,
-                        margin: 10
+                        marginStart: 7,
+                        marginTop:7
 
                     }}>Privacy Policy</Text>
                 </View>

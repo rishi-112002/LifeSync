@@ -1,5 +1,5 @@
 import React = require("react");
-import { View, FlatList, StyleSheet, RefreshControl } from "react-native";
+import { View, FlatList, StyleSheet, RefreshControl, Animated } from "react-native";
 import firestore from '@react-native-firebase/firestore'
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,7 +8,8 @@ import HomeFlatListView from "./HomeFlatListView";
 import GetActualTime from "../reuseableComponent/GetActualTime";
 import GetAllUserData from "../fireStoreHandle/GetAllUserData";
 import { useTheme } from "@react-navigation/native";
-function HomeFlatList(_props: { onUserIconPress: any }) {
+function HomeFlatList(props: { onUserIconPress: any  , onScroll:any}) {
+    const {onScroll}= props
     const postCollection = firestore().collection('posts');
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
@@ -47,6 +48,10 @@ function HomeFlatList(_props: { onUserIconPress: any }) {
             setRefreshing(false);
         }, 2000);
     }, []);
+    const [scrollY] = useState(new Animated.Value(0));
+  const headerHeight = 50; // Set your header height
+
+
 
     useEffect(() => {
         postDataViaFireStore();
@@ -55,12 +60,14 @@ function HomeFlatList(_props: { onUserIconPress: any }) {
 
         <View style={{
             flex: 1,
-            backgroundColor: colors.background
+            backgroundColor: colors.background , 
+            marginTop:20
         }}>
 
             <FlatList data={postOption} renderItem={(item) => {
                 return <HomeFlatListView item={item} />
             }}
+            onScroll={onScroll}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 } />

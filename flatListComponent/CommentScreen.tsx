@@ -59,15 +59,15 @@ function CommentScreen() {
             flex: 1,
             flexDirection: 'column'
         }}>
-            <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 20, alignItems: 'flex-start' }}>
+            <View style={{ flexDirection: 'row', marginBottom: 5, marginTop: 10, alignItems: 'flex-start' }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                    <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginTop: 4 }} />
                 </TouchableOpacity>
-                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
+                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold' }}>
                     Comments
                 </Text>
-                <TouchableOpacity style={{ backgroundColor: 'green', marginStart: 'auto', borderRadius: 10, padding: 5, marginEnd: 15, marginTop: 5 }}>
-                    <Text style={{ color: "white", fontSize: 19, fontWeight: '500' }} onPress={handleOpenModal}>
+                <TouchableOpacity style={{ backgroundColor: 'green', marginStart: 'auto', borderRadius: 10, padding: 6, marginEnd: 15, marginTop: 5 }}>
+                    <Text style={{ color: "white", fontSize: 15, fontWeight: '500' }} onPress={handleOpenModal}>
                         Add
                     </Text>
                 </TouchableOpacity>

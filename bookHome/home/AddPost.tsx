@@ -135,9 +135,9 @@ function AddPost() {
     return (
 
         <View style={{ flexDirection: 'column', backgroundColor: colors.background, flex: 1 }} >
-            <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 20 }}>
+            <View style={{ flexDirection: 'row', marginBottom: 40, marginTop: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 36, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginTop: 5 }} />
                 </TouchableOpacity>
                 <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold' }}>
                     Add Post
@@ -173,7 +173,7 @@ function AddPost() {
                     </Text>
                 </TouchableOpacity>
                 {imageURI && (
-                    <Image source={({ uri: imageURI })} style={{ width: 140, height: 100, resizeMode: 'contain', marginStart: 80, borderRadius: 5, alignSelf: 'center', alignItems: 'center' }} />
+                    <Image source={({ uri: imageURI })} style={{ width: 110, height: 90, resizeMode: 'contain', marginStart: "auto", borderRadius: 5, alignSelf: 'center', alignItems: 'center'  , marginEnd:15}} />
                 )
                 }
             </View>

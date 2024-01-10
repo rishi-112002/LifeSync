@@ -7,6 +7,7 @@ import { useNavigation, useTheme } from "@react-navigation/native";
 import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import SelectProfileImagePopUp from "../../reuseableComponent/SelectProfileImagePopUp";
 import firestore from '@react-native-firebase/firestore'
+import Share from 'react-native-share';
 
 function UserProfileScreen() {
     const [profileImage, setProfileImage] = useState("");
@@ -54,6 +55,19 @@ function UserProfileScreen() {
                 console.error("Error fetching like counts:", error);
             });
     }
+    const share = async () => {
+        try {
+            const options = {
+                title: 'BookStore App',
+                message: 'Check out this awesome app!',
+                url: 'https://your-app-url.com',
+            };
+
+            await Share.open(options);
+        } catch (error) {
+            console.log('Error sharing app:', error.message);
+        }
+    };
     useEffect(() => {
         getImage();
         postCount();
@@ -65,19 +79,21 @@ function UserProfileScreen() {
     const handleOpenModal = () => {
         setIsModalVisible(true);
     };
-    const {dark} = useTheme()
+    const { dark } = useTheme()
 
     return (
-        <ScrollView style={{ backgroundColor: colors.background, flex: 1 }} contentContainerStyle={{paddingBottom:90}}>
-            <View style={{ flexDirection: 'row', marginTop: 5, alignItems: 'flex-start' }}>
+        <ScrollView style={{ backgroundColor: colors.background, flex: 1 }} contentContainerStyle={{ paddingBottom: 90 }}>
+            <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 50, height: 50, resizeMode: 'center', marginEnd: 5, alignItems: 'flex-start' }} />
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5, marginTop: 6 }} />
                 </TouchableOpacity>
-
+                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold' }}>
+                    {userName}
+                </Text>
             </View>
             <View style={{
                 alignItems: 'center',
-                marginTop: 15,
+                marginTop: 5,
                 backgroundColor: colors.background
             }}>
                 <TouchableOpacity onPress={handleOpenModal}>
@@ -94,34 +110,45 @@ function UserProfileScreen() {
                 {isModalVisible &&
                     <SelectProfileImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={profileImage} />
                 }
-                <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 4 }}>
-                    {userName}
-                </Text>
+
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    padding: 16,
-                    marginStart:5,
-                    marginEnd:5,
+                    padding: 15,
+                    marginStart: 12,
+                    marginEnd: 14,
+                    marginTop: 20,
                     justifyContent: 'space-between',
                     backgroundColor: colors.card,
                     borderRadius: 20
                 }}>
-                    <View style={{marginEnd:20 , marginStart:20 , alignItems:'center'}}>
+                    <View style={{ marginEnd: 20, marginStart: 8, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
                         <Text style={style.label}>Followers</Text>
                         <Text style={style.count}>{followerCount}</Text>
                     </View>
-                    <View style={{marginEnd:20 , marginStart:20  , alignItems:'center'}}>
+                    <View style={{ marginEnd: 20, marginStart: 20, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
                         <Text style={style.label}>Following</Text>
                         <Text style={style.count}>{followingCount}</Text>
                     </View>
-                    <View style={{marginEnd:20 , marginStart:20 , alignItems:'center'}}>
+                    <View style={{ marginEnd: 8, marginStart: 20, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
                         <Text style={style.label}>Posts</Text>
                         <Text style={style.count}>{likeCount}</Text>
                     </View>
                 </View>
             </View>
-            <Text style={{ color: colors.text, fontSize: 27, fontWeight: 'bold', marginTop: 35, marginStart: 20 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
+                <TouchableOpacity style={{ backgroundColor: colors.card, padding: 4, margin: 10, borderRadius: 10 }}>
+                    <Text style={{ color: colors.text, fontWeight: '600', padding: 4, marginStart: 15, marginEnd: 15 }}>
+                        Edit Profile
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ backgroundColor: colors.card, padding: 4, margin: 10, borderRadius: 10, marginStart: 30 }} onPress={share}>
+                    <Text style={{ color: colors.text, fontWeight: '600', padding: 4, marginStart: 15, marginEnd: 15 }}>
+                        share Profile
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <Text style={{ color: colors.text, fontSize: 24, fontWeight: 'bold', marginTop: 20, marginStart: 20 }}>
                 Category List :-
             </Text>
             <LibraryFlatList searchText={""} userId={userId} onNavigate={undefined} />
@@ -138,11 +165,11 @@ const style = StyleSheet.create({
         backgroundColor: 'white'
     },
     imageContainer: {
-        width: 150,
-        height: 150,
+        width: 110,
+        height: 110,
         borderRadius: 100,
         overflow: 'hidden',
-        elevation: 20,
+        elevation: 10,
         borderColor: 'gray',
         backgroundColor: '#f0f0f0',
         justifyContent: 'center',

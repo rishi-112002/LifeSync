@@ -22,7 +22,7 @@ function PopUpModal(props: { isPopupMenuVisible: any, togglePopupMenu: any, onPr
                     alignItems: 'flex-end'
                 }}>
                     <TouchableOpacity onPress={togglePopupMenu}>
-                        <Text style={{ color: colors.text, fontSize: 17, backgroundColor: colors.card, margin: 35, borderWidth: 0.1, borderColor: 'gray', borderRadius: 10, padding: 5 }}
+                        <Text style={{ color: colors.text, fontSize: 17, backgroundColor: colors.background, margin: 35, borderWidth: 0.1, borderColor: 'gray', borderRadius: 10, padding: 5 }}
                             onPress={onPress}>
                             Add Category
                         </Text>
