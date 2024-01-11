@@ -11,30 +11,42 @@ import Share from 'react-native-share';
 
 function UserProfileScreen() {
     const [profileImage, setProfileImage] = useState("");
-    const userName = useSelector((state: RootState) => {
-        return state.loginAuth.userName
-    });
-    const { colors } = useTheme()
-    const [likeCount, setLikeCount] = useState(0)
+    const [userName, setUserName] = useState("")
+    const [followerCount, setFollowersCount] = useState("")
+    const [followingCount, setFollowingCount] = useState("")
     const userId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
-    const imageUrl = useSelector((state: RootState) => {
-        return state.allUserData.userData[userId]?.profileImage || 'DefaultName';
-    })
-    const followerCount = useSelector((state: RootState) => {
-        return state.allUserData.userData[userId]?.followerCount || 0;
-    })
-    const followingCount = useSelector((state: RootState) => {
-        return state.allUserData.userData[userId]?.followingCount || 0;
-    })
+    const userEmail = useSelector((state: RootState) => {
+        return state.loginAuth.email
+    });
+  
+    const usersCollection = firestore().collection('users');
+    const userDetails = () => {
+        console.log("hello user Details", userId)
+        usersCollection
+            .where("email", "==", userEmail).onSnapshot
+            ((querySnapshot) => {
+                querySnapshot.forEach(async (doc) => {
+                    console.log("doc", doc._data.name)
+                    const name = doc._data.name
+                    setUserName(name)
+                    getImage(doc._data.profileImage)
+                    setFollowersCount(doc._data.follower)
+                    setFollowingCount(doc._data.followingCount)
+                })
+            })
+        
+    };
+    const { colors } = useTheme()
+    const [likeCount, setLikeCount] = useState(0)
     const navigation = useNavigation()
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    async function getImage() {
+    async function getImage(imageUri:any) {
         try {
             const storageRef = storage().ref();
-            const imageRef = storageRef.child(imageUrl);
+            const imageRef = storageRef.child(imageUri);
             const url = await imageRef.getDownloadURL();
             setProfileImage(url);
         } catch (error) {
@@ -42,6 +54,10 @@ function UserProfileScreen() {
             throw error;
         }
     }
+    const userData = useSelector((state: RootState) => {
+
+        return state.allUserData.userData[userId]
+    })
     const postCollection = firestore().collection('posts');
     const postCount = () => {
         postCollection.where('userId', '==', userId)
@@ -69,9 +85,8 @@ function UserProfileScreen() {
         }
     };
     useEffect(() => {
-        getImage();
+        userDetails();
         postCount();
-        console.log("profileImage", profileImage)
     }, []);
     const handleCloseModal = () => {
         setIsModalVisible(false);
@@ -80,6 +95,7 @@ function UserProfileScreen() {
         setIsModalVisible(true);
     };
     const { dark } = useTheme()
+    console.log("userName", userName)
 
     return (
         <ScrollView style={{ backgroundColor: colors.background, flex: 1 }} contentContainerStyle={{ paddingBottom: 90 }}>
@@ -110,7 +126,6 @@ function UserProfileScreen() {
                 {isModalVisible &&
                     <SelectProfileImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={profileImage} />
                 }
-
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -137,7 +152,7 @@ function UserProfileScreen() {
                 </View>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
-                <TouchableOpacity style={{ backgroundColor: colors.card, padding: 4, margin: 10, borderRadius: 10 }}>
+                <TouchableOpacity style={{ backgroundColor: colors.card, padding: 4, margin: 10, borderRadius: 10 }} onPress={() => navigation.navigate("EditUserProfile", {userEmail:userEmail, userId: userId, userName: userName, profileImage: profileImage, userData: userData })}>
                     <Text style={{ color: colors.text, fontWeight: '600', padding: 4, marginStart: 15, marginEnd: 15 }}>
                         Edit Profile
                     </Text>

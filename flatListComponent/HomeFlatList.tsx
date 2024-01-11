@@ -48,11 +48,6 @@ function HomeFlatList(props: { onUserIconPress: any  , onScroll:any}) {
             setRefreshing(false);
         }, 2000);
     }, []);
-    const [scrollY] = useState(new Animated.Value(0));
-  const headerHeight = 50; // Set your header height
-
-
-
     useEffect(() => {
         postDataViaFireStore();
     }, []);

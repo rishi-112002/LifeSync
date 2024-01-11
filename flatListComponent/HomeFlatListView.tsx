@@ -132,7 +132,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     useEffect(() => {
         getImage();
         checkLikeRealtime();
-        getUserImage();
+     
     }, []);
 
     async function getImage() {
@@ -141,6 +141,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             const imageRef = storageRef.child(item.item.imageUri);
             const url = await imageRef.getDownloadURL();
             setImageUrl(url);
+           await getUserImage();
         } catch (error) {
             console.error('Error getting image URL:', error);
             throw error;
@@ -148,7 +149,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     }
     async function getUserImage() {
         try {
-            console.log("hello" , imageUri)
             const storageRef = storage().ref();
             const imageRef = storageRef.child(imageUri);
             const url = await imageRef.getDownloadURL();

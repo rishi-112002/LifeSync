@@ -19,7 +19,9 @@ async function GetAllUserData() {
                     gender: usersData["gender"],
                     profileImage: usersData["profileImage"],
                     followerCount: usersData["follower"],
-                    followingCount: usersData["followingCount"]
+                    followingCount: usersData["followingCount"],
+                    countryCode:usersData["countryCode"],
+                    address: usersData["address"]
                 };
                 allUsersData[doc.id] = userObject;
             });

@@ -88,9 +88,7 @@ function LoginScreen() {
 
         console.log("Valid email and password");
     };
-    const handleTheme =() =>{
-        Appearance.setColorScheme("dark")
-    }
+
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: colors.background }} keyboardShouldPersistTaps='handled'>
@@ -119,10 +117,8 @@ function LoginScreen() {
                         } else {
                             setEmail(text);
                         }
-                    }
-
-                    }
-                    placeholder=" " secureTextEntry={false} keyBoardType={"email-address"} />
+                    } }
+                    placeholder=" " secureTextEntry={false} keyBoardType={"email-address"} errorMessage={""} />
                 <Text style={{
                     color: colors.text,
                     fontSize: 16,

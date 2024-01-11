@@ -10,7 +10,6 @@ import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
-import AddCategory from "./AddCategory";
 
 function PostEditScreen() {
     const [bookName, setBookName] = useState("")

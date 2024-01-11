@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import TextInputCom from "../../reuseableComponent/TextInputComponent";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { useNavigation, useTheme } from "@react-navigation/native";
@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 import firestore from '@react-native-firebase/firestore'
 import { RootState } from "../../reduxIntegration/Store";
 import PopUpLoader from "../../reuseableComponent/PopUpLoader";
-import AddCategory from "../library/AddCategory";
 function AddPost() {
     const [bookName, setBookName] = useState("")
     const [authorName, setAuthorName] = useState("")
