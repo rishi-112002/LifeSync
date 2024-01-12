@@ -8,8 +8,8 @@ import HomeFlatListView from "./HomeFlatListView";
 import GetActualTime from "../reuseableComponent/GetActualTime";
 import GetAllUserData from "../fireStoreHandle/GetAllUserData";
 import { useTheme } from "@react-navigation/native";
-function HomeFlatList(props: { onUserIconPress: any  , onScroll:any}) {
-    const {onScroll}= props
+function HomeFlatList(props: { onUserIconPress: any, onScroll: any }) {
+    const { onScroll } = props
     const postCollection = firestore().collection('posts');
     const [postOption, setPostOption] = useState([])
     const userName = useSelector((state: RootState) => {
@@ -20,14 +20,14 @@ function HomeFlatList(props: { onUserIconPress: any  , onScroll:any}) {
     const postDataViaFireStore = () => {
         postCollection.get()
             .then((querySnapShot) => {
-                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any, postId: any, likeCount: any, likeBy: [], userProfile: any }[] = [];
+                const option: ((prevState: never[]) => never[]) | { name: string; link: any; bookName: any; authorName: any, userId: any, timeResult: any, imageUri: any, postId: any, likeCount: any, likeBy: [] }[] = [];
                 querySnapShot.forEach(async (doc) => {
                     const postData = doc.data();
                     try {
                         const result = GetActualTime(postData.createdAt.seconds);
                         option.push({
                             name: userName, link: postData.link, bookName: postData.title, authorName: postData.subTitle,
-                            userId: postData.userId, timeResult: result, imageUri: postData.image, postId: doc.id, likeBy: postData.likeBy, likeCount: postData.likeCount, userProfile: postData.profileImage
+                            userId: postData.userId, timeResult: result, imageUri: postData.image, postId: doc.id, likeBy: postData.likeBy, likeCount: postData.likeCount
                         });
                     } catch (error) {
                         console.error("Error getting download URL:", error);
@@ -55,14 +55,14 @@ function HomeFlatList(props: { onUserIconPress: any  , onScroll:any}) {
 
         <View style={{
             flex: 1,
-            backgroundColor: colors.background , 
-            marginTop:20
+            backgroundColor: colors.background,
+            marginTop: 20
         }}>
 
             <FlatList data={postOption} renderItem={(item) => {
                 return <HomeFlatListView item={item} />
             }}
-            onScroll={onScroll}
+                onScroll={onScroll}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 } />

@@ -49,7 +49,7 @@ function LibraryFlatList(props: { searchText: string, userId: any, onNavigate: a
     return (
         !categoryOption || categoryOption.length === 0 ?
             (
-                <View style={{ marginTop: 170, alignItems: "center"  , backgroundColor:colors.background }}>
+                <View style={{ marginTop: 100, alignItems: "center"  , backgroundColor:colors.background }}>
                     <TouchableOpacity onPress={onNavigate}>
                         <Image source={dark ? require('../assets/addCategoryLightTheme.png'):require('../assets/addCategoryDarkTheme.png')} style={{ padding: 50 }} resizeMode="contain" />
                         <Text style={{ color: 'gray' }}>

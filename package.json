@@ -22,6 +22,7 @@
     "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/material-bottom-tabs": "^6.2.19",
+    "@react-navigation/material-top-tabs": "^6.6.5",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@reduxjs/toolkit": "^1.9.7",
@@ -38,6 +39,7 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.13.4",
     "react-native-image-picker": "^7.0.3",
+    "react-native-pager-view": "^6.2.3",
     "react-native-paper": "^5.11.1",
     "react-native-picker-select": "^9.0.0",
     "react-native-reanimated": "^3.5.4",
@@ -45,6 +47,7 @@
     "react-native-screens": "^3.27.0",
     "react-native-share": "^10.0.2",
     "react-native-snackbar": "^2.6.2",
+    "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.0.2",
     "react-redux": "^8.1.3",
     "strip-ansi": "^7.1.0"

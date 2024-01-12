@@ -10,7 +10,7 @@ function SearchFlatList(props: { searchText: String }) {
     const GetAllSearchData = async () => {
 
         const nameArray: any[] = []
-        await firestore().collection("users").get().then((querySnapshot) => {
+        await firestore().collection("users").onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 const bookList = doc.data();
                 nameArray.push(bookList)

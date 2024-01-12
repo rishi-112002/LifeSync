@@ -87,7 +87,7 @@ function LibrarySearchFilterView(props: { searchText: any, item: ListRenderItemI
 const styles = StyleSheet.create({
   view: {
     padding: 10,
-    width: "48%",
+    width: "50%",
     marginBottom: 20,
     marginTop: 15
   },

@@ -19,26 +19,16 @@ function EditUserProfile() {
     const handleCloseModal = () => {
         setIsModalVisible(false);
     };
-    const [userName, setUserName] = useState("")
-    const [Address, setAddress] = useState("")
-    const [phoneNo, setPhoneNo] = useState("")
-    const [gender, setGender] = useState("")
-    const [countryCode, setCountryCode] = useState('');
-    const setData = () => {
-        setUserName(data.userData.name)
-        setAddress(data.userData.address)
-        setPhoneNo(data.userData.mobile)
-        setGender(data.userData.gender)
-        setCountryCode(data.userData.countryCode)
-    }
+    const [userName, setUserName] = useState(data.userData.name)
+    const [Address, setAddress] = useState(data.userData.address)
+    const [phoneNo, setPhoneNo] = useState(data.userData.mobile)
+    const [gender, setGender] = useState(data.userData.gender)
+    const [countryCode, setCountryCode] = useState(data.userData.countryCode);
     const handleOpenModal = () => {
         setIsModalVisible(true);
     };
     const [show, setShow] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    useEffect(() => {
-        setData()
-    }, []);
     const genderOptions = [
         {
             label: "male",
@@ -79,7 +69,7 @@ function EditUserProfile() {
         updateUserToFireStore();
 
     }
-    const [imageUrl , setImageUrl]= useState("")
+    const [imageUrl, setImageUrl] = useState("")
     const usersCollection = firestore().collection('users');
     const userDetails = () => {
         usersCollection
@@ -90,9 +80,9 @@ function EditUserProfile() {
                     getImage(doc._data.profileImage)
                 })
             })
-        
+
     };
-    async function getImage(imageUri:any) {
+    async function getImage(imageUri: any) {
         try {
             const storageRef = storage().ref();
             const imageRef = storageRef.child(imageUri);
@@ -139,7 +129,7 @@ function EditUserProfile() {
                 </View>
                 <View style={style.imageContainer}>
                     {imageUrl ? (
-                        <Image source={{ uri:imageUrl }} style={style.profileImage} />
+                        <Image source={{ uri: imageUrl }} style={style.profileImage} />
                     ) : (
                         <View style={style.placeholderContainer}>
                             <Text style={style.placeholderText}>profileImage</Text>
@@ -225,9 +215,9 @@ function EditUserProfile() {
                         dropDownDirection='AUTO'
                     />
                 </View>
-                <KeyboardAvoidingView>
+                {show && <KeyboardAvoidingView>
                     <CountryCodePicker show={show} setShow={setShow} setCountryCode={setCountryCode} />
-                </KeyboardAvoidingView>
+                </KeyboardAvoidingView>}
                 <ButtonComponent buttonTittle={"save"} onPress={handleUserData} />
             </View>
         </View>

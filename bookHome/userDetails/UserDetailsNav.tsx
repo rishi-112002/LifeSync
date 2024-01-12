@@ -13,6 +13,8 @@ import ProfileScreen from "../home/ProfileScreen";
 import AddCategory from "../library/AddCategory";
 import PostEditScreen from "../library/PostEditScreen";
 import EditUserProfile from "./EditUserProfile";
+import TopBarNav from "../topNavigationBar/TopBarNav";
+
 
 const Stack = createNativeStackNavigator();
 function UserDetailsNav() {
@@ -32,6 +34,7 @@ function UserDetailsNav() {
             <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ headerShown: false }} />
             <Stack.Screen name="TermsOfUsage" component={TermsOfUsageScreen} options={{ headerShown: false }} />
             <Stack.Screen name="EditUserProfile" component={EditUserProfile} options={{ headerShown: false }} />
+            <Stack.Screen name="TopBarNav" component={TopBarNav} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 }

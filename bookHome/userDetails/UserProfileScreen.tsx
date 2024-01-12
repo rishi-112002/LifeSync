@@ -137,8 +137,8 @@ function UserProfileScreen() {
                     backgroundColor: colors.card,
                     borderRadius: 20
                 }}>
-                    <View style={{ marginEnd: 20, marginStart: 8, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
-                        <Text style={style.label}>Followers</Text>
+                    <View style={{ marginEnd: 20, marginStart: 8, alignItems: 'center', marginTop: -10, marginBottom: -10 }} >
+                        <Text style={style.label} onPress={()=> navigation.navigate("TopBarNav" , {userName:userName})}>Followers</Text>
                         <Text style={style.count}>{followerCount}</Text>
                     </View>
                     <View style={{ marginEnd: 20, marginStart: 20, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>

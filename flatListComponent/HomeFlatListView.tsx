@@ -159,27 +159,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             throw error;
         }
     }
-
-    // async function getUserImage() {
-    //     try {
-    //         const storageRef = storage().ref();
-    //         const imageRef = storageRef.child(imageUri);
-    //         const url = await imageRef.getDownloadURL();
-    //         setUserImage(url);
-    //     } catch (error) {
-    //         if (error.code === 'storage/object-not-found') {
-    //             // Handle the case where the image is not found.
-    //             // For example, you can set a default image URL.
-    //             setUserImage('URL_TO_DEFAULT_IMAGE');
-    //         } else {
-    //             // Handle other storage-related errors.
-    //             console.error('Error getting image URL:', error);
-    //             throw error;
-    //         }
-    //     }
-    // }
-    
-
     const [modalVisible, setModalVisible] = useState(false);
 
     const handlePress = () => {
