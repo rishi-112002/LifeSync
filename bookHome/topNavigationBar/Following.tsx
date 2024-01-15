@@ -6,6 +6,7 @@ import { RootState } from "../../reduxIntegration/Store";
 import FollowFlatList from "./FollowFlatList";
 import { useTheme } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore'
+import FollowingFlat from "./followingFlat";
 
 function Following() {
     const [searchText, SetSearchText] = useState()
@@ -36,7 +37,7 @@ function Following() {
     return (
         <View style={{ flex: 1 }}>
             <SearchBar value={searchText} onChangeText={SetSearchText} />
-            {!loading ? (<FollowFlatList item={followerArray}  id={true}/>) :
+            {!loading ? (<FollowingFlat item={followerArray}/>) :
                 (
                     <View>
                         <Text style={{textAlign:'center' , margin:10 , color:colors.text}}>Loading...</Text>

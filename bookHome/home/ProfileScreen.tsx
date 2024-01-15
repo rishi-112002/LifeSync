@@ -7,6 +7,7 @@ import { RootState } from "../../reduxIntegration/Store";
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage';
 import FullScreenImagePopUp from "../../reuseableComponent/FullScreenImageModalPopUp";
+import PopUpLoader from "../../reuseableComponent/PopUpLoader";
 
 
 function ProfileScreen() {
@@ -16,7 +17,7 @@ function ProfileScreen() {
     const currentUserId = useSelector((state: RootState) => {
         return state.loginAuth.userId
     });
-    const { colors , dark} = useTheme()
+    const { colors, dark } = useTheme()
     const [userImage, setUserImage] = useState("")
     const userId = data.userIds;
     const [follow, setFollow] = useState(false);
@@ -26,6 +27,7 @@ function ProfileScreen() {
             const followerRef = firestore().collection("users").doc(userId);
             const followerDoc = await followerRef.get();
             const followerData = followerDoc.data()
+            console.log("followerData", followerData)
             const likeByArray = followerDoc.exists ? (followerData.followBy || []) : [];
             const hasFollowed = likeByArray.includes(currentUserId);
             if (!hasFollowed) {
@@ -59,7 +61,7 @@ function ProfileScreen() {
                     followingCount: followingByArray.length,
                     following: followingByArray
                 });
-
+                setLoading(false)
                 console.log("Like count updated successfully");
             }
             else {
@@ -113,6 +115,8 @@ function ProfileScreen() {
             }
         } catch (error) {
             console.error("Error updating like count: ", error);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -139,25 +143,25 @@ function ProfileScreen() {
                 return
             }
         } catch (error) {
+
             console.error("Error updating like count: ", error);
+        } finally {
+            setLoading(false)
         }
     };
-
+    const [loading, setLoading] = useState(false)
     const handleFollow = async () => {
-        setFollow(!follow)
+        setLoading(true)
         if (currentUserId != userId) {
-            if (!follow) {
+            if (follow) {
                 await updateFollower()
                 await updateFollowing()
-                console.log("underFollow", follow)
-                return
             }
             else {
                 await updateUnFollower();
                 await updateUnFollowing();
-                console.log("unFollow", follow)
-                return
             }
+            setFollow(!follow)
 
         }
     }
@@ -173,11 +177,8 @@ function ProfileScreen() {
         }
     }
     useEffect(() => {
-
-        if (data.profileUri) {
-            getUserImage();
-            checkFollow()
-        }
+        getUserImage();
+        checkFollow()
     }, []);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -190,17 +191,17 @@ function ProfileScreen() {
     return (
         <ScrollView style={{
             backgroundColor: colors.background,
-           
-        }} contentContainerStyle={{paddingBottom:80}}>
+
+        }} contentContainerStyle={{ paddingBottom: 80 }}>
             <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 10, marginStart: 10 }}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")}  style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5 , marginTop:6 }}/>
+                    <Image source={dark ? require("../../assets/backButtonForDarkTheme.png") : require("../../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5, marginTop: 6 }} />
                 </TouchableOpacity>
-                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold'}}>
+                <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold' }}>
                     {data.userNames}
                 </Text>
                 <TouchableOpacity style={{ marginStart: 'auto', marginEnd: 20 }} >
-                <Image source={dark ?require('../../assets/threeDotLightTheme.png'):require('../../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto"  ,  resizeMode:'center' , height:42  , marginEnd:-25}} />
+                    <Image source={dark ? require('../../assets/threeDotLightTheme.png') : require('../../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto", resizeMode: 'center', height: 42, marginEnd: -25 }} />
                 </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center', marginTop: 20, flexDirection: "column" }}>
@@ -225,8 +226,9 @@ function ProfileScreen() {
 
             <LibraryFlatList searchText={" "} userId={data.userIds} onNavigate={undefined} />
             {isModalVisible &&
-                    <FullScreenImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={userImage} />
-                }
+                <FullScreenImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={userImage} />
+            }
+            {/* {loading && <PopUpLoader />} */}
         </ScrollView>
     )
 }

@@ -7,7 +7,7 @@ import PopUpLoader from "../../reuseableComponent/PopUpLoader";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reduxIntegration/Store";
 
-function FollowerFlatListView(props: { item: any }) {
+function FollowingFlatListView(props: { item: any }) {
     const { colors } = useTheme()
     const navigation = useNavigation()
     const { item } = props
@@ -31,15 +31,31 @@ function FollowerFlatListView(props: { item: any }) {
         return state.loginAuth.userId
     });
 
+    const [follow, setFollow] = useState(false);
+
+    const checkFollow = async (userId: any) => {
+        try {
+            const followingRef = firestore().collection("users").doc(currentUserId);
+            followingRef.onSnapshot((followingDoc) => {
+                const followingData = followingDoc.data();
+                const followingByArray = followingDoc.exists ? (followingData.following || []) : [];
+                const hasFollowed = followingByArray.includes(userId);
+
+                setFollow(!hasFollowed);
+            });
+        } catch (error) {
+            console.error("Error checking follow status: ", error);
+        }
+    };
     const updateUnFollowing = async (userId: any) => {
         try {
-            const followingRef = firestore().collection("users").doc(userId);
+            const followingRef = firestore().collection("users").doc(currentUserId);
             const followingDoc = await followingRef.get();
             const followingData = followingDoc.data()
             const followingByArray = followingDoc.exists ? (followingData.following || []) : [];
-            const hasFollowed = followingByArray.includes(currentUserId);
+            const hasFollowed = followingByArray.includes(userId);
             if (hasFollowed) {
-                const index = followingByArray.indexOf(currentUserId);
+                const index = followingByArray.indexOf(userId);
                 followingByArray.splice(index, 1);
 
                 await followingRef.update({
@@ -48,7 +64,6 @@ function FollowerFlatListView(props: { item: any }) {
                 });
 
                 console.log("unFollowing updated successfully");
-                setLoading(false)
             }
             else {
                 console.log("User has already unFollowing the user");
@@ -58,15 +73,15 @@ function FollowerFlatListView(props: { item: any }) {
             console.error("Error updating like count: ", error);
         }
     };
-    const updateUnFollower = async ( userId:any) => {
+    const updateUnFollower = async (userId: any) => {
         try {
-            const followerRef = firestore().collection("users").doc(currentUserId);
+            const followerRef = firestore().collection("users").doc(userId);
             const followerDoc = await followerRef.get();
             const followerData = followerDoc.data()
             const likeByArray = followerDoc.exists ? (followerData.followBy || []) : [];
-            const hasFollowed = likeByArray.includes(userId);
+            const hasFollowed = likeByArray.includes(currentUserId);
             if (hasFollowed) {
-                const index = likeByArray.indexOf(userId);
+                const index = likeByArray.indexOf(currentUserId);
                 likeByArray.splice(index, 1);
 
                 await followerRef.update({
@@ -84,12 +99,13 @@ function FollowerFlatListView(props: { item: any }) {
         } catch (error) {
             console.error("Error updating like count: ", error);
         }
-    };   
+    };
 
-    const handleDelete = (userId: any) => {
+
+    const handleDelete = (userId: any, userNames: any) => {
         Alert.alert(
             "Warning",
-            "Are you sure to remove ?",
+            `Are you sure to unFollow ${userNames}....?`,
             [
                 {
                     text: "Cancel",
@@ -100,8 +116,9 @@ function FollowerFlatListView(props: { item: any }) {
                     onPress: async () => {
                         console.log("ok", userId)
                         setLoading(true)
+                        await checkFollow(userId)
+                        await updateUnFollowing(userId)
                         await updateUnFollower(userId)
-                       await updateUnFollowing(userId)
                     },
                 },
             ],
@@ -123,13 +140,13 @@ function FollowerFlatListView(props: { item: any }) {
                         {item.item.name}
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ marginTop: 10, marginStart: "auto", padding: 5, marginEnd: 11 }} onPress={() => handleDelete(item.item.userId)}>
+                <TouchableOpacity style={{ marginTop: 10, marginStart: "auto", padding: 5, marginEnd: 10 }} onPress={() => handleDelete(item.item.userId, item.item.name)}>
                     <Text style={{ color: colors.text, marginLeft: 4, fontSize: 14, backgroundColor: colors.card, borderRadius: 5, padding: 4 }}>
-                        remove
+                        {follow ? "Follow" : "Following"}
                     </Text>
                 </TouchableOpacity>
             </View>{loading &&
                 <PopUpLoader />}
         </View>)
 }
-export default FollowerFlatListView;
+export default FollowingFlatListView;

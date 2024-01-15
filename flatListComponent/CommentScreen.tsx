@@ -66,14 +66,6 @@ function CommentScreen() {
                 <Text style={{ color: colors.text, fontSize: 25, fontWeight: 'bold' }}>
                     Comments
                 </Text>
-                <TouchableOpacity style={{ backgroundColor: 'green', marginStart: 'auto', borderRadius: 10, padding: 6, marginEnd: 15, marginTop: 5 }}>
-                    <Text style={{ color: "white", fontSize: 15, fontWeight: '500' }} onPress={handleOpenModal}>
-                        Add
-                    </Text>
-                </TouchableOpacity>
-                {isModalVisible &&
-                    <CommentModal visible={isModalVisible} onClose={handleCloseModal} postId={data["postId"]} userId={data.userId} userName={data.userName} />
-                }
             </View>
             <FlatList data={commentOption} renderItem={(item) => {
                 return <CommentFlatList item={item} />
@@ -81,7 +73,7 @@ function CommentScreen() {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 } />
-
+            <CommentModal visible={isModalVisible} onClose={handleCloseModal} postId={data["postId"]} userId={data.userId} userName={data.userName} />
         </View>
     )
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { Animated, Text, View } from 'react-native'
 import HomeFlatList from "../../flatListComponent/HomeFlatList";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import GetAllUserData from "../../fireStoreHandle/GetAllUserData";
+import GetAllUserData from "../../flatListComponent/fireStoreHandle/GetAllUserData";
 function HomeScreen() {
     GetAllUserData();
     const { colors } = useTheme()
@@ -28,7 +28,6 @@ function HomeScreen() {
                 }}
             >
                 <View style={{
-                    // marginTop:Constant.statusBarHeight,
                     position: "absolute",
                     top: 0,
                     left: 0,
@@ -54,9 +53,9 @@ function HomeScreen() {
                     </Text>
                 </View>
             </Animated.View>
-            {/* <View style={{ marginBottom: 40, backgroundColor: 'rgba(0, 0, 0, 0)' }}>
+            <View style={{ marginBottom: 20, backgroundColor: 'rgba(0, 0, 0, 0)' }}>
 
-            </View> */}
+            </View>
             <HomeFlatList onUserIconPress={undefined} onScroll={(e: { nativeEvent: { contentOffset: { y: number; }; }; }) => {
                 scrollY.setValue(e.nativeEvent.contentOffset.y)
             }} />
@@ -64,21 +63,3 @@ function HomeScreen() {
     )
 };
 export default HomeScreen;
-
-
-// <ScrollView style={{
-//     backgroundColor: colors.background,
-// }} contentContainerStyle={{ paddingBottom: 47 }} onScroll={Animated.event(
-//     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-//     { useNativeDriver: false }
-// )}>
-//     <View style={{ flexDirection: 'row' }}>
-//         <Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-//             <Text style={{ fontSize: 18, color: 'white' }}>Your Header</Text>
-//         </Animated.View>
-//         <Text style={{ color: "white", backgroundColor: 'green', marginStart: 'auto', fontSize: 15, fontWeight: '500', borderRadius: 10, padding: 6, margin: 12, textAlign: 'center' }} onPress={() => navigation.navigate("AddPost")}>
-//             Post
-//         </Text>
-//     </View>
-//     <HomeFlatList onUserIconPress={undefined} />
-// </ScrollView>

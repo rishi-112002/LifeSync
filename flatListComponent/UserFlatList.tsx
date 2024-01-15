@@ -82,7 +82,7 @@ function UserFlatList() {
             text: "Terms Of usage"
         },
         {
-            text: "Ratting app"
+            text: "Rating app"
         },
         {
             text: "Share app"
@@ -110,7 +110,7 @@ function UserFlatList() {
     const userEmail = useSelector((state: RootState) => {
         return state.loginAuth.email
     });
-    const userName= useSelector((state: RootState) => {
+    const userName = useSelector((state: RootState) => {
         return state.loginAuth.userName
     });
     return (
@@ -125,7 +125,7 @@ function UserFlatList() {
                             break;
 
                         case 'Change Password':
-                            navigation.navigate("ChangePassword", { userId: userId, userEmail: userEmail , userName: userName})
+                            navigation.navigate("ChangePassword", { userId: userId, userEmail: userEmail, userName: userName })
                             break;
                         case 'Liked Posts':
                             navigation.navigate("LikedPostScreen")
@@ -170,7 +170,7 @@ function UserFlatList() {
                                 borderBottomColor: colors.notification,
                                 borderRightColor: colors.background,
                                 borderTopColor: colors.background,
-                                borderLeftColor:  colors.background,
+                                borderLeftColor: colors.background,
                                 fontSize: 20,
                                 fontWeight: 'bold'
                             }} >

@@ -4,6 +4,7 @@ import firestore from '@react-native-firebase/firestore'
 import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reduxIntegration/Store';
+import { useTheme } from '@react-navigation/native';
 function CommentModal(props: { visible: any, onClose: any, postId: any, userId: any, userName: any }) {
     const [commentText, setCommentText] = useState('');
     const { visible, onClose, postId, userId, userName } = props
@@ -14,7 +15,7 @@ function CommentModal(props: { visible: any, onClose: any, postId: any, userId: 
     const imageUrl = useSelector((state: RootState) => {
         return state.allUserData.userData[userId]?.profileImage || 'DefaultName';
     })
-
+    const { colors, dark } = useTheme()
     const addCommentToFireStore = async () => {
         const commentData = {
             createdAt: serverTimestamp(),
@@ -45,39 +46,42 @@ function CommentModal(props: { visible: any, onClose: any, postId: any, userId: 
     };
     return (
 
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={visible}
-            onRequestClose={onClose}
-        >
-            <TouchableWithoutFeedback onPress={onClose} accessible={false} >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalText}>Add Comment Here</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Type your comment..."
-                            value={commentText}
-                            multiline
-                            onChangeText={setCommentText}
-                        />
-                        <View style={styles.buttonContainer}>
-                            <TouchableOpacity onPress={handleSubmit}>
-                                <Text style={{ color: "white", backgroundColor: 'blue', marginStart: 'auto', fontSize: 19, fontWeight: '500', borderRadius: 10, padding: 5 }} >
-                                    Submit
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleCancel}>
-                                <Text style={{ color: "white", backgroundColor: 'gray', marginStart: 'auto', fontSize: 19, fontWeight: '500', borderRadius: 10, padding: 5 }}>
-                                    Cancel
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+
+        <TouchableWithoutFeedback onPress={onClose} accessible={false} >
+            <View style={styles.modalContainer}>
+                <View style={{
+                    backgroundColor: colors.background,
+                    padding: 20,
+                    borderRadius: 10,
+                    width: '100%'
+                }}>
+
+                    <TextInput
+                        style={{
+                            borderWidth: 1,
+                            borderColor: '#ccc',
+                            borderRadius: 10,
+                            padding: 10,
+                            marginBottom: 15,
+                            height: 60,
+                            color: colors.text,
+                            fontSize: 16
+                        }}
+                        placeholder="Type your comment..."
+                        value={commentText}
+                        multiline
+                        onChangeText={setCommentText}
+                    />
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={handleSubmit} style={{ marginStart: "auto" }}>
+                            <Text style={{ color: "white", backgroundColor: 'blue', marginStart: 'auto', fontSize: 19, fontWeight: '500', borderRadius: 10, padding: 5 }} >
+                                Submit
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
-        </Modal>
+            </View>
+        </TouchableWithoutFeedback >
     );
 };
 
@@ -86,13 +90,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: -50
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: '',
         padding: 20,
         borderRadius: 10,
-        elevation: 5,
-        width: 300,
+        width: '100%'
     },
     modalText: {
         fontSize: 18,

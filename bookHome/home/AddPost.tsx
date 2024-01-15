@@ -156,8 +156,20 @@ function AddPost() {
                     style={{
                         alignItems: 'center',
                         backgroundColor: colors.background,
-                        borderColor:colors.border
+                        borderColor: colors.border
                     }}
+                    labelStyle={{
+                        color:colors.text,
+                        backgroundColor:colors.background
+                      }}
+                      selectedItemLabelStyle={{
+                        color: colors.primary, 
+                      }}
+                      dropDownContainerStyle={{
+                        backgroundColor: colors.background,
+                        borderColor: colors.border,
+                      }}
+                      textStyle={{ color: colors.text }}
                     maxHeight={200}
                     autoScroll
                     keyboardShouldPersistTaps="handled"

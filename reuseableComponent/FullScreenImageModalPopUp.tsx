@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Modal, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Modal, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 
 function FullScreenImagePopUp(props: { visible: any, onClose: any, profileUri: any }) {
     const { visible, onClose, profileUri } = props

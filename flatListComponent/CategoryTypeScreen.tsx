@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
-import GetAllUserData from "../fireStoreHandle/GetAllUserData";
+import GetAllUserData from "./fireStoreHandle/GetAllUserData";
 import CategoryFlatList from "./categoryFlatList";
 import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";

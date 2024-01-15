@@ -5,9 +5,9 @@ import { useTheme } from "@react-navigation/native";
 
 
 
-function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navigateToScreen: any, postId: any }) {
+function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navigateToScreen: any, postId: any , sharePost:any }) {
 
-    const { toggleLikeButton, like, item, navigateToScreen, postId } = props
+    const { toggleLikeButton, like, item, navigateToScreen, postId,sharePost } = props
     const [commentCount, SetCommentCount] = useState(0)
     const { colors, dark } = useTheme()
 
@@ -37,7 +37,7 @@ function LikeComment(props: { toggleLikeButton: any, like: any, item: any, navig
                 <TouchableOpacity onPress={navigateToScreen}>
                     <Image source={!dark ? require('../assets/commentLightTheme.png') : require('../assets/commentDarkTheme.png')} style={{ marginStart: 4,marginTop:2, width: 50, height: 28, resizeMode: 'center' }} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={sharePost}>
                     <Image source={!dark ? require('../assets/shareLightTheme.png') : require('../assets/shareDarkTheme.png')} style={{ marginStart: 4, width: 50, height: 30, resizeMode: 'center' }} />
                 </TouchableOpacity>
             </View>

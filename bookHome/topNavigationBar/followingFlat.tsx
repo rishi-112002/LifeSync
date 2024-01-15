@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import firestore from '@react-native-firebase/firestore'
-import FollowerFlatListView from "./FollowFlatListView";
 import FollowingFlatListView from "./FollowingFlatlist";
 
-function FollowFlatList(props: { item: any, id: any }) {
-    const { item, id } = props
+function FollowingFlat(props: { item: any }) {
+    const { item } = props
     const [followerData, setFollowerData] = useState([])
     const usersCollection = firestore().collection('users');
-    console.log("id", id)
     const followerDetails = () => {
         if (item.length > 0) {
             usersCollection
@@ -33,8 +31,8 @@ function FollowFlatList(props: { item: any, id: any }) {
 
     return (
         <View style={{ flex: 1 }}>
-            <FlatList data={followerData} renderItem={(item) => { return <FollowerFlatListView item={item} /> }} />
+            <FlatList data={followerData} renderItem={(item) => { return <FollowingFlatListView item={item} /> }} />
         </View>
     )
 }
-export default FollowFlatList;
+export default FollowingFlat;

@@ -8,6 +8,7 @@ import LibraryFlatList from "../../flatListComponent/LibraryFlatList";
 import SelectProfileImagePopUp from "../../reuseableComponent/SelectProfileImagePopUp";
 import firestore from '@react-native-firebase/firestore'
 import Share from 'react-native-share';
+import FullScreenImagePopUp from "../../reuseableComponent/FullScreenImageModalPopUp";
 
 function UserProfileScreen() {
     const [profileImage, setProfileImage] = useState("");
@@ -20,7 +21,7 @@ function UserProfileScreen() {
     const userEmail = useSelector((state: RootState) => {
         return state.loginAuth.email
     });
-  
+
     const usersCollection = firestore().collection('users');
     const userDetails = () => {
         console.log("hello user Details", userId)
@@ -36,14 +37,14 @@ function UserProfileScreen() {
                     setFollowingCount(doc._data.followingCount)
                 })
             })
-        
+
     };
     const { colors } = useTheme()
     const [likeCount, setLikeCount] = useState(0)
     const navigation = useNavigation()
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    async function getImage(imageUri:any) {
+    async function getImage(imageUri: any) {
         try {
             const storageRef = storage().ref();
             const imageRef = storageRef.child(imageUri);
@@ -124,7 +125,7 @@ function UserProfileScreen() {
                     </View>
                 </TouchableOpacity>
                 {isModalVisible &&
-                    <SelectProfileImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={profileImage} />
+                    <FullScreenImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={profileImage} />
                 }
                 <View style={{
                     flexDirection: 'row',
@@ -137,14 +138,19 @@ function UserProfileScreen() {
                     backgroundColor: colors.card,
                     borderRadius: 20
                 }}>
-                    <View style={{ marginEnd: 20, marginStart: 8, alignItems: 'center', marginTop: -10, marginBottom: -10 }} >
-                        <Text style={style.label} onPress={()=> navigation.navigate("TopBarNav" , {userName:userName})}>Followers</Text>
-                        <Text style={style.count}>{followerCount}</Text>
-                    </View>
-                    <View style={{ marginEnd: 20, marginStart: 20, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
-                        <Text style={style.label}>Following</Text>
-                        <Text style={style.count}>{followingCount}</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("TopBarNav", { userName: userName, followerCount: followerCount, followingCount: followingCount, routeName: "Follower" })}>
+                        <View style={{ marginEnd: 20, marginStart: 8, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
+                            <Text style={style.label} >Followers</Text>
+                            <Text style={style.count}>{followerCount}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("TopBarNav", { userName: userName, followerCount: followerCount, followingCount: followingCount, routeName: "Following" })}>
+
+                        <View style={{ marginEnd: 20, marginStart: 20, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
+                            <Text style={style.label}>Following</Text>
+                            <Text style={style.count}>{followingCount}</Text>
+                        </View>
+                    </TouchableOpacity>
                     <View style={{ marginEnd: 8, marginStart: 20, alignItems: 'center', marginTop: -10, marginBottom: -10 }}>
                         <Text style={style.label}>Posts</Text>
                         <Text style={style.count}>{likeCount}</Text>
@@ -152,7 +158,7 @@ function UserProfileScreen() {
                 </View>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
-                <TouchableOpacity style={{ backgroundColor: colors.card, padding: 4, margin: 10, borderRadius: 10 }} onPress={() => navigation.navigate("EditUserProfile", {userEmail:userEmail, userId: userId, userName: userName, profileImage: profileImage, userData: userData })}>
+                <TouchableOpacity style={{ backgroundColor: colors.card, padding: 4, margin: 10, borderRadius: 10 }} onPress={() => navigation.navigate("EditUserProfile", { userEmail: userEmail, userId: userId, userName: userName, profileImage: profileImage, userData: userData })}>
                     <Text style={{ color: colors.text, fontWeight: '600', padding: 4, marginStart: 15, marginEnd: 15 }}>
                         Edit Profile
                     </Text>
@@ -166,7 +172,7 @@ function UserProfileScreen() {
             <Text style={{ color: colors.text, fontSize: 24, fontWeight: 'bold', marginTop: 20, marginStart: 20 }}>
                 Category List :-
             </Text>
-            <LibraryFlatList searchText={""} userId={userId} onNavigate={undefined} />
+            <LibraryFlatList searchText={""} userId={userId} onNavigate={() => navigation.navigate("AddCategory")} />
         </ScrollView >
     )
 }

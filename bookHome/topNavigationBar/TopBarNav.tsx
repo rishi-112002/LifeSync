@@ -1,6 +1,4 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import PrivacyPolicy from '../userDetails/PrivacyPolicy';
-import TermsOfUsageScreen from '../userDetails/TermsOfUsage';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
@@ -34,20 +32,12 @@ function TopBarNav() {
                     borderColor: colors.background,
                     paddingBottom: 3
                 },
-
                 tabBarActiveTintColor: "#0077FF",
                 tabBarInactiveTintColor: "gray",
-                // tabBarLabel: ({ focused }) => (
-                //     <Text style={{ fontSize: 1, color: focused ? "#0077FF" : "white" }}>
-                //         YourTabLabel
-                //     </Text>
-                // ),
-
-            }}>
-                <Tab.Screen name="Follower" component={Follower} />
-                <Tab.Screen name="Following" component={Following} />
-                <Tab.Screen name="posts" component={PrivacyPolicy} />
-
+            }}
+            initialRouteName= {data.routeName} >
+                <Tab.Screen  name={`${data.followerCount}    Follower`} component={Follower}/>
+                <Tab.Screen  name={`${data.followingCount}    Following`}component={Following} />
             </Tab.Navigator>
         </View>
     );

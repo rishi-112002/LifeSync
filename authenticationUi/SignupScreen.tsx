@@ -18,7 +18,7 @@ function SignupScreen() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
-    const [userId, setUserId] = useState<string | null>("");
+    const [userId, setUserId] = useState("");
     const showToast = () => {
         console.log("hello snack bar ")
         Snackbar.show({
@@ -97,7 +97,7 @@ function SignupScreen() {
             }
         });
     };
-    const uploadPhoto = async () => {
+    const uploadPhoto = async (newUserId:any) => {
         const uploadUri = profileImage
         let FileName = `ProfileImage/${uploadUri.substring(uploadUri.lastIndexOf('/') + 1)}`
 
@@ -108,7 +108,7 @@ function SignupScreen() {
                 console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
             })
             task.then(() => {
-                addUserData(FileName)
+                addUserData(FileName , newUserId)
             })
         } catch (error) {
             setLoading(false)
@@ -120,8 +120,9 @@ function SignupScreen() {
         try {
             await auth().createUserWithEmailAndPassword(email, password).then(async (success) => {
                 const newUserId = auth().currentUser?.uid;
+                console.log("new User Id " , newUserId)
                 setUserId(newUserId)
-                await uploadPhoto()
+                await uploadPhoto( newUserId)
             })
             console.log('User added successfully!');
 
@@ -137,7 +138,7 @@ function SignupScreen() {
         navigation.navigate("Login");
     };
 
-    const addUserData = async (fileName: any) => {
+    const addUserData = async (fileName: any , newUserId:any) => {
         const userData = {
             address: "Indore",
             countryCode: "+91",
@@ -148,7 +149,7 @@ function SignupScreen() {
             name: name,
             status: "active",
             updatedAt: serverTimestamp(),
-            userId: userId,
+            userId: newUserId,
             profileImage: fileName,
             followBy: [],
             follower: 0,
@@ -156,7 +157,7 @@ function SignupScreen() {
             followingCount: 0
         }
         try {
-            await firestore().collection("users").doc(userId).set(userData).then((success) => {
+            await firestore().collection("users").doc(newUserId).set(userData).then(() => {
                 setLoading(false)
                 showToastAndNavigate()
             }).catch((error) => console.log("error while make the user ", error))
@@ -198,7 +199,7 @@ function SignupScreen() {
             <TextInputCom
                 value={name}
                 onChangeText={(text: React.SetStateAction<string>) => setName(text)}
-                placeholder="" secureTextEntry={false} />
+                placeholder="" secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
             <Text style={style.inputText}>
                 Email
             </Text>
@@ -207,14 +208,13 @@ function SignupScreen() {
                 keyBoardType={"email-address"}
                 onChangeText={(text: string) => {
                     if (text.includes(' ')) {
-                        Alert.alert("Warning", "Spaces are not allowed in the email")
+                        Alert.alert("Warning", "Spaces are not allowed in the email");
                         setEmail(text.trim());
                     } else {
                         setEmail(text);
                     }
-                }
-                }
-                placeholder="" secureTextEntry={false} />
+                } }
+                placeholder="" secureTextEntry={false} errorMessage={""} />
             <Text style={style.inputText}>
                 Password
             </Text>

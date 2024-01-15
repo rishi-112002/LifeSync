@@ -1,45 +1,26 @@
 import React, { useState, useEffect } from "react";
 import firestore from '@react-native-firebase/firestore';
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import storage from "@react-native-firebase/storage";
-function SearchFlatList(props: { searchText: String }) {
-    const { searchText } = props
-    const [bookNames, setBookNames] = useState([]);
-    const { colors } = useTheme()
-    // const [userImage, setUserImage] = useState()
-    const GetAllSearchData = async () => {
-        
-        const nameArray: any[] = []
-        firestore().collection("users").onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const bookList = doc.data();
-                nameArray.push(bookList);
-                // getUserImage(bookList.profileImage)
-            });
-        })
-        setBookNames(nameArray)
 
-    }
-    async function getUserImage(profileImage: any) {
-        try {
-            const storageRef = storage().ref();
-            const imageRef = storageRef.child(profileImage);
-            const url = await imageRef.getDownloadURL();
-            setUserImage(url);
-        } catch (error) {
-            console.error('Error getting image URL:', error);
-            throw error;
-        }
+function SearchFollowerFollowingFlatList(props: { searchText: String  , userIds:[]}) {
+    const { searchText  , userIds} = props
+    const [userName, setUserNames] = useState([]);
+    const { colors } = useTheme()
+    const GetAllSearchData = async () => {
+        firestore().collection("users").where("userId", "==", userIds).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const userList = doc.data();
+                setUserNames(userList)
+            });
+        })   
     }
 
     useEffect(() => {
         GetAllSearchData();
     }, []);
-
     const navigation = useNavigation()
     const filterData = (item: { description: any, name: any }) => {
-        console.log("item", item)
         if (!item || searchText === "") {
             return null;
         }
@@ -51,12 +32,6 @@ function SearchFlatList(props: { searchText: String }) {
             return (
                 <View>{item.profileImage &&
                     <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.userId, userNames: name, profileUri: item.profileImage })}>
-                        {/* {
-                    userImage &&
-                    <TouchableOpacity>
-                        <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 50, height: 50, borderRadius: 30 }} />
-                    </TouchableOpacity>
-                } */}
                         <Text style={{
                             color: colors.text,
                             marginStart: 15,
@@ -93,11 +68,11 @@ function SearchFlatList(props: { searchText: String }) {
             backgroundColor: colors.background
         }}>
             <FlatList
-                data={bookNames}
+                data={userName}
                 renderItem={({ item }) => filterData(item)}
                 keyboardShouldPersistTaps='handled'
             />
         </View>
     )
 }
-export default SearchFlatList;
+export default SearchFollowerFollowingFlatList;

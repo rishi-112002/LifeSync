@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
-import { store } from '../reduxIntegration/Store';
-import { allUserDetails } from '../reduxIntegration/Reducer';
+import { store } from '../../reduxIntegration/Store';
+import { allUserDetails } from '../../reduxIntegration/Reducer';
 
 const usersCollection = firestore().collection('users');
 

@@ -8,7 +8,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import ButtonComponent from "../../reuseableComponent/ButtonComponent";
 import { serverTimestamp } from '@react-native-firebase/firestore';
 import firestore from '@react-native-firebase/firestore';
-import GetAllUserData from "../../fireStoreHandle/GetAllUserData";
+import GetAllUserData from "../../flatListComponent/fireStoreHandle/GetAllUserData";
 import storage from "@react-native-firebase/storage";
 function EditUserProfile() {
     const route = useRoute()
@@ -206,11 +206,22 @@ function EditUserProfile() {
                         style={{
                             alignItems: 'center',
                             backgroundColor: colors.background,
-                            borderColor: colors.border,
+                            borderColor: colors.border
                         }}
+                        labelStyle={{
+                            color:colors.text,
+                            backgroundColor:colors.background
+                          }}
+                          selectedItemLabelStyle={{
+                            color: colors.primary, 
+                          }}
+                          dropDownContainerStyle={{
+                            backgroundColor: colors.background,
+                            borderColor: colors.border,
+                          }}
+                          textStyle={{ color: colors.text }}
                         maxHeight={200}
                         autoScroll
-                        keyboardShouldPersistTaps="handled"
                         placeholderStyle={{ color: colors.text, fontWeight: 'bold', fontSize: 15 }}
                         dropDownDirection='AUTO'
                     />

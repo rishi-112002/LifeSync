@@ -107,7 +107,7 @@ function NewPassword() {
                             color: colors.text,
                             fontSize: 16,
                             fontWeight: 'bold',
-                            marginStart: 35,
+                            marginStart: 22,
                             marginTop: 10
                         }}>
                             old Password
@@ -124,7 +124,7 @@ function NewPassword() {
                         color: colors.text,
                         fontSize: 16,
                         fontWeight: 'bold',
-                        marginStart: 35,
+                        marginStart: 22,
                         marginTop: 10
                     }}>
                         New Password
@@ -143,7 +143,7 @@ function NewPassword() {
                         color: colors.text,
                         fontSize: 16,
                         fontWeight: 'bold',
-                        marginStart: 35,
+                        marginStart: 22,
                         marginTop: 10
                     }}>
                         Confirm Password

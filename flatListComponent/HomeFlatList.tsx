@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../reduxIntegration/Store";
 import HomeFlatListView from "./HomeFlatListView";
 import GetActualTime from "../reuseableComponent/GetActualTime";
-import GetAllUserData from "../fireStoreHandle/GetAllUserData";
+import GetAllUserData from "./fireStoreHandle/GetAllUserData";
 import { useTheme } from "@react-navigation/native";
 function HomeFlatList(props: { onUserIconPress: any, onScroll: any }) {
     const { onScroll } = props

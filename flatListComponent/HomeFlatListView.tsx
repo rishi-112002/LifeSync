@@ -7,9 +7,10 @@ import { useNavigation, useTheme } from "@react-navigation/native";
 import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import LikeComment from "./LikeComment";
+import Share from 'react-native-share';
 
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
-    const { item } = props  
+    const { item } = props
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
@@ -124,7 +125,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
         }
     };
     const imageUri = useSelector((state: RootState) => {
-        console.log("userIds" , item.item.userId)
+        console.log("userIds", item.item.userId)
         return state.allUserData.userData[item.item.userId]?.profileImage || 'DefaultName';
     })
 
@@ -132,7 +133,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     useEffect(() => {
         getImage();
         checkLikeRealtime();
-     
+
     }, []);
 
     async function getImage() {
@@ -141,7 +142,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             const imageRef = storageRef.child(item.item.imageUri);
             const url = await imageRef.getDownloadURL();
             setImageUrl(url);
-           await getUserImage();
+            await getUserImage();
         } catch (error) {
             console.error('Error getting image URL:', error);
             throw error;
@@ -154,7 +155,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             const url = await imageRef.getDownloadURL();
             setUserImage(url);
         } catch (error) {
-            console.log("hy" , )
+            console.log("hy",)
             console.error('Error getting image URL:', error);
             throw error;
         }
@@ -168,6 +169,19 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const handleLinkClick = () => {
         const url = item.item.link;
         Linking.openURL(url);
+    };
+    const share = async () => {
+        try {
+            const options = {
+                title: 'BookStore App',
+                message: 'Check out this awesome app!',
+                url: 'https://your-app-url.com',
+            };
+
+            await Share.open(options);
+        } catch (error) {
+            console.log('Error sharing app:', error.message);
+        }
     };
 
     return (
@@ -219,7 +233,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                     </TouchableOpacity>
                 </View>
             </View>
-            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} postId={item.item.postId} />
+            <LikeComment toggleLikeButton={toggleLikeButton} like={like} item={item} navigateToScreen={() => navigation.navigate("CommentScreen", { postId: item.item.postId, userId: userId, userName: userNameCurrentUser })} postId={item.item.postId} sharePost={share} />
             <View style={{ borderColor: colors.card, borderWidth: 0.3, borderRadius: 10, marginTop: 4 }}></View>
         </View>
     )

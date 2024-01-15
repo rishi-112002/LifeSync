@@ -7,17 +7,7 @@ import { useTheme } from "@react-navigation/native";
 
 function SearchScreen() {
     const [searchText, setValue] = useState("")
-    const searchBarRef = useRef(null);
     const { colors, dark } = useTheme()
-    const handlePress = () => {
-        console.log("focus")
-
-        // Focus on the search bar and open the keyboard
-        if (searchBarRef.current) {
-
-            console.log("focus")
-        }
-    };
     return (
         <View style={{
             flex: 1,
@@ -38,7 +28,7 @@ function SearchScreen() {
             {
                 (searchText === "") &&
                 (<View style={{ marginTop: "30%", alignItems: 'center' }}>
-                    <TouchableOpacity onPress={handlePress}>
+                    <TouchableOpacity>
                         <Image source={dark ? require('../../assets/defaultSeachForDarkTheme.png') : require('../../assets/defaultSeachForLightTheme.png')} style={{ width: 110, height: 110, resizeMode: 'contain', marginStart: 5 }} />
                         <Text style={{ color: 'darkgray', marginStart: 20 }}>
                             Type to search
