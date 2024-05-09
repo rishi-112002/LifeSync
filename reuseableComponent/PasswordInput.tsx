@@ -7,13 +7,25 @@ function PasswordInput(props: { placeholder: any; value: any; onChangeText: any;
   const { placeholder, value, onChangeText } = props;
   const [showPassword, setShowPassword] = useState(false);
   const { colors } = useTheme()
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   return (
-    <View style={styles.inputs}>
+    <View style={{ flexDirection: 'row',
+    // color: 'black',
+    borderColor: colors.border,
+    borderWidth: 1.0,
+    borderRadius: 10,
+    alignItems: 'center',
+    alignContent: 'center',
+    marginStart: 15,
+    marginEnd: 15,
+    marginTop: 5,
+    flex: 1,
+    paddingStart: 10,
+    
+    }}>
       <TextInput
         style={{ flex: 1,
           color: colors.text,
@@ -36,8 +48,8 @@ const styles = StyleSheet.create({
   inputs: {
     flexDirection: 'row',
     color: 'black',
-    borderColor: 'grey',
-    borderWidth: 1.0,
+  
+    borderWidth: 0.7,
     borderRadius: 10,
     alignItems: 'center',
     alignContent: 'center',

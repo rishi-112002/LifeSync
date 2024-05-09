@@ -95,10 +95,10 @@ function LoginScreen() {
             <View>
                 <AppIconComponent />
                 <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 20, fontSize: 27, fontWeight: 'bold' }}>
-                    Welcome Back  !
+                    Welcome Back  
                 </Text>
                 <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 20, marginBottom: 20, fontSize: 15, fontWeight: '300' }}>
-                    please enter your details
+                  
                 </Text>
                 <Text style={{
                     color: colors.text,
@@ -107,7 +107,7 @@ function LoginScreen() {
                     marginStart: 25,
                     marginTop: 22
                 }}>
-                    Email
+                    Email/Mobile
                 </Text>
                 <TextInputCom
                     value={email}
@@ -137,13 +137,13 @@ function LoginScreen() {
                         }
                     }
                     }
-                    placeholder="min 6 character" keyBoardType="normal" />
-                <Text style={{ alignSelf: 'flex-end', color: 'blue', marginTop: 20, fontSize: 14, fontWeight: 'bold', width: 180, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Forgot Password')}>
+                    placeholder=" " keyBoardType="normal" />
+                <Text style={{ alignSelf: 'flex-end', color: '#008F7D', marginTop: 20, fontSize: 14, fontWeight: 'bold', width: 180, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('Forgot Password')}>
                     Forgot Password ?
                 </Text>
                 <ButtonComponent buttonTittle="Login" onPress={handleLogin} />
                 {loading && <PopUpLoader />}
-                <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('sign up')}>
+                <Text style={{ alignSelf: 'center', color: '#008F7D', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', width: 300, height: 35, textAlign: "center" }} onPress={() => navigation.navigate('sign up')}>
                     Don't have an account, Create new?
                 </Text>
             </View>

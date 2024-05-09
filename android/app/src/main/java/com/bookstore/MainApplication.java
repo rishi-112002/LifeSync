@@ -1,5 +1,4 @@
 package com.bookstore;
-
 import android.app.Application;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -28,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
           return packages;
         }
 
+        
         @Override
         protected String getJSMainModuleName() {
           return "index";

@@ -45,7 +45,7 @@ function BottomTabNavigation() {
                     options={{
                         tabBarLabel: ({ focused }) => (
                             <Text style={{ fontSize: 12, color: focused ? "#0077FF" : colors.text }}>
-                                Home
+                                
                             </Text>
                         ),
                         tabBarIcon: ({ focused }) => (
@@ -61,7 +61,7 @@ function BottomTabNavigation() {
                     options={{
                         tabBarLabel: ({ focused }) => (
                             <Text style={{ fontSize: 12, color: focused ? "#0077FF" : colors.text }}>
-                                Search
+                                
                             </Text>
                         ),
                         tabBarIcon: ({ focused }) => (
@@ -77,7 +77,7 @@ function BottomTabNavigation() {
                     options={{
                         tabBarLabel: ({ focused }) => (
                             <Text style={{ fontSize: 12, color: focused ? "#0077FF" : colors.text }}>
-                                Library
+                                
                             </Text>
                         ),
                         tabBarIcon: ({ focused }) => (
@@ -92,7 +92,7 @@ function BottomTabNavigation() {
                     options={{
                         tabBarLabel: ({ focused }) => (
                             <Text style={{ fontSize: 12, color: focused ? "#0077FF" : colors.text }}>
-                                Account
+                                
                             </Text>
                         ),
                         tabBarIcon: ({ focused }) => (

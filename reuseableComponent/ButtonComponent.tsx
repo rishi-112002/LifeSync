@@ -15,7 +15,7 @@ const style = StyleSheet.create({
         marginStart: 25,
         marginEnd: 25,
         height: 47,
-        backgroundColor: '#52AFFF',
+        backgroundColor: '#008F7D',
         alignContent: 'center',
         marginTop: 25,
         elevation: 2,

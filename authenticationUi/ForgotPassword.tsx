@@ -5,11 +5,12 @@ import ButtonComponent from "../reuseableComponent/ButtonComponent"
 import TextInputCom from "../reuseableComponent/TextInputComponent"
 import React from "react"
 import auth from '@react-native-firebase/auth';
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 
 function ForgotPassword() {
   const [email, setEmail] = useState("")
   const navigation = useNavigation();
+  const { colors, dark } = useTheme()
   const [loading, setLoading] = useState(false)
   let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
   const handleLogin = () => {
@@ -54,22 +55,27 @@ const handleEmail = () => {
 
 
   return (
-    <ScrollView style={style.container} keyboardShouldPersistTaps="handled">
+    <ScrollView style={{ flex: 1,
+      backgroundColor: colors.background}} keyboardShouldPersistTaps="handled">
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: "contain", marginTop: 18, marginStart: 5 }} />
-      </TouchableOpacity>
+                        <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5, marginTop: 6 }} />
+                    </TouchableOpacity>
       <AppIconComponent />
-      <Text style={{ alignSelf: 'center', color: 'black', marginTop: 20, marginBottom: 50, fontSize: 20, fontWeight: 'bold' }}>
+      <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 20, marginBottom: 50, fontSize: 20, fontWeight: 'bold' }}>
         Forgot Password
       </Text>
-      <Text style={style.inputText}>
-        Email
+      <Text style={{color: colors.text,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginStart: 35,
+    marginTop: 15}}>
+        E-mail
       </Text>
       <TextInputCom
         value={email}
         keyBoardType={"email-address"}
         onChangeText={(text: string) => setEmail(text)}
-        placeholder="" secureTextEntry={false} />
+        placeholder="" secureTextEntry={false} errorMessage={""} />
       <ButtonComponent buttonTittle="Verify Email" onPress={handleLogin} />
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
 

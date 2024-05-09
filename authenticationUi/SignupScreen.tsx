@@ -5,7 +5,7 @@ import TextInputCom from "../reuseableComponent/TextInputComponent";
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import { serverTimestamp } from '@react-native-firebase/firestore';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import PasswordInput from "../reuseableComponent/PasswordInput";
 import Snackbar from "react-native-snackbar";
 import { View } from "react-native";
@@ -19,6 +19,7 @@ function SignupScreen() {
     const [password, setPassword] = useState("")
     const [name, setName] = useState("")
     const [userId, setUserId] = useState("");
+    const { colors , dark } = useTheme()
     const showToast = () => {
         console.log("hello snack bar ")
         Snackbar.show({
@@ -170,13 +171,14 @@ function SignupScreen() {
         }
     }
     return (
-        <ScrollView style={style.containers} keyboardShouldPersistTaps="handled">
+        <ScrollView style={{   flex: 1,
+            backgroundColor: colors.background}  } keyboardShouldPersistTaps="handled">
             <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image source={require("../assets/backArrow.png")} style={{ width: 50, height: 35, resizeMode: "contain", marginTop: 15, marginStart: 5 }} />
-                </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Image source={dark ? require("../assets/backButtonForDarkTheme.png") : require("../assets/backArrow.png")} style={{ width: 40, height: 25, resizeMode: 'contain', marginEnd: 5, marginTop: 6 }} />
+                    </TouchableOpacity>
 
-                <Text style={{ alignSelf: 'center', color: 'black', marginTop: 10, fontSize: 30, fontWeight: 'bold', marginEnd: 'auto', marginStart: 20 }}>
+                <Text style={{ alignSelf: 'center', color: colors.text, marginTop: 3,marginBottom:4, fontSize: 25, fontWeight: 'bold', marginEnd: 'auto', marginStart: 20 }}>
                     Sign up
                 </Text>
             </View>
@@ -193,15 +195,24 @@ function SignupScreen() {
                     </View>
                 </TouchableOpacity>
             </View>
-            <Text style={style.inputText}>
+            <Text style={{   color: colors.text,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginStart: 25,
+        marginTop: 20}}>
                 Name
             </Text>
             <TextInputCom
                 value={name}
                 onChangeText={(text: React.SetStateAction<string>) => setName(text)}
                 placeholder="" secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
-            <Text style={style.inputText}>
-                Email
+            <Text style={{   color: colors.text,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginStart: 25,
+        marginTop: 20,
+  }}>
+                E-mail
             </Text>
             <TextInputCom
                 value={email}
@@ -215,7 +226,11 @@ function SignupScreen() {
                     }
                 } }
                 placeholder="" secureTextEntry={false} errorMessage={""} />
-            <Text style={style.inputText}>
+            <Text style={{   color: colors.text,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginStart: 25,
+        marginTop: 20}}>
                 Password
             </Text>
             <PasswordInput value={password}
@@ -229,10 +244,10 @@ function SignupScreen() {
                     }
                 }
                 }
-                placeholder="min 6 character" keyBoardType="normal" />
+                placeholder=" " keyBoardType="normal" />
             <ButtonComponent buttonTittle="Sign up" onPress={handleSignInAuth} />
             {loading && <PopUpLoader />}
-            <Text style={{ alignSelf: 'center', color: 'blue', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', flex: 1 }} onPress={() => navigation.navigate('Login')}>
+            <Text style={{ alignSelf: 'center', color: '#008F7D', marginTop: 20, fontSize: 14, marginEnd: 15, fontWeight: 'bold', flex: 1 }} onPress={() => navigation.navigate('Login')}>
                 Already have an account, Login?
             </Text>
         </ScrollView>)
@@ -241,7 +256,8 @@ function SignupScreen() {
 const style = StyleSheet.create({
     containers: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: "white"
+    
     },
     inputText: {
         color: 'black',
