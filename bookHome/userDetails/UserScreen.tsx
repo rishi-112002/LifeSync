@@ -44,7 +44,7 @@ function UserScreen({ }) {
                 fontWeight: 'bold',
                 marginBottom:15
             }}>
-                {userName}
+                Hi! {userName}
             </Text>
             <UserFlatList />
         </View>

@@ -72,8 +72,11 @@ function CommentScreen() {
             }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                } />
+                } 
+                />
+            
             <CommentModal visible={isModalVisible} onClose={handleCloseModal} postId={data["postId"]} userId={data.userId} userName={data.userName} />
+          
         </View>
     )
 }

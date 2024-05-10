@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, TextInput, StyleSheet, TouchableOpacity, Alert, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Modal, TextInput, StyleSheet, TouchableOpacity, Alert, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import firestore from '@react-native-firebase/firestore'
 import { serverTimestamp } from '@react-native-firebase/firestore';
 import { useSelector } from 'react-redux';
@@ -51,9 +51,11 @@ function CommentModal(props: { visible: any, onClose: any, postId: any, userId: 
             <View style={styles.modalContainer}>
                 <View style={{
                     backgroundColor: colors.background,
-                    padding: 20,
+                    padding: 15,
                     borderRadius: 10,
-                    width: '100%'
+                    width: '100%',
+                    flexDirection:'row',
+                    alignItems:'stretch'
                 }}>
 
                     <TextInput
@@ -62,10 +64,12 @@ function CommentModal(props: { visible: any, onClose: any, postId: any, userId: 
                             borderColor: '#ccc',
                             borderRadius: 10,
                             padding: 10,
-                            marginBottom: 15,
-                            height: 60,
+                            marginBottom: 10,
+                            height: 46,
                             color: colors.text,
-                            fontSize: 16
+                            fontSize: 16,
+                            marginEnd:"auto",
+                            width:"84%"
                         }}
                         placeholder="Type your comment..."
                         value={commentText}
@@ -73,14 +77,17 @@ function CommentModal(props: { visible: any, onClose: any, postId: any, userId: 
                         onChangeText={setCommentText}
                     />
                     <View style={styles.buttonContainer}>
+            <KeyboardAvoidingView>
                         <TouchableOpacity onPress={handleSubmit} style={{ marginStart: "auto" }}>
-                            <Text style={{ color: "white", backgroundColor: 'blue', marginStart: 'auto', fontSize: 19, fontWeight: '500', borderRadius: 10, padding: 5 }} >
-                                Submit
+                            <Text style={{ color: "white", backgroundColor: 'blue', marginStart: 'auto', fontSize: 15, fontWeight: '500', borderRadius: 10, padding: 10 }} >
+                                ok
                             </Text>
                         </TouchableOpacity>
+                        </KeyboardAvoidingView>
                     </View>
                 </View>
             </View>
+            
         </TouchableWithoutFeedback >
     );
 };
@@ -90,7 +97,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: -50
+        marginBottom: 0
     },
     modalContent: {
         backgroundColor: '',
@@ -115,8 +122,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+       width:"16%"
     },
 });
 

@@ -48,9 +48,9 @@ function HomeScreen() {
                     }}>
                         Home
                     </Text>
-                    <Text style={{ color: "white", backgroundColor: 'green', fontSize: 15, fontWeight: '500', borderRadius: 10, padding: 4, textAlign: 'center', marginTop: 19, marginEnd: 8 }} onPress={() => navigation.navigate("AddPost")}>
+                    {/* <Text style={{ color: "white", backgroundColor: 'green', fontSize: 15, fontWeight: '500', borderRadius: 10, padding: 4, textAlign: 'center', marginTop: 19, marginEnd: 8 }} onPress={() => navigation.navigate("AddPost")}>
                         Post
-                    </Text>
+                    </Text> */}
                 </View>
             </Animated.View>
             <View style={{ marginBottom: 20, backgroundColor: 'rgba(0, 0, 0, 0)' }}>

@@ -56,7 +56,8 @@ function HomeFlatList(props: { onUserIconPress: any, onScroll: any }) {
         <View style={{
             flex: 1,
             backgroundColor: colors.background,
-            marginTop: 20
+            marginTop: 20, 
+            marginBottom:45
         }}>
 
             <FlatList data={postOption} renderItem={(item) => {

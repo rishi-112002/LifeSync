@@ -142,8 +142,8 @@ function AddPost() {
                     Add Post
                 </Text>
             </View>
-            <TextInputCom placeholder="Book Name" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
-            <TextInputCom placeholder="Author Name" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
+            <TextInputCom placeholder="Tittle" value={bookName} onChangeText={setBookName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
+            <TextInputCom placeholder="Caption,HashTags" value={authorName} onChangeText={setAuthorName} secureTextEntry={false} errorMessage={""} keyBoardType={undefined} />
             <TextInputCom placeholder="Link" value={link} onChangeText={setLink} secureTextEntry={false} errorMessage={''} keyBoardType={undefined} />
             <View style={{ padding: 10, marginStart: 7, marginEnd: 5, marginTop: 5 }}>
                 <DropDownPicker

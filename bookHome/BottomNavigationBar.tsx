@@ -5,9 +5,10 @@ import UserDetailsNav from "./userDetails/UserDetailsNav";
 import SearchNavigation from "./searchDetails/SearchNav";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from '@react-navigation/native';
-import { Image, KeyboardAvoidingView, Platform, Text } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text } from "react-native";
+import AddPost from "./home/AddPost";
+const Tab = createBottomTabNavigator();
 function BottomTabNavigation() {
-    const Tab = createBottomTabNavigator();
     const { colors, dark } = useTheme();
 
     return (
@@ -17,16 +18,27 @@ function BottomTabNavigation() {
         >
             <Tab.Navigator
                 initialRouteName="Home"
+                
                 screenOptions={{
+                
                     tabBarStyle: {
+                        
                         position: "absolute",
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        elevation: 2,
                         backgroundColor: colors.background,
                         borderColor: colors.background,
-                        paddingBottom: 3
+                        paddingBottom: 3,
+                        shadowColor:"#7F5DF0",
+                        shadowOffset:{
+                            width:0,
+                            height:10,
+                        },
+                        shadowOpacity:0.25,
+                        shadowRadius:3.5,
+                        elevation:5
+                    
                     },
 
                     tabBarActiveTintColor: "#0077FF",
@@ -42,6 +54,7 @@ function BottomTabNavigation() {
                 <Tab.Screen
                     name="0"
                     component={HomeNavigation}
+                    
                     options={{
                         tabBarLabel: ({ focused }) => (
                             <Text style={{ fontSize: 12, color: focused ? "#0077FF" : colors.text }}>
@@ -55,6 +68,7 @@ function BottomTabNavigation() {
                         headerShown: false
                     }}
                 />
+                
                 <Tab.Screen
                     name="Search"
                     component={SearchNavigation}
@@ -71,6 +85,24 @@ function BottomTabNavigation() {
                         headerShown: false
                     }}
                 />
+                  <Tab.Screen
+                    name="AddPost"
+                    component={AddPost}
+                    options={{
+                        tabBarLabel: ({ focused }) => (
+                            <Text style={{ fontSize: 12, color: focused ? "#0077FF" : colors.text }}>
+                                
+                            </Text>
+                        ),
+                        
+                        tabBarIcon: ({ focused }) => (
+                            <Image source={!dark ? (!focused ? require('../assets/addIconTab.png') : require('../assets/addIconTab.png')) : (!focused ? require('../assets/addIconTab.png') : require('../assets/addIconTab.png'))} style={{ height: 34, width: 49, resizeMode: 'contain', marginTop: 5, marginBottom:30 }} />
+
+                        ),
+                        headerShown: false
+                    }}
+                />
+
                 <Tab.Screen
                     name="Library"
                     component={LibraryNavigation}
@@ -104,7 +136,19 @@ function BottomTabNavigation() {
             </Tab.Navigator>
         </KeyboardAvoidingView>
     );
-}
+};
+const style = StyleSheet.create({
+    shadow:{
+        shadowColor:"#7F5DF0",
+        shadowOffset:{
+            width:0,
+            height:10,
+        },
+        shadowOpacity:0.25,
+        shadowRadius:3.5,
+        elevation:5
+    }
+})
 
 
 export default BottomTabNavigation;

@@ -8,12 +8,27 @@ import firestore from '@react-native-firebase/firestore'
 import ModalPopUp from "../reuseableComponent/ModalPopUp";
 import LikeComment from "./LikeComment";
 import Share from 'react-native-share';
+import FullScreenImagePopUp from "../reuseableComponent/FullScreenImageModalPopUp";
 
 function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
     const { item } = props
     const userName = useSelector((state: RootState) => {
         return state.allUserData.userData[item.item.userId]?.name || 'DefaultName';
     })
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+    };
+    const handleOpenModal = () => {
+        setIsModalVisible(true);
+    };
+    const handleClose = () => {
+        setIsModal(false);
+    };
+    const handleOpen = () => {    
+        setIsModal(true);
+    };
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModal, setIsModal] = useState(false);
     const navigation = useNavigation();
     const [imageUrl, setImageUrl] = useState("");
     const [userImage, setUserImage] = useState("")
@@ -125,7 +140,6 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
         }
     };
     const imageUri = useSelector((state: RootState) => {
-        console.log("userIds", item.item.userId)
         return state.allUserData.userData[item.item.userId]?.profileImage || 'DefaultName';
     })
 
@@ -189,7 +203,7 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
             <View style={styles.userIcon}>
                 {
                     userImage &&
-                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
+                    <TouchableOpacity onLongPress={handleOpen} onPress={() => navigation.navigate('ProfileScreen', { userIds: item.item.userId, userNames: userName, profileUri: imageUri })}>
                         <Image source={{ uri: userImage }} style={{ marginTop: 5, resizeMode: 'center', width: 40, height: 40, borderRadius: 30 }} />
                     </TouchableOpacity>
                 }
@@ -203,18 +217,28 @@ function HomeFlatListView(props: { item: ListRenderItemInfo<never> }) {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handlePress} style={{ paddingBottom: 20 }}>
+                {item.item.userId === userId &&  <TouchableOpacity onPress={handlePress} style={{ paddingBottom: 20 }}>
                     <Image source={dark ? require('../assets/threeDotLightTheme.png') : require('../assets/threeDotDarkTheme.png')} style={{ marginStart: "auto", marginEnd: -20, resizeMode: 'center', height: 45 }} />
                 </TouchableOpacity>
+}
                 {item.item.userId === userId && modalVisible && (
                     <ModalPopUp modalVisible={modalVisible} setModalVisible={setModalVisible} navigationToScreen={() => navigation.navigate("PostEditScreen", { postId: item.item.postId, userId: item.item.userId })} postId={item.item.postId} commentId={undefined} />
                 )}
             </View>
 
             <View style={{ flexDirection: 'row', backgroundColor: colors.card, borderRadius: 10, marginTop: -10, padding: 7, marginEnd: 8, marginStart: 8 }}>
-                {imageUrl && <TouchableOpacity>
+                {imageUrl && <TouchableOpacity onPress={handleOpenModal}>
                     <Image source={{ uri: imageUrl }} style={{ height: 80, width: 80, alignSelf: 'center', borderRadius: 10, resizeMode: 'cover' }} />
-                </TouchableOpacity>}
+                </TouchableOpacity>
+                }
+                 {
+                 isModalVisible &&
+                    <FullScreenImagePopUp visible={isModalVisible} onClose={handleCloseModal} profileUri={imageUrl} />
+                }
+                 {
+                 isModal &&
+                    <FullScreenImagePopUp visible={isModal} onClose={handleClose} profileUri={userImage} />
+                }
 
                 <View style={{ flexDirection: 'column', flex: 1 }}>
                     <TouchableOpacity>

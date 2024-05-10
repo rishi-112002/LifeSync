@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
                     color: colors.text,
                     margin: 15
                 }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Presently free. But before a course, it was a trap. But not.
+                    We collect information you provide when using our app, including personal details, content you share, and usage data.
                 </Text>
 
                 <Text style={{
@@ -55,8 +55,7 @@ const PrivacyPolicy = () => {
                     color: colors.text,
                     margin: 15
                 }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.
-                    Sed cursus ante dapibus diam. Sed nisi.
+                    We use your information to improve our app, personalize content, communicate with you, enforce policies, and analyze usage patterns.
                 </Text>
 
                 <Text style={{
@@ -71,8 +70,7 @@ const PrivacyPolicy = () => {
                     color: colors.text,
                     margin: 15
                 }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.
-                    Sed cursus ante dapibus diam. Sed nisi.
+                    We may share your information with third parties for service provision, legal compliance, or safety reasons.
                 </Text>
 
                 <Text style={{
@@ -86,10 +84,41 @@ const PrivacyPolicy = () => {
                     color: colors.text,
                     margin: 15
                 }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.
-                    Sed cursus ante dapibus diam. Sed nisi.
-                    arevfevfvf
-                    vdvfewvv
+                    We implement security measures to protect your information, but cannot guarantee absolute security.
+                </Text>
+                <Text style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: colors.text,
+                    margin: 15
+                }}>4. Children Privacy</Text>
+                <Text style={{
+                    fontSize: 16,
+                    color: colors.text,
+                    margin: 15
+                }}>
+                     Our app is not intended for children under 13, and we do not knowingly collect their personal information.
+                </Text>
+                <Text style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: colors.text,
+                    margin: 15
+                }}>4. Contact Us</Text>
+                <Text style={{
+                    fontSize: 16,
+                    color: colors.text,
+                    margin: 15
+                }}>
+                   If you have questions or concerns about our privacy practices, please contact us.
+                </Text>
+                <Text style={{
+                    fontSize: 16,
+                    color: colors.text,
+                    margin: 15,
+                    fontWeight:'500'
+                }}>
+                   By using our app, you agree to the terms of this privacy policy.
                 </Text>
             </View>
         </ScrollView >
